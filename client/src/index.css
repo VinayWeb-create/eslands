@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background-color: #ffffff;
+  background-color: #0b1120;
 }
 
 /* Enterprise homepage 2026 */
@@ -34,8 +34,8 @@ html {
 
 body {
   min-height: 100vh;
-  background: #ffffff;
-  color: #1e293b;
+  background: #0b1120;
+  color: #e2e8f0;
 }
 
 * {
@@ -221,6 +221,22 @@ textarea:focus-visible {
 .motion-safe .animate-fade-in {
   animation: fade-in 0.8s ease-out forwards;
 }
+
+/* Marquee */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* Scrollbar hide */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
 /* Custom Utilities */
 .bg-surface {

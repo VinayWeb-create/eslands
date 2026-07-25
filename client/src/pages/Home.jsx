@@ -1,13 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import {
-  ArrowRight, Phone, Mail, MapPin, Send, Check, Play,
+  ArrowRight, Phone, Mail, MapPin, Send, Check,
   Globe, Smartphone, Code2, Network, Tag, Palette, Search,
-  PlayCircle, Star, Quote, Laptop, Sparkles, ChevronLeft, ChevronRight, CheckCircle2
+  PlayCircle, Star, Quote, Sparkles, ChevronLeft, ChevronRight, CheckCircle2,
+  Shield, TrendingUp, Award
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import api from '../lib/api';
+import CountUp from '../components/CountUp';
+
+/* ─── Data (unchanged) ─── */
 
 const heroSlides = [
   { src: '/ban-9.jpg', alt: 'London Tower Bridge background', title: 'Welcome to Esland IT Solution' },
@@ -16,142 +19,44 @@ const heroSlides = [
 ];
 
 const oldServices = [
-  {
-    title: 'Web Development',
-    desc: 'It has been a very positive part of us that, no one has given any pathetic feedback about the web Development of ours.',
-    icon: Globe,
-    color: '#0ea5e9',
-    bg: 'from-sky-50 to-sky-100/50 border-sky-100 hover:border-sky-300'
-  },
-  {
-    title: 'Mobile App Development',
-    desc: 'Our expert mobile app developers understand your business that would help you integrate your business on the mobile.',
-    icon: Smartphone,
-    color: '#f97316',
-    bg: 'from-orange-50 to-orange-100/50 border-orange-100 hover:border-orange-300'
-  },
-  {
-    title: 'Software Development',
-    desc: 'Software Application Development and Maintenance is a part of Esland IT Solutions Core activity.',
-    icon: Code2,
-    color: '#ef4444',
-    bg: 'from-red-50 to-red-100/50 border-red-100 hover:border-red-300'
-  },
-  {
-    title: 'Networking solutions',
-    desc: 'We deliver simplistic yet consistent solutions that are flexible and can moulded in accordance to client requirements.',
-    icon: Network,
-    color: '#84cc16',
-    bg: 'from-lime-50 to-lime-100/50 border-lime-100 hover:border-lime-300'
-  },
-  {
-    title: 'Professional Naming',
-    desc: 'Getting the right name is the first step towards successful company.',
-    icon: Tag,
-    color: '#f97316',
-    bg: 'from-orange-50 to-orange-100/50 border-orange-100 hover:border-orange-300'
-  },
-  {
-    title: 'Branding',
-    desc: 'Your logo represents your brand, but your brand is everything that your business stands for.',
-    icon: Palette,
-    color: '#06b6d4',
-    bg: 'from-cyan-50 to-cyan-100/50 border-cyan-100 hover:border-cyan-300'
-  },
-  {
-    title: 'Seo and Marketing',
-    desc: 'We have done extensive research in Search Engine Optimation (SEO) techniques.',
-    icon: Search,
-    color: '#ec4899',
-    bg: 'from-pink-50 to-pink-100/50 border-pink-100 hover:border-pink-300'
-  },
-  {
-    title: '2D animation',
-    desc: '2D animation focuses on creating characters, storyboards, and backgrounds in two-dimensional environments.',
-    icon: PlayCircle,
-    color: '#6366f1',
-    bg: 'from-indigo-50 to-indigo-100/50 border-indigo-100 hover:border-indigo-300'
-  }
+  { title: 'Web Development', desc: 'It has been a very positive part of us that, no one has given any pathetic feedback about the web Development of ours.', icon: Globe, gradient: 'from-sky-500 to-blue-600' },
+  { title: 'Mobile App Development', desc: 'Our expert mobile app developers understand your business that would help you integrate your business on the mobile.', icon: Smartphone, gradient: 'from-indigo-500 to-purple-600' },
+  { title: 'Software Development', desc: 'Software Application Development and Maintenance is a part of Esland IT Solutions Core activity.', icon: Code2, gradient: 'from-sky-400 to-indigo-500' },
+  { title: 'Networking solutions', desc: 'We deliver simplistic yet consistent solutions that are flexible and can moulded in accordance to client requirements.', icon: Network, gradient: 'from-cyan-500 to-sky-500' },
+  { title: 'Professional Naming', desc: 'Getting the right name is the first step towards successful company.', icon: Tag, gradient: 'from-violet-500 to-indigo-500' },
+  { title: 'Branding', desc: 'Your logo represents your brand, but your brand is everything that your business stands for.', icon: Palette, gradient: 'from-sky-500 to-cyan-500' },
+  { title: 'Seo and Marketing', desc: 'We have done extensive research in Search Engine Optimation (SEO) techniques.', icon: Search, gradient: 'from-indigo-500 to-sky-500' },
+  { title: '2D animation', desc: '2D animation focuses on creating characters, storyboards, and backgrounds in two-dimensional environments.', icon: PlayCircle, gradient: 'from-blue-500 to-indigo-600' }
 ];
 
 const testimonials = [
-  {
-    name: 'Usman',
-    client: 'Mobile Bitz, Dartford',
-    title: 'Friendly !!!',
-    quote: 'A very friendly and helpful company that have looked for solutions to any problems. It is great to talk to the same person every time I phone up or e-mail. My site is at top of both Google and Bing and this brings me more customers. Every time I phone up or e-mail a change, it is done quickly and efficiently. They have helped me expand my customer base.'
-  },
-  {
-    name: 'Sami',
-    client: 'Kingsburry School',
-    title: 'Genuine service !!!',
-    quote: 'I like Esland, because they genuinely try to find solutions for your business, rather than just trying to sell new services all the time, which may or may not be useful. Nice people too - always helps!'
-  },
-  {
-    name: 'Ukrani',
-    client: 'Private Client',
-    title: 'Fantastic !!!',
-    quote: 'Fantastic service and website build from Esland, great input and help from them as we didn’t really know where to start.... Let them do their thing so we can get on with ours, worked for us! Thanks Esland IT Solutions'
-  },
-  {
-    name: 'Rupeesh',
-    client: 'Flower Paradise',
-    title: 'Recommended !!!',
-    quote: 'I am very happy with my new website and SEO services for my flower shop business and have already started to build my new clients! I would highly recommend Esland.'
-  },
-  {
-    name: 'Gaurav',
-    client: 'Ash Groove',
-    title: 'Quick Respond !!!',
-    quote: 'Esland IT services was very quick to respond to any query, and completed the task of transferring my website from joomla to WordPress, and transferring my blogger blog to within the website very quickly. I found this company very self-sufficient and easy to get along with.'
-  },
-  {
-    name: 'Amdip Traders Ltd',
-    client: 'Amdip Traders',
-    title: 'Great job !!!',
-    quote: 'Could not have been easier!!! They did great job . Am about to use them again. Very happy customer!'
-  },
-  {
-    name: 'Pat',
-    client: 'Ilford Kitchens',
-    title: 'SEO-Satisfied !!!',
-    quote: 'We are a very satisfied client of Eland. Our traffic has increased substantially as well as a significant increase in the quality of our leads. Their efforts have contributed to a 40% increase in our sales.'
-  }
+  { name: 'Usman', client: 'Mobile Bitz, Dartford', title: 'Friendly !!!', quote: 'A very friendly and helpful company that have looked for solutions to any problems. It is great to talk to the same person every time I phone up or e-mail. My site is at top of both Google and Bing and this brings me more customers. Every time I phone up or e-mail a change, it is done quickly and efficiently. They have helped me expand my customer base.' },
+  { name: 'Sami', client: 'Kingsburry School', title: 'Genuine service !!!', quote: 'I like Esland, because they genuinely try to find solutions for your business, rather than just trying to sell new services all the time, which may or may not be useful. Nice people too - always helps!' },
+  { name: 'Ukrani', client: 'Private Client', title: 'Fantastic !!!', quote: "Fantastic service and website build from Esland, great input and help from them as we didn't really know where to start.... Let them do their thing so we can get on with ours, worked for us! Thanks Esland IT Solutions" },
+  { name: 'Rupeesh', client: 'Flower Paradise', title: 'Recommended !!!', quote: 'I am very happy with my new website and SEO services for my flower shop business and have already started to build my new clients! I would highly recommend Esland.' },
+  { name: 'Gaurav', client: 'Ash Groove', title: 'Quick Respond !!!', quote: 'Esland IT services was very quick to respond to any query, and completed the task of transferring my website from joomla to WordPress, and transferring my blogger blog to within the website very quickly. I found this company very self-sufficient and easy to get along with.' },
+  { name: 'Amdip Traders Ltd', client: 'Amdip Traders', title: 'Great job !!!', quote: 'Could not have been easier!!! They did great job . Am about to use them again. Very happy customer!' },
+  { name: 'Pat', client: 'Ilford Kitchens', title: 'SEO-Satisfied !!!', quote: 'We are a very satisfied client of Eland. Our traffic has increased substantially as well as a significant increase in the quality of our leads. Their efforts have contributed to a 40% increase in our sales.' }
 ];
 
 const pricingPlans = [
-  {
-    name: 'Standard',
-    price: '2',
-    features: ['2 GB Webspace', '1 Domain', '10 GB Bandwidth', 'Free Setup Support']
-  },
-  {
-    name: 'Business',
-    price: '3.99',
-    features: ['3 GB Webspace', '2 Domains', '25 GB Bandwidth', '99.9% Uptime Guarantee'],
-    popular: true
-  },
-  {
-    name: 'Premium',
-    price: '4.99',
-    features: ['5 GB Webspace', '5 Domains', '50 GB Bandwidth', 'Enhanced Security Suite']
-  },
-  {
-    name: 'Ultimate',
-    price: '5.99',
-    features: ['10 GB Webspace', '10 Domains', '100 GB Bandwidth', 'Dedicated Managed Server']
-  }
+  { name: 'Standard', price: '2', features: ['2 GB Webspace', '1 Domain', '10 GB Bandwidth', 'Free Setup Support'] },
+  { name: 'Business', price: '3.99', features: ['3 GB Webspace', '2 Domains', '25 GB Bandwidth', '99.9% Uptime Guarantee'], popular: true },
+  { name: 'Premium', price: '4.99', features: ['5 GB Webspace', '5 Domains', '50 GB Bandwidth', 'Enhanced Security Suite'] },
+  { name: 'Ultimate', price: '5.99', features: ['10 GB Webspace', '10 Domains', '100 GB Bandwidth', 'Dedicated Managed Server'] }
 ];
 
 const partners = [
-  { name: 'NEX', logo: '/nex.png', isImg: true },
-  { name: 'Mobile Bitz', isImg: false },
-  { name: 'Kingsburry School', isImg: false },
-  { name: 'Flower Paradise', isImg: false },
-  { name: 'Ash Groove', isImg: false },
-  { name: 'Amdip Traders', isImg: false },
-  { name: 'Ilford Kitchens', isImg: false }
+  { name: 'Flower Paradise', color: '#e879a0', hoverColor: '#f9a8d4', accent: 'from-pink-500/15 to-rose-500/10', border: 'hover:border-pink-500/30' },
+  { name: 'Ash Groove', color: '#60a5a0', hoverColor: '#5eead4', accent: 'from-teal-500/15 to-emerald-500/10', border: 'hover:border-teal-500/30' },
+  { name: 'Amdip Traders', color: '#f59e0b', hoverColor: '#fbbf24', accent: 'from-amber-500/15 to-yellow-500/10', border: 'hover:border-amber-500/30' },
+  { name: 'Ilford Kitchens', color: '#ef4444', hoverColor: '#f87171', accent: 'from-red-500/15 to-orange-500/10', border: 'hover:border-red-500/30' },
+  { name: 'NEX', color: '#3b82f6', hoverColor: '#60a5fa', accent: 'from-blue-500/15 to-indigo-500/10', border: 'hover:border-blue-500/30', logo: '/nex.png', isImg: true },
+  { name: 'Mobile Bitz', color: '#8b5cf6', hoverColor: '#a78bfa', accent: 'from-violet-500/15 to-purple-500/10', border: 'hover:border-violet-500/30' },
+  { name: 'Kingsburry School', color: '#10b981', hoverColor: '#34d399', accent: 'from-emerald-500/15 to-green-500/10', border: 'hover:border-emerald-500/30' },
 ];
+
+/* ─── Reusable animation variants ─── */
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -160,6 +65,38 @@ const fadeUp = {
   transition: { duration: 0.6, ease: 'easeOut' }
 };
 
+const staggerContainer = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } }
+};
+
+const staggerItem = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 260, damping: 24 } }
+};
+
+/* ─── Section Helpers ─── */
+
+function Eyebrow({ children }) {
+  return (
+    <motion.p {...fadeUp} className="text-xs font-bold uppercase tracking-[0.35em] text-sky-400 mb-3">
+      {children}
+    </motion.p>
+  );
+}
+
+function SectionTitle({ children }) {
+  return (
+    <motion.h2 {...fadeUp} className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
+      {children}
+    </motion.h2>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════════════════
+   HOME PAGE — DARK THEME
+   ═══════════════════════════════════════════════════════════════════════════════════════ */
+
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
@@ -167,8 +104,8 @@ export default function Home() {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [newsLoading, setNewsLoading] = useState(false);
+  const [testPaused, setTestPaused] = useState(false);
 
-  // Hero slideshow interval
   useEffect(() => {
     const timer = window.setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % heroSlides.length);
@@ -176,13 +113,13 @@ export default function Home() {
     return () => window.clearInterval(timer);
   }, []);
 
-  // Testimonial auto-scroll
   useEffect(() => {
+    if (testPaused) return;
     const timer = window.setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
     }, 8000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [testPaused]);
 
   const handleContactSubmit = async (e) => {
     e.preventDefault();
@@ -213,63 +150,69 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-white text-slate-700 overflow-x-hidden pt-[65px]">
-      {/* 1. HERO CAROUSEL */}
-      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Images */}
+    <div className="relative min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden pt-[65px]">
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+         1. HERO CAROUSEL
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="relative h-[70vh] sm:h-[80vh] min-h-[520px] sm:min-h-[600px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSlide}
-              initial={{ opacity: 0, scale: 1.05 }}
+              initial={{ opacity: 0, scale: 1.08 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 1.4, ease: 'easeInOut' }}
               className="absolute inset-0"
             >
-              <img
-                src={heroSlides[activeSlide].src}
-                alt={heroSlides[activeSlide].alt}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-slate-950/45 mix-blend-multiply" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+              <img src={heroSlides[activeSlide].src} alt={heroSlides[activeSlide].alt} className="w-full h-full object-cover" />
+              {/* Mobile: lighter overlay so images show; Desktop: heavier for text readability */}
+              <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 sm:from-slate-950/70 via-slate-950/20 sm:via-slate-950/40 to-slate-950/80 sm:to-slate-950/90" />
+              <div className="absolute inset-0 bg-gradient-to-r from-slate-950/30 sm:from-slate-950/50 via-transparent to-slate-950/30 sm:to-slate-950/50" />
             </motion.div>
           </AnimatePresence>
         </div>
 
-        {/* Content Container */}
+        {/* Grid overlay */}
+        <div className="absolute inset-0 z-[1] opacity-[0.06] bg-[linear-gradient(rgba(123,156,255,0.13)_1px,transparent_1px),linear-gradient(90deg,rgba(123,156,255,0.13)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+
+        {/* Ambient glow orbs */}
+        <div className="absolute top-[-200px] right-[-100px] w-[500px] h-[500px] rounded-full bg-sky-600/15 blur-[120px] pointer-events-none z-[1]" />
+        <div className="absolute bottom-[-200px] left-[-100px] w-[400px] h-[400px] rounded-full bg-indigo-600/15 blur-[120px] pointer-events-none z-[1]" />
+
         <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center lg:text-left">
-          <div className="grid gap-12 lg:grid-cols-[1.3fr_0.7fr] items-center w-full">
+          <div className="grid gap-6 sm:gap-12 lg:grid-cols-[1.3fr_0.7fr] items-center w-full">
             <div className="max-w-3xl">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-              >
-                <div className="inline-flex items-center gap-2 rounded-full border border-sky-450/30 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-400 mb-6">
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="inline-flex items-center gap-2 rounded-full border border-sky-400/20 bg-sky-500/10 px-4 py-1.5 text-xs font-semibold text-sky-300 mb-6"
+                >
                   <Sparkles size={12} className="animate-pulse" />
                   ESTABLISHED SINCE 2013
-                </div>
-                <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-6 uppercase leading-tight">
+                </motion.div>
+                <h1 className="text-3xl sm:text-6xl font-black tracking-tight text-white mb-4 sm:mb-6 uppercase leading-tight">
                   Welcome to <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-sky-100 to-sky-300 animate-gradient">
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-300 via-blue-200 to-indigo-300 animate-gradient">
                     Esland IT Solution
                   </span>
                 </h1>
-                <p className="text-lg sm:text-xl text-slate-200 font-medium max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0">
+                <p className="text-lg sm:text-xl text-slate-300 font-medium max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0">
                   We Build creative, effective &amp; professional websites and affordable web design solutions !!!
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
                   <a
                     href="#services"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-sky-500/20 hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300"
                   >
                     <PlayCircle size={16} /> Get More
                   </a>
                   <a
                     href="#contact"
-                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-4 text-sm font-semibold text-white hover:bg-white/20 transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-4 text-sm font-semibold text-white hover:bg-white/10 transition-all duration-300"
                   >
                     <Phone size={15} /> Call us
                   </a>
@@ -277,34 +220,26 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* Slide Illustration for Mobile & Desktop */}
             <div className="flex justify-center items-center lg:justify-end">
-              {activeSlide === 1 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 40, scale: 0.85 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 1, delay: 0.2 }}
-                  className="z-10 pointer-events-none mt-6 lg:mt-0"
-                >
-                  <img
-                    src="/Computer_India.png"
-                    alt="Computer network visualization"
-                    className="w-[200px] sm:w-[280px] lg:w-[420px] drop-shadow-[0_15px_30px_rgba(56,189,248,0.25)] animate-float"
-                  />
-                </motion.div>
-              )}
+              <motion.div
+                initial={{ opacity: 0, y: 40, scale: 0.85 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="z-10 pointer-events-none mt-6 lg:mt-0"
+              >
+                <img src="/Computer_India.png" alt="Computer network visualization" className="w-[160px] sm:w-[240px] lg:w-[420px] drop-shadow-[0_15px_30px_rgba(56,189,248,0.25)] animate-float" />
+              </motion.div>
             </div>
           </div>
         </div>
 
-        {/* Carousel Indicators */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex gap-2">
           {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => setActiveSlide(index)}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
-                activeSlide === index ? 'w-8 bg-sky-500' : 'w-2.5 bg-white/30 hover:bg-white/50'
+              className={`h-2.5 rounded-full transition-all duration-500 ${
+                activeSlide === index ? 'w-10 bg-gradient-to-r from-sky-400 to-indigo-500 shadow-lg shadow-sky-500/30' : 'w-2.5 bg-white/20 hover:bg-white/40'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -312,181 +247,239 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Partners Ticker */}
-      <section className="border-y border-slate-100 bg-slate-50 py-10">
-        <div className="mx-auto max-w-7xl px-6">
-          <p className="text-center text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-400 mb-8">
-            Empowering Growth for Our Trusted Clients
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
-            {partners.map((partner, index) => (
-              <div key={index} className="grayscale opacity-50 hover:opacity-100 hover:grayscale-0 transition duration-300">
-                {partner.isImg ? (
-                  <img src={partner.logo} alt={partner.name} className="h-10 w-auto object-contain" />
-                ) : (
-                  <span className="text-xl font-bold tracking-tight text-slate-800 font-serif">{partner.name}</span>
-                )}
+      {/* ═══════════════════════════════════════════════════════════════════════
+         2. PARTNERS MARQUEE + STATS
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="border-y border-white/5 bg-slate-950 py-14 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-600/5 via-indigo-600/5 to-sky-600/5 pointer-events-none" />
+        <div className="mx-auto max-w-7xl px-6 mb-10 relative z-10">
+          <motion.p {...fadeUp} className="text-center text-xs font-bold uppercase tracking-[0.3em] text-slate-500 mb-3">
+            Trusted by Businesses Across the UK
+          </motion.p>
+          <motion.div {...fadeUp} className="flex flex-wrap justify-center gap-8 md:gap-16 mt-8">
+            {[
+              { value: 100, suffix: '+', label: 'Clients' },
+              { value: 500, suffix: '+', label: 'Projects' },
+              { value: 10, suffix: '+', label: 'Years' },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <div className="text-3xl sm:text-4xl font-extrabold text-white">
+                  <CountUp end={stat.value} suffix={stat.suffix} />
+                </div>
+                <p className="text-sm text-slate-500 font-medium mt-1">{stat.label}</p>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* Marquee */}
+        <div className="relative overflow-hidden">
+          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-950 to-transparent z-10 pointer-events-none" />
+          <div className="flex animate-marquee" style={{ width: 'max-content' }}>
+            {[...partners, ...partners].map((partner, index) => (
+              <div key={index} className="mx-3 flex-shrink-0 group cursor-pointer">
+                <div
+                  className={`relative flex items-center gap-3 px-7 py-5 rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm transition-all duration-500 group-hover:-translate-y-1.5 group-hover:shadow-2xl overflow-hidden ${partner.border}`}
+                  style={{
+                    '--brand': partner.color,
+                    '--brand-hover': partner.hoverColor,
+                  }}
+                >
+                  {/* Glow background on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
+                    style={{ background: `radial-gradient(circle at 50% 50%, ${partner.color}10, transparent 70%)` }}
+                  />
+                  {/* Top accent line */}
+                  <div
+                    className="absolute top-0 left-4 right-4 h-[2px] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-500 scale-x-0 group-hover:scale-x-100"
+                    style={{ background: `linear-gradient(90deg, transparent, ${partner.color}, transparent)` }}
+                  />
+                  {partner.isImg ? (
+                    <img src={partner.logo} alt={partner.name} className="h-7 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
+                  ) : (
+                    <span
+                      className="text-[17px] font-extrabold tracking-tight relative z-10 transition-all duration-300 group-hover:tracking-wide"
+                      style={{ color: `${partner.color}aa` }}
+                      onMouseEnter={(e) => e.target.style.color = partner.hoverColor}
+                      onMouseLeave={(e) => e.target.style.color = `${partner.color}aa`}
+                    >
+                      {partner.name}
+                    </span>
+                  )}
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 2. ABOUT US SECTION */}
-      <section id="about" className="py-24 px-6 relative overflow-hidden bg-white">
-        <div className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-sky-500/5 blur-3xl" />
+      {/* ═══════════════════════════════════════════════════════════════════════
+         3. ABOUT ESLAND
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="about" className="py-24 px-6 relative overflow-hidden bg-slate-950">
+        <div className="pointer-events-none absolute left-0 top-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-sky-600/10 blur-[120px]" />
+        <div className="pointer-events-none absolute right-0 bottom-0 h-64 w-64 rounded-full bg-indigo-600/10 blur-[100px]" />
+
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="grid gap-16 lg:grid-cols-2 items-center">
             {/* Left text */}
             <motion.div {...fadeUp}>
-              <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-600 mb-3">SOME WORDS ABOUT ESLAND</p>
-              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
+              <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-400 mb-3">SOME WORDS ABOUT ESLAND</p>
+              <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-6">
                 Technology Partner Built For <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-indigo-600">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">
                   Your Ambition
                 </span>
               </h2>
-              <p className="text-slate-600 text-base leading-8 mb-8 font-medium">
+              <p className="text-slate-400 text-base leading-8 mb-8 font-medium">
                 Esland IT Solutions is a platform which lets you discover the best products across a wide array of categories that include Essential Electronics, Computers, Printers Appliances also software support. Esland IT Solutions was founded in 2013 by Naresh Pathi with the goal of creating Software development projects and the best online essential electronics shopping research and discovery destination. Whatever your budget or the size of your business we are here to support you and make technology simple.
               </p>
 
-              {/* 3 Pill attributes */}
-              <div className="grid grid-cols-3 gap-4">
-                {['Creative', 'Impressive', 'Professional'].map((item) => (
-                  <div
-                    key={item}
-                    className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-100 bg-slate-50 text-center transition hover:border-sky-500/20"
+              {/* Stats row */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                {[
+                  { value: 10, suffix: '+', label: 'Years', icon: Award },
+                  { value: 500, suffix: '+', label: 'Projects', icon: TrendingUp },
+                  { value: 200, suffix: '+', label: 'Clients', icon: CheckCircle2 },
+                  { value: 24, suffix: '/7', label: 'Support', icon: Shield },
+                ].map((stat) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4 }}
+                    className="flex flex-col items-center justify-center p-4 rounded-2xl border border-white/5 bg-white/[0.03] text-center hover:border-sky-500/20 hover:bg-sky-500/5 transition-all duration-300 group"
                   >
-                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-sky-50 text-sky-600 mb-2">
-                      <CheckCircle2 size={16} />
+                    <stat.icon size={18} className="text-sky-400 mb-2 group-hover:scale-110 transition-transform" />
+                    <div className="text-2xl font-extrabold text-white">
+                      <CountUp end={stat.value} suffix={stat.suffix} />
                     </div>
-                    <span className="text-sm font-semibold text-slate-800">{item}</span>
-                  </div>
+                    <span className="text-xs text-slate-500 font-medium mt-1">{stat.label}</span>
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
 
-            {/* Right image */}
-            <motion.div
-              {...fadeUp}
-              transition={{ delay: 0.15, duration: 0.6 }}
-              className="relative flex justify-center"
-            >
-              <div className="relative rounded-[2.5rem] p-2 border border-slate-200/60 bg-white overflow-hidden max-w-md shadow-lg group">
-                <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition duration-500" />
-                <img
-                  src="/about-image.jpg"
-                  alt="Esland workspace environment"
-                  className="rounded-[2.2rem] w-full object-cover aspect-[4/3] relative z-10 transition duration-500 group-hover:scale-[1.02]"
-                />
-              </div>
+            {/* Right image with tilt */}
+            <motion.div {...fadeUp} transition={{ delay: 0.15, duration: 0.6 }} className="relative flex justify-center">
+              <TiltImage />
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* 3. SERVICES SECTION */}
-      <section id="services" className="py-24 px-6 relative bg-slate-50">
-        <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-sky-500/5 blur-3xl" />
-        <div className="mx-auto max-w-7xl">
-          {/* Header */}
+      {/* ═══════════════════════════════════════════════════════════════════════
+         4. CREATIVE / IMPRESSIVE / PROFESSIONAL
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="py-24 px-6 relative bg-slate-900/50 overflow-hidden">
+        <div className="pointer-events-none absolute right-1/4 top-0 h-72 w-72 rounded-full bg-indigo-600/10 blur-[100px]" />
+        <div className="mx-auto max-w-7xl relative z-10">
+          <div className="text-center mb-16">
+            <Eyebrow>Why Esland</Eyebrow>
+            <SectionTitle>The Esland Difference</SectionTitle>
+          </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { title: 'Creative', desc: 'Innovative solutions that push boundaries and deliver memorable digital experiences.', gradient: 'from-indigo-500 to-sky-500', icon: Sparkles, glow: 'shadow-indigo-500/20' },
+              { title: 'Impressive', desc: 'Results that speak for themselves — measurable impact on your business growth.', gradient: 'from-sky-500 to-cyan-500', icon: TrendingUp, glow: 'shadow-sky-500/20' },
+              { title: 'Professional', desc: 'Enterprise-grade quality with dedicated support and transparent communication.', gradient: 'from-sky-500 to-indigo-500', icon: Shield, glow: 'shadow-sky-500/20' },
+            ].map((card) => (
+              <motion.div
+                key={card.title}
+                variants={staggerItem}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true }}
+                className="group relative"
+              >
+                <div className={`relative rounded-[2rem] border border-white/5 bg-white/[0.03] p-8 sm:p-10 transition-all duration-500 hover:border-transparent hover:shadow-2xl ${card.glow} hover:-translate-y-2 overflow-hidden`}>
+                  {/* Gradient border on hover */}
+                  <div className={`absolute inset-0 rounded-[2rem] bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} style={{ padding: '1px' }}>
+                    <div className="w-full h-full rounded-[calc(2rem-1px)] bg-slate-900/95" />
+                  </div>
+                  <div className="relative z-10">
+                    <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${card.gradient} text-white mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                      <card.icon size={24} />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-3">{card.title}</h3>
+                    <p className="text-slate-400 leading-relaxed">{card.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════════════════════
+         5. SERVICES — BENTO GRID
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="services" className="py-24 px-6 relative bg-slate-950 overflow-hidden">
+        <div className="pointer-events-none absolute right-0 top-1/4 h-[400px] w-[400px] rounded-full bg-sky-600/5 blur-[120px]" />
+        <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-20">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-600 mb-3">OUR SERVICES</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
-              Complete Customer Satisfaction
-            </h2>
-            <p className="text-slate-500 max-w-lg mx-auto text-sm leading-relaxed">
+            <Eyebrow>OUR SERVICES</Eyebrow>
+            <SectionTitle>Complete Customer Satisfaction</SectionTitle>
+            <motion.p {...fadeUp} className="text-slate-400 max-w-lg mx-auto text-sm leading-relaxed">
               We leverage our expertise to build, protect, and optimize your business technology ecosystems.
-            </p>
+            </motion.p>
           </div>
 
-          {/* Grid Layout (4 left cards, image in center, 4 right cards) */}
-          <div className="grid gap-8 lg:grid-cols-[1fr_280px_1fr] items-center">
-            {/* Left 4 cards */}
-            <div className="space-y-6">
-              {oldServices.slice(0, 4).map((service, index) => {
-                const IconComp = service.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    {...fadeUp}
-                    className={`rounded-2xl border bg-white p-6 flex gap-5 hover:-translate-y-1 shadow-sm hover:shadow-md transition duration-300 group border-slate-100`}
-                  >
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600 group-hover:scale-110 transition duration-300">
-                      <IconComp size={20} style={{ color: service.color }} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-800 mb-2">{service.title}</h3>
-                      <p className="text-sm text-slate-500 leading-relaxed">{service.desc}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.05 }}
+            className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {oldServices.map((service, index) => {
+              const IconComp = service.icon;
+              return (
+                <motion.div
+                  key={index}
+                  variants={staggerItem}
+                  className="group relative rounded-[1.5rem] border border-white/5 bg-white/[0.03] p-6 sm:p-7 transition-all duration-500 hover:border-white/10 hover:shadow-2xl hover:shadow-sky-500/5 hover:-translate-y-1.5 overflow-hidden"
+                >
+                  {/* Gradient accent top bar */}
+                  <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
 
-            {/* Central aesthetic image banner */}
-            <motion.div
-              {...fadeUp}
-              transition={{ delay: 0.1, duration: 0.6 }}
-              className="flex justify-center w-full lg:w-auto"
-            >
-              <div className="rounded-[2.5rem] border border-slate-200 bg-white p-2 overflow-hidden shadow-lg relative group">
-                <div className="absolute inset-0 bg-slate-900/5 z-10" />
-                <img
-                  src="/woman-blue.jpg"
-                  alt="Esland specialist support"
-                  className="rounded-[2.2rem] h-[320px] sm:h-[400px] lg:h-[550px] w-full max-w-[280px] lg:w-[260px] object-cover relative z-0 transition duration-500 group-hover:scale-105"
-                />
-              </div>
-            </motion.div>
-
-            {/* Right 4 cards */}
-            <div className="space-y-6">
-              {oldServices.slice(4, 8).map((service, index) => {
-                const IconComp = service.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    {...fadeUp}
-                    className={`rounded-2xl border bg-white p-6 flex gap-5 hover:-translate-y-1 shadow-sm hover:shadow-md transition duration-300 group border-slate-100`}
-                  >
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600 group-hover:scale-110 transition duration-300">
-                      <IconComp size={20} style={{ color: service.color }} />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-800 mb-2">{service.title}</h3>
-                      <p className="text-sm text-slate-500 leading-relaxed">{service.desc}</p>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
+                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${service.gradient} text-white mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                    <IconComp size={20} />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-sky-100 transition-colors">{service.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-4">{service.desc}</p>
+                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-sky-400 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                    Learn more <ArrowRight size={14} />
+                  </span>
+                </motion.div>
+              );
+            })}
+          </motion.div>
         </div>
       </section>
 
-      {/* 4. BRANDING CTA SECTION (Dark accents to stand out) */}
-      <section className="py-20 px-6 relative bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 border-y border-slate-800">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-sky-400 via-indigo-900 to-transparent" />
+      {/* ═══════════════════════════════════════════════════════════════════════
+         6. BRANDING CTA
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="py-20 px-6 relative bg-gradient-to-br from-slate-900 via-indigo-950/50 to-slate-900 border-y border-white/5 overflow-hidden">
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(ellipse_at_center,var(--tw-gradient-stops))] from-sky-500/20 via-indigo-900/10 to-transparent pointer-events-none" />
+        <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:50px_50px] pointer-events-none" />
         <div className="mx-auto max-w-4xl relative z-10 text-center">
           <motion.div {...fadeUp}>
             <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white mb-4">
               Want to <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">brand</span> your business?
             </h2>
-            <p className="text-lg text-slate-350 mb-8 font-medium italic">
+            <p className="text-lg text-slate-300 mb-8 font-medium italic">
               &quot; we can help brand your business effectively !!! &quot;
             </p>
             <div className="flex justify-center gap-4">
-              <a
-                href="#services"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white hover:brightness-110 shadow-lg transition"
-              >
+              <a href="#services" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white hover:brightness-110 shadow-lg shadow-sky-500/20 transition">
                 Get More <ArrowRight size={15} />
               </a>
-              <a
-                href="#contact"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition"
-              >
+              <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition">
                 Call us
               </a>
             </div>
@@ -494,125 +487,169 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. HAPPY CLIENTS TESTIMONIALS */}
-      <section id="testimonials" className="py-24 px-6 relative bg-white">
-        <div className="mx-auto max-w-7xl">
+      {/* ═══════════════════════════════════════════════════════════════════════
+         7. TESTIMONIALS
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="testimonials" className="py-24 px-6 relative bg-slate-950 overflow-hidden">
+        <div className="pointer-events-none absolute left-1/4 top-0 h-96 w-96 rounded-full bg-sky-600/5 blur-[120px]" />
+        <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-16">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-600 mb-3">TESTIMONIALS</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-              Some of Our Happy Clients
-            </h2>
+            <Eyebrow>TESTIMONIALS</Eyebrow>
+            <SectionTitle>Some of Our Happy Clients</SectionTitle>
           </div>
 
-          <div className="grid gap-12 lg:grid-cols-[280px_1fr] items-center">
-            {/* Left client visual */}
-            <motion.div
-              {...fadeUp}
-              className="flex justify-center w-full lg:w-auto"
-            >
-              <div className="rounded-[2.5rem] border border-slate-200 bg-white p-2 shadow-lg relative">
+          <div
+            className="grid gap-8 lg:grid-cols-[1fr_1.6fr] items-start"
+            onMouseEnter={() => setTestPaused(true)}
+            onMouseLeave={() => setTestPaused(false)}
+          >
+            {/* Left: visual + badges */}
+            <motion.div {...fadeUp} className="flex flex-col items-center gap-6 w-full">
+              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.03] p-2 shadow-lg relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
                 <img
                   src="/chel-4.png"
                   alt="Happy customer representation"
-                  className="rounded-[2.2rem] h-[260px] sm:h-[340px] w-full max-w-[280px] lg:w-[260px] object-cover opacity-95 transition duration-300"
+                  className="rounded-[2.2rem] h-[260px] sm:h-[340px] w-full max-w-[280px] lg:w-[260px] object-cover relative z-10 transition duration-500 group-hover:scale-[1.02]"
                 />
+              </div>
+              <div className="flex gap-3 flex-wrap justify-center">
+                {[
+                  { icon: Star, text: '5.0 Rating', color: 'text-amber-400' },
+                  { icon: CheckCircle2, text: '100% Satisfaction', color: 'text-emerald-400' },
+                ].map((badge) => (
+                  <div key={badge.text} className="inline-flex items-center gap-1.5 rounded-full border border-white/5 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-slate-400">
+                    <badge.icon size={12} className={badge.color} />
+                    {badge.text}
+                  </div>
+                ))}
               </div>
             </motion.div>
 
-            {/* Right testimonial slider */}
+            {/* Right: testimonial slider */}
             <div className="relative">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeTestimonial}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, y: 16, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: -16, filter: 'blur(4px)' }}
                   transition={{ duration: 0.4 }}
-                  className="rounded-[2.5rem] border border-slate-200 bg-white p-8 sm:p-12 shadow-lg relative"
+                  className="rounded-[2.5rem] border border-white/5 bg-white/[0.03] backdrop-blur-sm p-8 sm:p-12 shadow-lg relative overflow-hidden"
                 >
-                  <Quote size={40} className="text-sky-500/10 absolute right-8 top-8" />
-                  <div className="flex gap-1 text-sky-400 mb-6">
+                  <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-sky-500/10 to-transparent rounded-bl-full pointer-events-none" />
+                  <Quote size={48} className="text-sky-500/10 absolute right-8 top-8" />
+
+                  <div className="flex gap-1 text-amber-400 mb-6">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={15} fill="currentColor" className="text-amber-400" />
+                      <Star key={i} size={16} fill="currentColor" />
                     ))}
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-4">
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">
                     &quot;{testimonials[activeTestimonial].title}&quot;
                   </h3>
-                  <p className="text-slate-600 text-sm sm:text-base leading-8 mb-8 font-medium">
+                  <p className="text-slate-400 text-sm sm:text-base leading-8 mb-8 font-medium">
                     {testimonials[activeTestimonial].quote}
                   </p>
-                  <div>
-                    <h4 className="text-base font-bold text-slate-800">
-                      {testimonials[activeTestimonial].name}
-                    </h4>
-                    <p className="text-xs text-sky-600 mt-1 uppercase tracking-wider font-semibold">
-                      {testimonials[activeTestimonial].client}
-                    </p>
+                  <div className="flex items-center gap-4">
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                      {testimonials[activeTestimonial].name[0]}
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-white">
+                        {testimonials[activeTestimonial].name}
+                      </h4>
+                      <p className="text-xs text-sky-400 mt-0.5 uppercase tracking-wider font-semibold">
+                        {testimonials[activeTestimonial].client}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
 
-              {/* Slider dots */}
-              <div className="flex justify-center lg:justify-start gap-2 mt-8">
-                {testimonials.map((_, i) => (
+              {/* Controls */}
+              <div className="flex items-center gap-4 mt-8">
+                <div className="flex gap-2">
                   <button
-                    key={i}
-                    onClick={() => setActiveTestimonial(i)}
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      activeTestimonial === i ? 'w-6 bg-sky-500' : 'w-2 bg-slate-200 hover:bg-slate-350'
-                    }`}
-                    aria-label={`Testimonial slide ${i + 1}`}
-                  />
-                ))}
+                    onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
+                    className="h-9 w-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-sky-500/30 transition-all duration-200"
+                    aria-label="Previous testimonial"
+                  >
+                    <ChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
+                    className="h-9 w-9 rounded-full border border-white/10 bg-white/5 flex items-center justify-center text-slate-400 hover:text-white hover:border-sky-500/30 transition-all duration-200"
+                    aria-label="Next testimonial"
+                  >
+                    <ChevronRight size={16} />
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  {testimonials.map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setActiveTestimonial(i)}
+                      className={`h-2 rounded-full transition-all duration-300 ${
+                        activeTestimonial === i ? 'w-6 bg-gradient-to-r from-sky-400 to-indigo-500' : 'w-2 bg-white/10 hover:bg-white/20'
+                      }`}
+                      aria-label={`Testimonial slide ${i + 1}`}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 6. PRICING PLANS */}
-      <section id="pricing" className="py-24 px-6 relative bg-slate-50 border-t border-slate-100">
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 h-96 w-96 rounded-full bg-sky-500/5 blur-3xl" />
+      {/* ═══════════════════════════════════════════════════════════════════════
+         8. PRICING
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="pricing" className="py-24 px-6 relative bg-slate-900/50 border-t border-white/5">
+        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 h-96 w-96 rounded-full bg-sky-600/5 blur-[120px]" />
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-20">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-600 mb-3">OUR PRICING PLANS</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-4">
-              Simple &amp; Affordable Hosting
-            </h2>
-            <p className="text-slate-500 max-w-md mx-auto text-sm leading-relaxed">
+            <Eyebrow>OUR PRICING PLANS</Eyebrow>
+            <SectionTitle>Simple &amp; Affordable Hosting</SectionTitle>
+            <motion.p {...fadeUp} className="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
               Transparent, monthly rates with no hidden fees. Select a package that best fits your workspace.
-            </p>
+            </motion.p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {pricingPlans.map((plan, i) => (
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, amount: 0.05 }}
+            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {pricingPlans.map((plan) => (
               <motion.div
                 key={plan.name}
-                {...fadeUp}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
-                className={`rounded-[2rem] border p-8 flex flex-col relative transition-all duration-300 group hover:-translate-y-2 bg-white ${
+                variants={staggerItem}
+                className={`rounded-[2rem] border p-8 flex flex-col relative transition-all duration-300 group hover:-translate-y-2 bg-white/[0.03] backdrop-blur-sm ${
                   plan.popular
-                    ? 'border-sky-500 shadow-xl'
-                    : 'border-slate-200/80 hover:border-sky-500/30 shadow-sm'
+                    ? 'border-sky-500/50 shadow-xl shadow-sky-500/10'
+                    : 'border-white/5 hover:border-sky-500/20 shadow-sm hover:shadow-lg'
                 }`}
               >
                 {plan.popular && (
-                  <span className="absolute top-4 right-4 rounded-full bg-sky-500 px-3 py-1 text-[10px] font-bold text-white uppercase tracking-wider">
+                  <span className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-3 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-lg">
                     POPULAR
                   </span>
                 )}
-                <h3 className="text-lg font-bold text-slate-800 uppercase tracking-wider mb-2">{plan.name}</h3>
+                <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-2">{plan.name}</h3>
                 <div className="flex items-baseline gap-1 my-6">
-                  <span className="text-sm font-semibold text-slate-400">£</span>
-                  <span className="text-4xl font-extrabold text-slate-900">{plan.price}</span>
+                  <span className="text-sm font-semibold text-slate-500">£</span>
+                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
                   <span className="text-xs text-slate-500 font-medium">/Per Month</span>
                 </div>
-                <hr className="border-slate-100 mb-6" />
+                <hr className="border-white/5 mb-6" />
                 <ul className="space-y-4 flex-1 mb-8">
                   {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-3 text-sm text-slate-600">
-                      <Check size={14} className="text-sky-500 flex-shrink-0" />
+                    <li key={feat} className="flex items-center gap-3 text-sm text-slate-400">
+                      <Check size={14} className="text-sky-400 flex-shrink-0" />
                       <span>{feat}</span>
                     </li>
                   ))}
@@ -621,77 +658,73 @@ export default function Home() {
                   href="#contact"
                   className={`w-full rounded-xl py-3 text-center text-xs font-bold uppercase tracking-wider transition duration-300 ${
                     plan.popular
-                      ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:brightness-110 shadow-lg'
-                      : 'border border-slate-200 text-slate-700 bg-slate-50 hover:bg-sky-50 hover:border-sky-500/30'
+                      ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:brightness-110 shadow-lg shadow-sky-500/20'
+                      : 'border border-white/10 text-slate-300 bg-white/5 hover:bg-sky-500/10 hover:border-sky-500/30'
                   }`}
                 >
                   Purchase
                 </a>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* 7. CONTACT & MAP SECTION */}
-      <section id="contact" className="py-24 px-6 relative overflow-hidden bg-white">
-        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-sky-500/5 blur-3xl" />
+      {/* ═══════════════════════════════════════════════════════════════════════
+         9. CONTACT & MAP
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section id="contact" className="py-24 px-6 relative overflow-hidden bg-slate-950">
+        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-sky-600/5 blur-[120px]" />
         <div className="mx-auto max-w-7xl relative z-10">
           <div className="text-center mb-20">
-            <p className="text-xs font-bold uppercase tracking-[0.35em] text-sky-600 mb-3">GET IN TOUCH</p>
-            <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900">
-              Have Your Say !!!
-            </h2>
+            <Eyebrow>GET IN TOUCH</Eyebrow>
+            <SectionTitle>Have Your Say !!!</SectionTitle>
           </div>
 
           <div className="grid gap-12 lg:grid-cols-2 items-start">
-            {/* Left column: Address & Google Maps Embed */}
+            {/* Left: Address & Map */}
             <motion.div {...fadeUp} className="space-y-6">
-              <div className="rounded-[2rem] border border-slate-200 bg-white p-8 shadow-md">
-                <h3 className="text-xl font-bold text-slate-950 mb-6">Our Office Address</h3>
+              <div className="rounded-[2rem] border border-white/5 bg-white/[0.03] p-8 shadow-md">
+                <h3 className="text-xl font-bold text-white mb-6">Our Office Address</h3>
                 <div className="space-y-5 text-sm">
                   <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
                       <MapPin size={18} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Mailing Address</p>
-                      <address className="mt-1 text-slate-650 leading-6 not-italic">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Mailing Address</p>
+                      <address className="mt-1 text-slate-300 leading-6 not-italic">
                         Suite-G, Weller House,<br />
                         58-60 Longbridge Rd,<br />
                         Barking, England, IG11 8RT.
                       </address>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
                       <Phone size={18} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Phone / Telephone</p>
-                      <a href="tel:02038190333" className="mt-1 block text-slate-700 font-bold hover:text-sky-600 transition">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone / Telephone</p>
+                      <a href="tel:02038190333" className="mt-1 block text-slate-200 font-bold hover:text-sky-400 transition">
                         02038190333
                       </a>
                     </div>
                   </div>
-
                   <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-50 text-sky-600">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
                       <Mail size={18} />
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Address</p>
-                      <a href="mailto:info@eslanditsolutions.com" className="mt-1 block text-slate-700 font-semibold hover:text-sky-600 transition break-all">
+                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Email Address</p>
+                      <a href="mailto:info@eslanditsolutions.com" className="mt-1 block text-slate-200 font-semibold hover:text-sky-400 transition break-all">
                         info@eslanditsolutions.com
                       </a>
                     </div>
                   </div>
                 </div>
               </div>
-
-              {/* Map IFrame */}
-              <div className="rounded-[2rem] border border-slate-200 overflow-hidden h-[300px] shadow-md">
+              <div className="rounded-[2rem] border border-white/5 overflow-hidden h-[300px] shadow-md">
                 <iframe
                   title="Esland IT Solutions Office Map Location"
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.691646495486!2d0.07895821577108171!3d51.53721527964005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a66d4184d01d%3A0x4fc9c915675b5d4b!2sRadial+House%2C+3-5+Ripple+Rd%2C+Barking+IG11+7NP%2C+UK!5e0!3m2!1sen!2sin!4v1483707062936"
@@ -702,90 +735,44 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Right column: Message Form & girl.png layout */}
+            {/* Right: Form */}
             <motion.div {...fadeUp} transition={{ delay: 0.12, duration: 0.6 }} className="space-y-6">
-              <div className="rounded-[2.5rem] border border-slate-200 bg-white p-8 sm:p-10 shadow-md relative overflow-hidden">
-                {/* Floating decorative image girl.png on wide screens */}
+              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.03] backdrop-blur-sm p-8 sm:p-10 shadow-md relative overflow-hidden">
                 <div className="absolute right-0 bottom-0 pointer-events-none opacity-10 w-[180px] hidden md:block">
                   <img src="/girl.png" alt="" className="w-full h-auto object-contain" />
                 </div>
-
-                <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-                  <Mail className="text-sky-500" size={20} /> Drop Us a Message
+                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                  <Mail className="text-sky-400" size={20} /> Drop Us a Message
                 </h3>
-
                 <form onSubmit={handleContactSubmit} className="space-y-5 relative z-10">
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
                       <label htmlFor="form-name" className="sr-only">Name</label>
-                      <input
-                        id="form-name"
-                        type="text"
-                        required
-                        placeholder="Name"
-                        value={form.name}
-                        onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        className="w-full rounded-2xl border border-slate-250 bg-slate-50 px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-sky-500 focus:bg-white focus:outline-none"
-                      />
+                      <input id="form-name" type="text" required placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
                     </div>
                     <div>
                       <label htmlFor="form-email" className="sr-only">Email</label>
-                      <input
-                        id="form-email"
-                        type="email"
-                        required
-                        placeholder="Email"
-                        value={form.email}
-                        onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        className="w-full rounded-2xl border border-slate-250 bg-slate-50 px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-sky-500 focus:bg-white focus:outline-none"
-                      />
+                      <input id="form-email" type="email" required placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
                     </div>
                   </div>
-
                   <div className="grid gap-5 sm:grid-cols-2">
                     <div>
                       <label htmlFor="form-phone" className="sr-only">Phone Number</label>
-                      <input
-                        id="form-phone"
-                        type="tel"
-                        required
-                        placeholder="Phone Number"
-                        value={form.phone}
-                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                        className="w-full rounded-2xl border border-slate-250 bg-slate-50 px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-sky-500 focus:bg-white focus:outline-none"
-                      />
+                      <input id="form-phone" type="tel" required placeholder="Phone Number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
                     </div>
                     <div>
                       <label htmlFor="form-subject" className="sr-only">Subject</label>
-                      <input
-                        id="form-subject"
-                        type="text"
-                        required
-                        placeholder="Subject"
-                        value={form.subject}
-                        onChange={(e) => setForm({ ...form, subject: e.target.value })}
-                        className="w-full rounded-2xl border border-slate-250 bg-slate-50 px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-sky-500 focus:bg-white focus:outline-none"
-                      />
+                      <input id="form-subject" type="text" required placeholder="Subject" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
                     </div>
                   </div>
-
                   <div>
                     <label htmlFor="form-message" className="sr-only">Message</label>
-                    <textarea
-                      id="form-message"
-                      rows={5}
-                      required
-                      placeholder="Leave message here !!!"
-                      value={form.message}
-                      onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      className="w-full resize-none rounded-2xl border border-slate-250 bg-slate-50 px-4 py-3.5 text-sm text-slate-800 placeholder:text-slate-400 transition focus:border-sky-500 focus:bg-white focus:outline-none"
-                    />
+                    <textarea id="form-message" rows={5} required placeholder="Leave message here !!!" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
                   </div>
-
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg transition hover:brightness-110 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110 hover:shadow-sky-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     <Send size={14} />
                     {loading ? 'Sending Message...' : 'Send Message'}
@@ -797,26 +784,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 8. NEWSLETTER SUBSCRIBE BANNER (Dark slate overlay to contrast white layout) */}
-      <section className="relative py-20 px-6 overflow-hidden border-t border-slate-100">
+      {/* ═══════════════════════════════════════════════════════════════════════
+         10. NEWSLETTER
+         ═══════════════════════════════════════════════════════════════════════ */}
+      <section className="relative py-20 px-6 overflow-hidden border-t border-white/5 bg-slate-900/50">
         <div className="absolute inset-0 z-0">
-          <img
-            src="/banner-newsletter.jpg"
-            alt="Stay updated with Esland background"
-            className="w-full h-full object-cover grayscale opacity-20"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/60 to-slate-900/90" />
+          <img src="/banner-newsletter.jpg" alt="" className="w-full h-full object-cover grayscale opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/95" />
         </div>
-
+        <div className="absolute inset-0 z-[1] opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
         <div className="relative z-10 mx-auto max-w-7xl">
           <div className="grid gap-8 lg:grid-cols-2 items-center">
             <motion.div {...fadeUp}>
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2 flex items-center gap-3">
                 <Mail className="text-sky-400" size={24} /> Stay updated with Esland
               </h2>
-              <p className="text-slate-350 text-sm">Subscribe to receive the latest updates directly in your inbox.</p>
+              <p className="text-slate-400 text-sm">Subscribe to receive the latest updates directly in your inbox.</p>
             </motion.div>
-
             <motion.form
               {...fadeUp}
               transition={{ delay: 0.1, duration: 0.6 }}
@@ -831,12 +815,12 @@ export default function Home() {
                 placeholder="Your Email Address"
                 value={newsletterEmail}
                 onChange={(e) => setNewsletterEmail(e.target.value)}
-                className="flex-1 rounded-2xl border border-white/10 bg-slate-900/80 px-4 py-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+                className="flex-1 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm px-4 py-3 text-sm text-slate-200 placeholder:text-slate-600 focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 transition"
               />
               <button
                 type="submit"
                 disabled={newsLoading}
-                className="rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-6 py-3 text-sm font-bold text-white shadow hover:brightness-110 disabled:opacity-50"
+                className="rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-600 px-6 py-3 text-sm font-bold text-white shadow hover:brightness-110 disabled:opacity-50 transition"
               >
                 {newsLoading ? 'Subscribing...' : 'Subscribe'}
               </button>
@@ -844,6 +828,42 @@ export default function Home() {
           </div>
         </div>
       </section>
+    </div>
+  );
+}
+
+/* ─── Tilt Image Sub-component ─── */
+
+function TiltImage() {
+  const ref = useRef(null);
+  const [transform, setTransform] = useState('perspective(1000px) rotateX(0deg) rotateY(0deg)');
+
+  const handleMouse = useCallback((e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    setTransform(`perspective(1000px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) scale(1.02)`);
+  }, []);
+
+  const reset = useCallback(() => {
+    setTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)');
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      className="relative rounded-[2rem] sm:rounded-[2.5rem] p-1.5 sm:p-2 border border-white/5 bg-white/[0.03] overflow-hidden w-full max-w-sm sm:max-w-md shadow-lg group transition-transform duration-300 ease-out"
+      style={{ transform, transformStyle: 'preserve-3d' }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/10 via-transparent to-indigo-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none z-10" />
+      <img
+        src="/about-image.jpg"
+        alt="Esland workspace environment"
+        className="rounded-[2.2rem] w-full object-cover aspect-[4/3] relative z-10 transition-transform duration-500 group-hover:scale-[1.03]"
+      />
     </div>
   );
 }

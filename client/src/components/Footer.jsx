@@ -42,7 +42,7 @@ export default function Footer() {
   };
 
   return (
-    <footer className="border-t border-slate-200 bg-slate-50 text-slate-600">
+    <footer className="border-t border-white/5 bg-slate-950 text-slate-400">
       <div className="mx-auto grid max-w-7xl gap-12 px-6 py-14 sm:px-10 lg:grid-cols-4 lg:px-14">
         {/* Col 1: About */}
         <div className="space-y-5">
@@ -58,7 +58,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-500 transition hover:border-sky-500/40 hover:bg-sky-50 hover:text-sky-600"
+              className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/5 bg-white/5 text-slate-400 transition hover:border-sky-500/40 hover:bg-sky-500/10 hover:text-sky-400"
             >
               <Facebook size={14} />
             </a>
@@ -67,7 +67,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Twitter"
-              className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-500 transition hover:border-sky-500/40 hover:bg-sky-50 hover:text-sky-600"
+              className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/5 bg-white/5 text-slate-400 transition hover:border-sky-500/40 hover:bg-sky-500/10 hover:text-sky-400"
             >
               <Twitter size={14} />
             </a>
@@ -76,7 +76,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="LinkedIn"
-              className="flex h-8 w-8 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-500 transition hover:border-sky-500/40 hover:bg-sky-50 hover:text-sky-600"
+              className="flex h-8 w-8 items-center justify-center rounded-xl border border-white/5 bg-white/5 text-slate-400 transition hover:border-sky-500/40 hover:bg-sky-500/10 hover:text-sky-400"
             >
               <Linkedin size={14} />
             </a>
@@ -85,11 +85,11 @@ export default function Footer() {
 
         {/* Col 2: Services */}
         <div>
-          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Our Services</h3>
-          <ul className="space-y-3 text-xs text-slate-600">
+          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white">Our Services</h3>
+          <ul className="space-y-3 text-xs text-slate-500">
             {serviceLinks.map((item) => (
               <li key={item.label}>
-                <Link to={item.href} className="transition hover:text-sky-600">
+                <Link to={item.href} className="transition hover:text-sky-400">
                   {item.label}
                 </Link>
               </li>
@@ -99,20 +99,20 @@ export default function Footer() {
 
         {/* Col 3: Quick Links */}
         <div>
-          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Quick Links</h3>
-          <ul className="space-y-3 text-xs text-slate-600">
+          <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white">Quick Links</h3>
+          <ul className="space-y-3 text-xs text-slate-500">
             {quickLinks.map((item) => (
               <li key={item.label}>
-                <Link to={item.href} className="transition hover:text-sky-600">
+                <Link to={item.href} className="transition hover:text-sky-400">
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <a href="#" className="transition hover:text-sky-600">Privacy Policy</a>
+              <a href="#" className="transition hover:text-sky-400">Privacy Policy</a>
             </li>
             <li>
-              <a href="#" className="transition hover:text-sky-600">Terms &amp; Conditions</a>
+              <a href="#" className="transition hover:text-sky-400">Terms &amp; Conditions</a>
             </li>
           </ul>
         </div>
@@ -120,19 +120,19 @@ export default function Footer() {
         {/* Col 4: Contact + Newsletter */}
         <div className="space-y-6">
           <div>
-            <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-slate-900">Contact</h3>
-            <div className="space-y-3 text-xs text-slate-600">
+            <h3 className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white">Contact</h3>
+            <div className="space-y-3 text-xs text-slate-500">
               <div className="flex items-start gap-2.5">
-                <MapPin size={14} className="mt-0.5 flex-shrink-0 text-sky-600" />
+                <MapPin size={14} className="mt-0.5 flex-shrink-0 text-sky-400" />
                 <span className="leading-5">Suite-G, Weller House,<br />58-60 Longbridge Rd,<br />Barking, London, IG11 8RT.</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Phone size={13} className="flex-shrink-0 text-sky-600" />
-                <a href="tel:02038190333" className="transition hover:text-sky-600">02038190333</a>
+                <Phone size={13} className="flex-shrink-0 text-sky-400" />
+                <a href="tel:02038190333" className="transition hover:text-sky-400">02038190333</a>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail size={13} className="flex-shrink-0 text-sky-600" />
-                <a href="mailto:info@eslanditsolutions.com" className="break-all transition hover:text-sky-600">
+                <Mail size={13} className="flex-shrink-0 text-sky-400" />
+                <a href="mailto:info@eslanditsolutions.com" className="break-all transition hover:text-sky-400">
                   info@eslanditsolutions.com
                 </a>
               </div>
@@ -149,7 +149,7 @@ export default function Footer() {
                 value={email}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="Your email"
-                className="min-w-0 flex-1 rounded-2xl border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:border-sky-400 focus:outline-none"
+                className="min-w-0 flex-1 rounded-2xl border border-white/10 bg-white/5 px-3 py-2.5 text-xs text-slate-200 placeholder:text-slate-600 focus:border-sky-500 focus:outline-none"
               />
               <button
                 type="submit"
@@ -164,13 +164,13 @@ export default function Footer() {
       </div>
 
       {/* Bottom Copyright Bar */}
-      <div className="border-t border-slate-200 bg-slate-100">
-        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] text-slate-500 sm:flex-row sm:justify-between sm:px-10 lg:px-14">
+      <div className="border-t border-white/5 bg-slate-950/80">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-6 py-4 text-center text-[10px] text-slate-600 sm:flex-row sm:justify-between sm:px-10 lg:px-14">
           <p>copyright &copy; Esland IT Solutions. All rights reserved.</p>
           <div className="flex items-center gap-3">
-            <a href="#" className="transition hover:text-slate-700">Privacy Policy</a>
+            <a href="#" className="transition hover:text-slate-400">Privacy Policy</a>
             <span>&bull;</span>
-            <a href="#" className="transition hover:text-slate-700">Terms &amp; Conditions</a>
+            <a href="#" className="transition hover:text-slate-400">Terms &amp; Conditions</a>
           </div>
         </div>
       </div>

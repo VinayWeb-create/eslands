@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
-import { Search, Layout, Code, Test, Rocket, Headphones, ChevronRight, CheckCircle } from 'lucide-react';
+import { Search, Layout, Code, FlaskConical, Rocket, Headphones, ChevronRight, CheckCircle } from 'lucide-react';
 
 const steps = [
   {
@@ -25,7 +25,7 @@ const steps = [
     color: 'from-orange-500 to-red-500'
   },
   {
-    icon: Test,
+    icon: FlaskConical,
     title: 'Testing',
     description: 'Rigorous quality assurance including unit testing, integration testing, and user acceptance testing.',
     duration: '1-2 weeks',
