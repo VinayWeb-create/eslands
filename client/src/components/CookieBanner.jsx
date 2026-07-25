@@ -20,7 +20,7 @@ export default function CookieBanner() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="max-w-3xl text-sm leading-6 text-slate-200">
           We use cookies to enhance your experience. By continuing to visit this site you agree to our use of cookies.{' '}
-          <a href="https://www.onebridgeinfotech.com/privacy-policy" target="_blank" rel="noreferrer" className="text-cyan-300 underline hover:text-cyan-100">
+          <a href="https://eslanditsolutions.com/privacy-policy" target="_blank" rel="noreferrer" className="text-cyan-300 underline hover:text-cyan-100">
             Learn more
           </a>
         </p>

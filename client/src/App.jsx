@@ -8,7 +8,8 @@ import About from './pages/About';
 import Careers from './pages/Careers';
 import Contact from './pages/Contact';
 import Products from './pages/Products';
-import Industries from './pages/Industries';
+import NotFound from './pages/NotFound';
+import Seo from './components/Seo';
 import ScrollIndicator from './components/ScrollIndicator';
 import CookieBanner from './components/CookieBanner';
 import { ToastContainer } from 'react-toastify';
@@ -18,7 +19,9 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-surface text-slate-100 selection:bg-sky-400 selection:text-slate-900">
+    <div className="min-h-screen bg-white text-slate-800 selection:bg-sky-100 selection:text-sky-900">
+      <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-white px-4 py-2 font-semibold text-slate-950 focus:not-sr-only">Skip to content</a>
+      <Seo />
       <ScrollIndicator />
       <Navbar />
       <AnimatePresence mode="wait">
@@ -27,13 +30,13 @@ function App() {
           <Route path="/services" element={<PageWrapper><Services /></PageWrapper>} />
           <Route path="/products" element={<PageWrapper><Products /></PageWrapper>} />
           <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
-          <Route path="/industries" element={<PageWrapper><Industries /></PageWrapper>} />
           <Route path="/careers" element={<PageWrapper><Careers /></PageWrapper>} />
           <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+          <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
         </Routes>
       </AnimatePresence>
       <Footer />
-      <ToastContainer position="top-right" theme="dark" />
+      <ToastContainer position="top-right" theme="light" />
       <CookieBanner />
     </div>
   );
@@ -46,7 +49,7 @@ function PageWrapper({ children }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -24 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
-      className="relative overflow-hidden"
+      id="main-content" className="relative overflow-hidden"
     >
       {children}
     </motion.main>
