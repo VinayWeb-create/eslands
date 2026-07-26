@@ -40,13 +40,13 @@ const pricingPlans = [
 ];
 
 const partners = [
-  { name: 'Flower Paradise', color: '#e879a0', hoverColor: '#f9a8d4', accent: 'from-pink-500/15 to-rose-500/10', border: 'hover:border-pink-500/30' },
-  { name: 'Ash Groove', color: '#60a5a0', hoverColor: '#5eead4', accent: 'from-teal-500/15 to-emerald-500/10', border: 'hover:border-teal-500/30' },
-  { name: 'Amdip Traders', color: '#f59e0b', hoverColor: '#fbbf24', accent: 'from-amber-500/15 to-yellow-500/10', border: 'hover:border-amber-500/30' },
-  { name: 'Ilford Kitchens', color: '#ef4444', hoverColor: '#f87171', accent: 'from-red-500/15 to-orange-500/10', border: 'hover:border-red-500/30' },
+  { name: 'Flower Paradise', color: '#e879a0', hoverColor: '#f9a8d4', accent: 'from-pink-500/15 to-rose-500/10', border: 'hover:border-pink-500/30', logo: '/images/flower_paradise_logo.png', isImg: true },
+  { name: 'Ash Groove', color: '#60a5a0', hoverColor: '#5eead4', accent: 'from-teal-500/15 to-emerald-500/10', border: 'hover:border-teal-500/30', logo: '/images/ash_groove_logo.png', isImg: true },
+  { name: 'Amdip Traders', color: '#f59e0b', hoverColor: '#fbbf24', accent: 'from-amber-500/15 to-yellow-500/10', border: 'hover:border-amber-500/30', logo: '/images/amdip_traders_logo.png', isImg: true },
+  { name: 'Ilford Kitchens', color: '#ef4444', hoverColor: '#f87171', accent: 'from-red-500/15 to-orange-500/10', border: 'hover:border-red-500/30', logo: '/images/ilford_kitchens_logo.png', isImg: true },
   { name: 'NEX', color: '#3b82f6', hoverColor: '#60a5fa', accent: 'from-blue-500/15 to-indigo-500/10', border: 'hover:border-blue-500/30', logo: '/nex.png', isImg: true },
-  { name: 'Mobile Bitz', color: '#8b5cf6', hoverColor: '#a78bfa', accent: 'from-violet-500/15 to-purple-500/10', border: 'hover:border-violet-500/30' },
-  { name: 'Kingsburry School', color: '#10b981', hoverColor: '#34d399', accent: 'from-emerald-500/15 to-green-500/10', border: 'hover:border-emerald-500/30' },
+  { name: 'Mobile Bitz', color: '#8b5cf6', hoverColor: '#a78bfa', accent: 'from-violet-500/15 to-purple-500/10', border: 'hover:border-violet-500/30', logo: '/images/mobile_bitz_logo.png', isImg: true },
+  { name: 'Kingsburry School', color: '#10b981', hoverColor: '#34d399', accent: 'from-emerald-500/15 to-green-500/10', border: 'hover:border-emerald-500/30', logo: '/images/kingsburry_school_logo.png', isImg: true },
 ];
 
 /* ─── Reusable animation variants ─── */
