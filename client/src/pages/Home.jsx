@@ -244,7 +244,11 @@ export default function Home() {
          2. PARTNERS MARQUEE + STATS
          ═══════════════════════════════════════════════════════════════════════ */}
       <section className="border-y border-white/5 bg-slate-950 py-14 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-sky-600/5 via-indigo-600/5 to-sky-600/5 pointer-events-none" />
+        <motion.div 
+          animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+          className="absolute inset-0 bg-gradient-to-r from-sky-900/10 via-indigo-900/10 to-sky-900/10 pointer-events-none bg-[length:200%_200%]" 
+        />
         <div className="mx-auto max-w-7xl px-6 mb-10 relative z-10">
           <motion.p {...fadeUp} className="text-center text-xs font-bold uppercase tracking-[0.3em] text-slate-500 mb-3">
             Trusted by Businesses Across the UK
@@ -297,7 +301,7 @@ export default function Home() {
                         src={partner.logo} 
                         alt={partner.name} 
                         loading="lazy" 
-                        className="h-16 sm:h-20 w-auto object-contain relative z-10 transition-all duration-500 group-hover:scale-110 rounded-2xl shadow-lg border border-white/10 group-hover:shadow-2xl"
+                        className="h-16 sm:h-20 w-auto object-contain relative z-10 transition-all duration-700 group-hover:scale-110 rounded-2xl shadow-lg border border-white/10 group-hover:shadow-2xl grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100"
                         style={{ boxShadow: `0 10px 30px -10px ${partner.color}40` }}
                       />
                     </div>
