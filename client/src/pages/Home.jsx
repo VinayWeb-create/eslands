@@ -290,7 +290,17 @@ export default function Home() {
                     style={{ background: `linear-gradient(90deg, transparent, ${partner.color}, transparent)` }}
                   />
                   {partner.isImg ? (
-                    <img src={partner.logo} alt={partner.name} loading="lazy" className="h-16 sm:h-20 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
+                    <div className="relative">
+                      {/* Logo specific glow */}
+                      <div className="absolute inset-0 blur-xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 scale-150" style={{ backgroundColor: partner.color }} />
+                      <img 
+                        src={partner.logo} 
+                        alt={partner.name} 
+                        loading="lazy" 
+                        className="h-16 sm:h-20 w-auto object-contain relative z-10 transition-all duration-500 group-hover:scale-110 rounded-2xl shadow-lg border border-white/10 group-hover:shadow-2xl"
+                        style={{ boxShadow: `0 10px 30px -10px ${partner.color}40` }}
+                      />
+                    </div>
                   ) : (
                     <span
                       className="text-[17px] font-extrabold tracking-tight relative z-10 transition-all duration-300 group-hover:tracking-wide"
