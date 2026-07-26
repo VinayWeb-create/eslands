@@ -410,7 +410,7 @@ export default function Services() {
                     to="/contact"
                     className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-350 bg-white px-8 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-md"
                   >
-                    Get a Quote <ArrowRight size={15} />
+                    Book a Consultation <ArrowRight size={15} />
                   </Link>
                 </motion.div>
               </div>

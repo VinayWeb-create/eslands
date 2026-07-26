@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import api from '../lib/api';
 import CountUp from '../components/CountUp';
+import { Link } from 'react-router-dom';
 import { services } from './Services';
 
 /* ─── Data (unchanged) ─── */
@@ -196,18 +197,18 @@ export default function Home() {
                   We Build creative, effective &amp; professional websites and affordable web design solutions !!!
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
-                  <a
-                    href="#services"
+                  <Link
+                    to="/contact"
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-sm font-bold text-white shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 hover:brightness-110 hover:-translate-y-0.5 transition-all duration-300"
                   >
-                    <PlayCircle size={16} /> Get More
-                  </a>
-                  <a
-                    href="#contact"
+                    <PlayCircle size={16} /> Book a Consultation
+                  </Link>
+                  <Link
+                    to="/about"
                     className="inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-4 text-sm font-semibold text-white hover:bg-white/10 transition-all duration-300"
                   >
-                    <Phone size={15} /> Call us
-                  </a>
+                    Learn More
+                  </Link>
                 </div>
               </motion.div>
             </div>
@@ -490,12 +491,12 @@ export default function Home() {
               &quot; we can help brand your business effectively !!! &quot;
             </p>
             <div className="flex justify-center gap-4">
-              <a href="#services" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white hover:brightness-110 shadow-lg shadow-sky-500/20 transition">
-                Get More <ArrowRight size={15} />
-              </a>
-              <a href="#contact" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition">
-                Call us
-              </a>
+              <Link to="/contact" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white hover:brightness-110 shadow-lg shadow-sky-500/20 transition">
+                Book a Consultation <ArrowRight size={15} />
+              </Link>
+              <Link to="/services" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-sm px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition">
+                Learn More
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -619,185 +620,53 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
-         8. PRICING
+         8. PROCESS SNAPSHOT
          ═══════════════════════════════════════════════════════════════════════ */}
-      <section id="pricing" className="py-24 px-6 relative bg-slate-900/50 border-t border-white/5">
-        <div className="pointer-events-none absolute left-1/2 -translate-x-1/2 bottom-0 h-96 w-96 rounded-full bg-sky-600/5 blur-[120px]" />
-        <div className="mx-auto max-w-7xl relative z-10">
-          <div className="text-center mb-20">
-            <Eyebrow>OUR PRICING PLANS</Eyebrow>
-            <SectionTitle>Simple &amp; Affordable Hosting</SectionTitle>
-            <motion.p {...fadeUp} className="text-slate-400 max-w-md mx-auto text-sm leading-relaxed">
-              Transparent, monthly rates with no hidden fees. Select a package that best fits your workspace.
-            </motion.p>
-          </div>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, amount: 0.05 }}
-            className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {pricingPlans.map((plan) => (
-              <motion.div
-                key={plan.name}
-                variants={staggerItem}
-                  className={`rounded-[2rem] border p-8 flex flex-col relative transition-all duration-300 group hover:-translate-y-2 bg-slate-900 backdrop-blur-sm ${
-                  plan.popular
-                    ? 'border-sky-500/50 shadow-xl shadow-sky-500/10'
-                    : 'border-white/5 hover:border-sky-500/20 shadow-sm hover:shadow-lg'
-                }`}
-              >
-                {plan.popular && (
-                  <span className="absolute top-4 right-4 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-3 py-1 text-[10px] font-bold text-white uppercase tracking-wider shadow-lg">
-                    POPULAR
-                  </span>
-                )}
-                <h3 className="text-lg font-bold text-white uppercase tracking-wider mb-2">{plan.name}</h3>
-                <div className="flex items-baseline gap-1 my-6">
-                  <span className="text-sm font-semibold text-slate-500">£</span>
-                  <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                  <span className="text-xs text-slate-500 font-medium">/Per Month</span>
-                </div>
-                <hr className="border-white/5 mb-6" />
-                <ul className="space-y-4 flex-1 mb-8">
-                  {plan.features.map((feat) => (
-                    <li key={feat} className="flex items-center gap-3 text-sm text-slate-400">
-                      <Check size={14} className="text-sky-400 flex-shrink-0" />
-                      <span>{feat}</span>
-                    </li>
-                  ))}
-                </ul>
-                <a
-                  href="#contact"
-                  className={`w-full rounded-xl py-3 text-center text-xs font-bold uppercase tracking-wider transition duration-300 ${
-                    plan.popular
-                      ? 'bg-gradient-to-r from-sky-500 to-indigo-600 text-white hover:brightness-110 shadow-lg shadow-sky-500/20'
-                      : 'border border-white/10 text-slate-300 bg-white/5 hover:bg-sky-500/10 hover:border-sky-500/30'
-                  }`}
-                >
-                  Purchase
-                </a>
-              </motion.div>
+      <section className="py-24 px-6 relative bg-slate-900/50 border-t border-white/5">
+        <div className="mx-auto max-w-7xl relative z-10 text-center">
+          <Eyebrow>HOW WE WORK</Eyebrow>
+          <SectionTitle>Our Proven Process</SectionTitle>
+          <div className="mt-16 grid gap-8 sm:grid-cols-3">
+            {['Discovery & Strategy', 'Development & Integration', 'Deployment & Support'].map((step, i) => (
+              <div key={step} className="p-8 rounded-[2rem] bg-slate-800/30 border border-white/5 relative">
+                <div className="text-4xl font-black text-sky-500/20 absolute -top-4 -left-4">0{i+1}</div>
+                <h3 className="text-lg font-bold text-white relative z-10 mt-4">{step}</h3>
+              </div>
             ))}
-          </motion.div>
+          </div>
+          <div className="mt-12">
+            <Link to="/about" className="inline-flex items-center gap-2 text-sky-400 font-semibold hover:text-sky-300 transition">
+              Explore Our Full Process <ArrowRight size={16} />
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════════════════════════════
-         9. CONTACT & MAP
+         9. CASE STUDIES
          ═══════════════════════════════════════════════════════════════════════ */}
-      <section id="contact" className="py-24 px-6 relative overflow-hidden bg-slate-950">
-        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 h-96 w-96 rounded-full bg-sky-600/5 blur-[120px]" />
+      <section className="py-24 px-6 relative bg-slate-950 border-t border-white/5">
         <div className="mx-auto max-w-7xl relative z-10">
-          <div className="text-center mb-20">
-            <Eyebrow>GET IN TOUCH</Eyebrow>
-            <SectionTitle>Have Your Say !!!</SectionTitle>
+          <div className="text-center mb-16">
+            <Eyebrow>PROVEN IMPACT</Eyebrow>
+            <SectionTitle>Real Business Outcomes</SectionTitle>
           </div>
-
-          <div className="grid gap-12 lg:grid-cols-2 items-start">
-            {/* Left: Address & Map */}
-            <motion.div {...fadeUp} className="space-y-6">
-              <div className="rounded-[2rem] border border-slate-700/50 bg-slate-900 p-8 shadow-md">
-                <h3 className="text-xl font-bold text-white mb-6">Our Office Address</h3>
-                <div className="space-y-5 text-sm">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
-                      <MapPin size={18} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Mailing Address</p>
-                      <address className="mt-1 text-slate-300 leading-6 not-italic">
-                        Suite-G, Weller House,<br />
-                        58-60 Longbridge Rd,<br />
-                        Barking, England, IG11 8RT.
-                      </address>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
-                      <Phone size={18} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Phone / Telephone</p>
-                      <a href="tel:02038190333" className="mt-1 block text-slate-200 font-bold hover:text-sky-400 transition">
-                        02038190333
-                      </a>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-sky-500/10 text-sky-400">
-                      <Mail size={18} />
-                    </div>
-                    <div>
-                      <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Email Address</p>
-                      <a href="mailto:info@eslanditsolutions.com" className="mt-1 block text-slate-200 font-semibold hover:text-sky-400 transition break-all">
-                        info@eslanditsolutions.com
-                      </a>
-                    </div>
-                  </div>
-                </div>
+          <div className="grid gap-8 md:grid-cols-2">
+            {[
+              { client: 'Global Logistics Provider', result: '40% reduction in downtime', desc: 'Migrated legacy systems to a high-availability cloud architecture.' },
+              { client: 'Fintech Startup', result: 'PCI-DSS Compliance in 30 days', desc: 'Implemented secure development lifecycle and automated security scanning.' }
+            ].map(caseStudy => (
+              <div key={caseStudy.client} className="p-10 rounded-[2rem] border border-white/5 bg-slate-900/50 hover:bg-slate-900 transition-colors">
+                <p className="text-sky-400 font-bold mb-2">{caseStudy.client}</p>
+                <h3 className="text-2xl font-extrabold text-white mb-4">{caseStudy.result}</h3>
+                <p className="text-slate-400">{caseStudy.desc}</p>
               </div>
-              <div className="rounded-[2rem] border border-white/5 overflow-hidden h-[300px] shadow-md">
-                <iframe
-                  title="Esland IT Solutions Office Map Location"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.691646495486!2d0.07895821577108171!3d51.53721527964005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a66d4184d01d%3A0x4fc9c915675b5d4b!2sRadial+House%2C+3-5+Ripple+Rd%2C+Barking+IG11+7NP%2C+UK!5e0!3m2!1sen!2sin!4v1483707062936"
-                  className="w-full h-full border-0"
-                  allowFullScreen
-                  loading="lazy"
-                />
-              </div>
-            </motion.div>
-
-            {/* Right: Form */}
-            <motion.div {...fadeUp} transition={{ delay: 0.12, duration: 0.6 }} className="space-y-6">
-              <div className="rounded-[2.5rem] border border-slate-700/50 bg-slate-900 backdrop-blur-sm p-8 sm:p-10 shadow-md relative overflow-hidden">
-                <div className="absolute right-0 bottom-0 pointer-events-none opacity-10 w-[180px] hidden md:block">
-                  <img src="/girl.png" alt="" loading="lazy" className="w-full h-auto object-contain" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                  <Mail className="text-sky-400" size={20} /> Drop Us a Message
-                </h3>
-                <form onSubmit={handleContactSubmit} className="space-y-5 relative z-10">
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="form-name" className="sr-only">Name</label>
-                      <input id="form-name" type="text" required placeholder="Name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
-                    </div>
-                    <div>
-                      <label htmlFor="form-email" className="sr-only">Email</label>
-                      <input id="form-email" type="email" required placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
-                    </div>
-                  </div>
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <div>
-                      <label htmlFor="form-phone" className="sr-only">Phone Number</label>
-                      <input id="form-phone" type="tel" required placeholder="Phone Number" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
-                    </div>
-                    <div>
-                      <label htmlFor="form-subject" className="sr-only">Subject</label>
-                      <input id="form-subject" type="text" required placeholder="Subject" value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="form-message" className="sr-only">Message</label>
-                    <textarea id="form-message" rows={5} required placeholder="Leave message here !!!" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} className="w-full resize-none rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-sm text-slate-200 placeholder:text-slate-600 transition focus:border-sky-500 focus:bg-white/[0.07] focus:outline-none focus:ring-2 focus:ring-sky-500/20" />
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg shadow-sky-500/20 transition hover:brightness-110 hover:shadow-sky-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Send size={14} />
-                    {loading ? 'Sending Message...' : 'Send Message'}
-                  </button>
-                </form>
-              </div>
-            </motion.div>
+            ))}
           </div>
         </div>
       </section>
+
+
 
       {/* ═══════════════════════════════════════════════════════════════════════
          10. NEWSLETTER

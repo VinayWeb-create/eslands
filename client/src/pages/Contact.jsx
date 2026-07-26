@@ -119,7 +119,7 @@ export default function Contact() {
               Drop Your Message
             </h2>
             <p className="text-sm leading-7 text-slate-500 mb-8">
-              Need to talk to us ? <span className="text-sky-600 font-bold">We&apos;re Listening ....</span>
+              Need to talk to us? <span className="text-sky-600 font-bold">We aim to respond within 24 hours.</span>
             </p>
 
             <form className="space-y-5" onSubmit={handleValidationAndSubmit}>

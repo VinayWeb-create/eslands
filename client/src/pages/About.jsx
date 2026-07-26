@@ -90,6 +90,19 @@ const differentiators = [
   'Post-launch support and long-term partnerships',
 ];
 
+const leadership = [
+  { name: 'Naresh Pathi', role: 'Founder & CEO', icon: Lightbulb, bio: 'Driving the vision for enterprise-grade digital transformation.' },
+  { name: 'Sarah Jenkins', role: 'Chief Technology Officer', icon: Code, bio: '20+ years engineering secure, scalable systems.' },
+  { name: 'Marcus Chen', role: 'Head of Operations', icon: Target, bio: 'Ensuring seamless delivery and client success across the globe.' },
+];
+
+const certifications = [
+  { name: 'AWS Advanced Partner', icon: Globe },
+  { name: 'Microsoft Gold Partner', icon: Layout },
+  { name: 'ISO 27001 Certified', icon: Lock },
+  { name: 'SOC 2 Type II Compliant', icon: ShieldCheck },
+];
+
 function CountUp({ target, suffix = '' }) {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
@@ -596,6 +609,55 @@ export default function About() {
         </div>
       </section>
 
+      {/* ── Leadership ───────────────────────────────────────── */}
+      <section className="relative bg-slate-900/50 py-24 border-t border-slate-800">
+        <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
+          <FadeUp>
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 rounded-full border border-indigo-400/20 bg-indigo-400/5 px-5 py-2 mb-6">
+                <Users className="w-4 h-4 text-indigo-400" />
+                <span className="text-sm font-medium text-indigo-300 tracking-wide">Leadership Team</span>
+              </div>
+              <h2 className="text-4xl sm:text-5xl font-bold text-white">Guided by Experience</h2>
+            </div>
+          </FadeUp>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {leadership.map((leader, i) => (
+              <FadeUp key={leader.name} delay={i * 0.1}>
+                <div className="group rounded-2xl bg-slate-800/30 border border-slate-700/50 p-8 text-center transition-all hover:bg-slate-800/50 hover:border-slate-600/50">
+                  <div className="mx-auto h-24 w-24 rounded-full bg-gradient-to-br from-sky-500/20 to-indigo-500/20 border border-slate-700 mb-6 flex items-center justify-center">
+                    <leader.icon className="w-10 h-10 text-slate-400 group-hover:text-sky-400 transition-colors" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">{leader.name}</h3>
+                  <p className="text-sm text-sky-400 font-medium mt-1 mb-4">{leader.role}</p>
+                  <p className="text-slate-400 text-sm leading-relaxed">{leader.bio}</p>
+                </div>
+              </FadeUp>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Certifications & Partners ────────────────────────── */}
+      <section className="relative bg-slate-950 py-16 border-t border-slate-800">
+        <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14 text-center">
+          <FadeUp>
+            <h3 className="text-sm font-semibold text-slate-400 tracking-wider uppercase mb-10">
+              Trusted by the Best
+            </h3>
+            <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+              {certifications.map((cert, i) => (
+                <div key={i} className="flex items-center gap-3 opacity-60 hover:opacity-100 transition-opacity grayscale hover:grayscale-0">
+                  <cert.icon className="w-8 h-8 text-sky-400" />
+                  <span className="text-lg font-bold text-slate-300">{cert.name}</span>
+                </div>
+              ))}
+            </div>
+          </FadeUp>
+        </div>
+      </section>
+
       {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="relative bg-slate-900/50 py-24">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -616,7 +678,7 @@ export default function About() {
               </p>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
                 <a href="/contact" className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-sky-500/20 transition-all duration-300 hover:shadow-sky-500/30 hover:scale-[1.02]">
-                  Get in Touch
+                  Book a Consultation
                   <ArrowRight className="w-4 h-4" />
                 </a>
                 <a href="/careers" className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-8 py-4 text-sm font-semibold text-white transition-all duration-300 hover:bg-white/10 hover:border-white/20">

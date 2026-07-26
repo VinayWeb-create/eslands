@@ -60,10 +60,10 @@ export default function Products() {
           >
             <p className="text-xs uppercase tracking-[0.35em] text-sky-300 mb-2">Esland IT Solutions</p>
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-4 uppercase">
-              Products
+              Enterprise Solutions
             </h1>
             <p className="text-slate-200 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
-              View all our product listings on this page !!
+              Discover our enterprise-grade hardware and software solutions tailored for your business.
             </p>
           </motion.div>
         </div>
@@ -194,7 +194,7 @@ export default function Products() {
                       href="/contact"
                       className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 py-2.5 text-[10px] font-bold text-white hover:brightness-110 shadow-lg shadow-sky-500/10 transition-all duration-300"
                     >
-                      <MessageSquare size={10} /> Enquire
+                      <MessageSquare size={10} /> Book a Consultation
                     </a>
                   </div>
                 </div>
@@ -242,7 +242,7 @@ export default function Products() {
               href="/contact"
               className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
             >
-              Request Quote
+              Book a Consultation
             </a>
           </div>
         </motion.div>
