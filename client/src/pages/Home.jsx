@@ -290,7 +290,7 @@ export default function Home() {
                     style={{ background: `linear-gradient(90deg, transparent, ${partner.color}, transparent)` }}
                   />
                   {partner.isImg ? (
-                    <img src={partner.logo} alt={partner.name} loading="lazy" className="h-7 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
+                    <img src={partner.logo} alt={partner.name} loading="lazy" className="h-16 sm:h-20 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
                   ) : (
                     <span
                       className="text-[17px] font-extrabold tracking-tight relative z-10 transition-all duration-300 group-hover:tracking-wide"
