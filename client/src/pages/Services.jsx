@@ -8,7 +8,7 @@ import {
   ArrowRight, Check, Phone
 } from 'lucide-react';
 
-const services = [
+export const services = [
   {
     id: 'web-development',
     label: 'Web Development',

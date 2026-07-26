@@ -58,7 +58,7 @@ export default function Careers() {
               </div>
               <p className="mt-5 text-sm leading-7 text-slate-650">{job.location}</p>
               <p className="mt-6 text-sm leading-7 text-slate-600">{job.description}</p>
-              <button type="button" className="mt-8 inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-6 py-3 text-sm font-semibold text-sky-600 transition hover:bg-sky-100/50">Apply Now</button>
+              <a href={`mailto:hr@eslanditsolutions.com?subject=Application for ${job.title}`} className="mt-8 inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-6 py-3 text-sm font-semibold text-sky-600 transition hover:bg-sky-100/50">Apply Now</a>
             </article>
           ))}
         </div>

@@ -9,6 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import api from '../lib/api';
 import CountUp from '../components/CountUp';
+import { services } from './Services';
 
 /* ─── Data (unchanged) ─── */
 
@@ -18,16 +19,7 @@ const heroSlides = [
   { src: '/banner-3.jpg', alt: 'Corporate teamwork background', title: 'Innovative Technology Solutions' }
 ];
 
-const oldServices = [
-  { title: 'Web Development', desc: 'It has been a very positive part of us that, no one has given any pathetic feedback about the web Development of ours.', icon: Globe, gradient: 'from-sky-500 to-blue-600' },
-  { title: 'Mobile App Development', desc: 'Our expert mobile app developers understand your business that would help you integrate your business on the mobile.', icon: Smartphone, gradient: 'from-indigo-500 to-purple-600' },
-  { title: 'Software Development', desc: 'Software Application Development and Maintenance is a part of Esland IT Solutions Core activity.', icon: Code2, gradient: 'from-sky-400 to-indigo-500' },
-  { title: 'Networking solutions', desc: 'We deliver simplistic yet consistent solutions that are flexible and can moulded in accordance to client requirements.', icon: Network, gradient: 'from-cyan-500 to-sky-500' },
-  { title: 'Professional Naming', desc: 'Getting the right name is the first step towards successful company.', icon: Tag, gradient: 'from-violet-500 to-indigo-500' },
-  { title: 'Branding', desc: 'Your logo represents your brand, but your brand is everything that your business stands for.', icon: Palette, gradient: 'from-sky-500 to-cyan-500' },
-  { title: 'Seo and Marketing', desc: 'We have done extensive research in Search Engine Optimation (SEO) techniques.', icon: Search, gradient: 'from-indigo-500 to-sky-500' },
-  { title: '2D animation', desc: '2D animation focuses on creating characters, storyboards, and backgrounds in two-dimensional environments.', icon: PlayCircle, gradient: 'from-blue-500 to-indigo-600' }
-];
+
 
 const testimonials = [
   { name: 'Usman', client: 'Mobile Bitz, Dartford', title: 'Friendly !!!', quote: 'A very friendly and helpful company that have looked for solutions to any problems. It is great to talk to the same person every time I phone up or e-mail. My site is at top of both Google and Bing and this brings me more customers. Every time I phone up or e-mail a change, it is done quickly and efficiently. They have helped me expand my customer base.' },
@@ -297,7 +289,7 @@ export default function Home() {
                     style={{ background: `linear-gradient(90deg, transparent, ${partner.color}, transparent)` }}
                   />
                   {partner.isImg ? (
-                    <img src={partner.logo} alt={partner.name} className="h-7 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
+                    <img src={partner.logo} alt={partner.name} loading="lazy" className="h-7 w-auto object-contain relative z-10 transition-all duration-300 group-hover:scale-110" />
                   ) : (
                     <span
                       className="text-[17px] font-extrabold tracking-tight relative z-10 transition-all duration-300 group-hover:tracking-wide"
@@ -351,7 +343,7 @@ export default function Home() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4 }}
-                    className="flex flex-col items-center justify-center p-4 rounded-2xl border border-white/5 bg-white/[0.03] text-center hover:border-sky-500/20 hover:bg-sky-500/5 transition-all duration-300 group"
+                    className="flex flex-col items-center justify-center p-4 rounded-2xl border border-slate-700/50 bg-slate-800/50 text-center hover:border-sky-500/20 hover:bg-sky-500/5 transition-all duration-300 group"
                   >
                     <stat.icon size={18} className="text-sky-400 mb-2 group-hover:scale-110 transition-transform" />
                     <div className="text-2xl font-extrabold text-white">
@@ -383,9 +375,9 @@ export default function Home() {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { title: 'Creative', desc: 'Innovative solutions that push boundaries and deliver memorable digital experiences.', gradient: 'from-indigo-500 to-sky-500', icon: Sparkles, glow: 'shadow-indigo-500/20' },
-              { title: 'Impressive', desc: 'Results that speak for themselves — measurable impact on your business growth.', gradient: 'from-sky-500 to-cyan-500', icon: TrendingUp, glow: 'shadow-sky-500/20' },
-              { title: 'Professional', desc: 'Enterprise-grade quality with dedicated support and transparent communication.', gradient: 'from-sky-500 to-indigo-500', icon: Shield, glow: 'shadow-sky-500/20' },
+              { title: 'Creative', desc: 'Innovative solutions that push boundaries and deliver memorable digital experiences.', gradient: 'from-indigo-500 to-sky-500', icon: Sparkles, glow: 'shadow-indigo-500/20', image: '/images/service.jpg' },
+              { title: 'Impressive', desc: 'Results that speak for themselves — measurable impact on your business growth.', gradient: 'from-sky-500 to-cyan-500', icon: TrendingUp, glow: 'shadow-sky-500/20', image: '/woman-blue.jpg' },
+              { title: 'Professional', desc: 'Enterprise-grade quality with dedicated support and transparent communication.', gradient: 'from-sky-500 to-indigo-500', icon: Shield, glow: 'shadow-sky-500/20', image: '/chel-4.png' },
             ].map((card) => (
               <motion.div
                 key={card.title}
@@ -395,12 +387,22 @@ export default function Home() {
                 viewport={{ once: true }}
                 className="group relative"
               >
-                <div className={`relative rounded-[2rem] border border-white/5 bg-white/[0.03] p-8 sm:p-10 transition-all duration-500 hover:border-transparent hover:shadow-2xl ${card.glow} hover:-translate-y-2 overflow-hidden`}>
+                <div className={`relative rounded-[2rem] border border-slate-700/50 bg-slate-900 transition-all duration-500 hover:border-transparent hover:shadow-2xl ${card.glow} hover:-translate-y-2 overflow-hidden`}>
                   {/* Gradient border on hover */}
                   <div className={`absolute inset-0 rounded-[2rem] bg-gradient-to-br ${card.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} style={{ padding: '1px' }}>
                     <div className="w-full h-full rounded-[calc(2rem-1px)] bg-slate-900/95" />
                   </div>
-                  <div className="relative z-10">
+                  {/* Image */}
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={card.image}
+                      alt={card.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+                  </div>
+                  <div className="relative z-10 p-8 sm:p-10">
                     <div className={`inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br ${card.gradient} text-white mb-6 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
                       <card.icon size={24} />
                     </div>
@@ -435,25 +437,37 @@ export default function Home() {
             viewport={{ once: true, amount: 0.05 }}
             className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4"
           >
-            {oldServices.map((service, index) => {
+            {services.slice(0, 8).map((service, index) => {
               const IconComp = service.icon;
               return (
                 <motion.div
                   key={index}
                   variants={staggerItem}
-                  className="group relative rounded-[1.5rem] border border-white/5 bg-white/[0.03] p-6 sm:p-7 transition-all duration-500 hover:border-white/10 hover:shadow-2xl hover:shadow-sky-500/5 hover:-translate-y-1.5 overflow-hidden"
+                  className="group relative rounded-[1.5rem] border border-slate-700/50 bg-slate-900 transition-all duration-500 hover:border-slate-600/50 hover:shadow-2xl hover:shadow-sky-500/5 hover:-translate-y-1.5 overflow-hidden"
                 >
-                  {/* Gradient accent top bar */}
-                  <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-
-                  <div className={`inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${service.gradient} text-white mb-5 shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                    <IconComp size={20} />
+                  {/* Service Image */}
+                  <div className="relative h-40 overflow-hidden">
+                    <img
+                      src={service.image}
+                      alt={service.label}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+                    {/* Gradient accent top bar */}
+                    <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${service.iconBg} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                    {/* Icon floating on image */}
+                    <div className={`absolute bottom-4 left-5 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${service.iconBg} text-white shadow-lg group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
+                      <IconComp size={20} />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white mb-2 group-hover:text-sky-100 transition-colors">{service.title}</h3>
-                  <p className="text-sm text-slate-400 leading-relaxed mb-4">{service.desc}</p>
-                  <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-sky-400 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-                    Learn more <ArrowRight size={14} />
-                  </span>
+                  <div className="p-6 sm:p-7">
+                    <h3 className="text-lg font-bold text-white mb-2 group-hover:text-sky-100 transition-colors">{service.label}</h3>
+                    <p className="text-sm text-slate-400 leading-relaxed mb-4">{service.subheading}</p>
+                    <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-sky-400 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                      Learn more <ArrowRight size={14} />
+                    </span>
+                  </div>
                 </motion.div>
               );
             })}
@@ -505,11 +519,12 @@ export default function Home() {
           >
             {/* Left: visual + badges */}
             <motion.div {...fadeUp} className="flex flex-col items-center gap-6 w-full">
-              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.03] p-2 shadow-lg relative overflow-hidden group">
+              <div className="rounded-[2.5rem] border border-slate-700/50 bg-slate-900 p-2 shadow-lg relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
                 <img
                   src="/chel-4.png"
                   alt="Happy customer representation"
+                  loading="lazy"
                   className="rounded-[2.2rem] h-[260px] sm:h-[340px] w-full max-w-[280px] lg:w-[260px] object-cover relative z-10 transition duration-500 group-hover:scale-[1.02]"
                 />
               </div>
@@ -518,7 +533,7 @@ export default function Home() {
                   { icon: Star, text: '5.0 Rating', color: 'text-amber-400' },
                   { icon: CheckCircle2, text: '100% Satisfaction', color: 'text-emerald-400' },
                 ].map((badge) => (
-                  <div key={badge.text} className="inline-flex items-center gap-1.5 rounded-full border border-white/5 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-slate-400">
+                  <div key={badge.text} className="inline-flex items-center gap-1.5 rounded-full border border-slate-700/50 bg-slate-800/50 px-3 py-1.5 text-xs font-semibold text-slate-400">
                     <badge.icon size={12} className={badge.color} />
                     {badge.text}
                   </div>
@@ -628,7 +643,7 @@ export default function Home() {
               <motion.div
                 key={plan.name}
                 variants={staggerItem}
-                className={`rounded-[2rem] border p-8 flex flex-col relative transition-all duration-300 group hover:-translate-y-2 bg-white/[0.03] backdrop-blur-sm ${
+                  className={`rounded-[2rem] border p-8 flex flex-col relative transition-all duration-300 group hover:-translate-y-2 bg-slate-900 backdrop-blur-sm ${
                   plan.popular
                     ? 'border-sky-500/50 shadow-xl shadow-sky-500/10'
                     : 'border-white/5 hover:border-sky-500/20 shadow-sm hover:shadow-lg'
@@ -684,7 +699,7 @@ export default function Home() {
           <div className="grid gap-12 lg:grid-cols-2 items-start">
             {/* Left: Address & Map */}
             <motion.div {...fadeUp} className="space-y-6">
-              <div className="rounded-[2rem] border border-white/5 bg-white/[0.03] p-8 shadow-md">
+              <div className="rounded-[2rem] border border-slate-700/50 bg-slate-900 p-8 shadow-md">
                 <h3 className="text-xl font-bold text-white mb-6">Our Office Address</h3>
                 <div className="space-y-5 text-sm">
                   <div className="flex items-start gap-4">
@@ -737,9 +752,9 @@ export default function Home() {
 
             {/* Right: Form */}
             <motion.div {...fadeUp} transition={{ delay: 0.12, duration: 0.6 }} className="space-y-6">
-              <div className="rounded-[2.5rem] border border-white/5 bg-white/[0.03] backdrop-blur-sm p-8 sm:p-10 shadow-md relative overflow-hidden">
+              <div className="rounded-[2.5rem] border border-slate-700/50 bg-slate-900 backdrop-blur-sm p-8 sm:p-10 shadow-md relative overflow-hidden">
                 <div className="absolute right-0 bottom-0 pointer-events-none opacity-10 w-[180px] hidden md:block">
-                  <img src="/girl.png" alt="" className="w-full h-auto object-contain" />
+                  <img src="/girl.png" alt="" loading="lazy" className="w-full h-auto object-contain" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
                   <Mail className="text-sky-400" size={20} /> Drop Us a Message
@@ -789,7 +804,7 @@ export default function Home() {
          ═══════════════════════════════════════════════════════════════════════ */}
       <section className="relative py-20 px-6 overflow-hidden border-t border-white/5 bg-slate-900/50">
         <div className="absolute inset-0 z-0">
-          <img src="/banner-newsletter.jpg" alt="" className="w-full h-full object-cover grayscale opacity-10" />
+          <img src="/banner-newsletter.jpg" alt="" loading="lazy" className="w-full h-full object-cover grayscale opacity-10" />
           <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-950/95" />
         </div>
         <div className="absolute inset-0 z-[1] opacity-[0.03] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
@@ -855,7 +870,7 @@ function TiltImage() {
       ref={ref}
       onMouseMove={handleMouse}
       onMouseLeave={reset}
-      className="relative rounded-[2rem] sm:rounded-[2.5rem] p-1.5 sm:p-2 border border-white/5 bg-white/[0.03] overflow-hidden w-full max-w-sm sm:max-w-md shadow-lg group transition-transform duration-300 ease-out"
+      className="relative rounded-[2rem] sm:rounded-[2.5rem] p-1.5 sm:p-2 border border-slate-700/50 bg-slate-900 overflow-hidden w-full max-w-sm sm:max-w-md shadow-lg group transition-transform duration-300 ease-out"
       style={{ transform, transformStyle: 'preserve-3d' }}
     >
       <div className="absolute inset-0 bg-gradient-to-tr from-sky-500/10 via-transparent to-indigo-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none z-10" />
