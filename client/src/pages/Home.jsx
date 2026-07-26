@@ -23,13 +23,13 @@ const heroSlides = [
 
 
 const testimonials = [
-  { name: 'Usman', client: 'Mobile Bitz, Dartford', title: 'Friendly !!!', quote: 'A very friendly and helpful company that have looked for solutions to any problems. It is great to talk to the same person every time I phone up or e-mail. My site is at top of both Google and Bing and this brings me more customers. Every time I phone up or e-mail a change, it is done quickly and efficiently. They have helped me expand my customer base.' },
-  { name: 'Sami', client: 'Kingsburry School', title: 'Genuine service !!!', quote: 'I like Esland, because they genuinely try to find solutions for your business, rather than just trying to sell new services all the time, which may or may not be useful. Nice people too - always helps!' },
-  { name: 'Ukrani', client: 'Private Client', title: 'Fantastic !!!', quote: "Fantastic service and website build from Esland, great input and help from them as we didn't really know where to start.... Let them do their thing so we can get on with ours, worked for us! Thanks Esland IT Solutions" },
-  { name: 'Rupeesh', client: 'Flower Paradise', title: 'Recommended !!!', quote: 'I am very happy with my new website and SEO services for my flower shop business and have already started to build my new clients! I would highly recommend Esland.' },
-  { name: 'Gaurav', client: 'Ash Groove', title: 'Quick Respond !!!', quote: 'Esland IT services was very quick to respond to any query, and completed the task of transferring my website from joomla to WordPress, and transferring my blogger blog to within the website very quickly. I found this company very self-sufficient and easy to get along with.' },
-  { name: 'Amdip Traders Ltd', client: 'Amdip Traders', title: 'Great job !!!', quote: 'Could not have been easier!!! They did great job . Am about to use them again. Very happy customer!' },
-  { name: 'Pat', client: 'Ilford Kitchens', title: 'SEO-Satisfied !!!', quote: 'We are a very satisfied client of Eland. Our traffic has increased substantially as well as a significant increase in the quality of our leads. Their efforts have contributed to a 40% increase in our sales.' }
+  { name: 'Usman', client: 'Mobile Bitz, Dartford', title: 'Friendly !!!', quote: 'A very friendly and helpful company that have looked for solutions to any problems. It is great to talk to the same person every time I phone up or e-mail. My site is at top of both Google and Bing and this brings me more customers. Every time I phone up or e-mail a change, it is done quickly and efficiently. They have helped me expand my customer base.', image: '/images/mobile_bitz.png' },
+  { name: 'Sami', client: 'Kingsburry School', title: 'Genuine service !!!', quote: 'I like Esland, because they genuinely try to find solutions for your business, rather than just trying to sell new services all the time, which may or may not be useful. Nice people too - always helps!', image: '/images/kingsburry_school.png' },
+  { name: 'Ukrani', client: 'Private Client', title: 'Fantastic !!!', quote: "Fantastic service and website build from Esland, great input and help from them as we didn't really know where to start.... Let them do their thing so we can get on with ours, worked for us! Thanks Esland IT Solutions", image: '/chel-4.png' },
+  { name: 'Rupeesh', client: 'Flower Paradise', title: 'Recommended !!!', quote: 'I am very happy with my new website and SEO services for my flower shop business and have already started to build my new clients! I would highly recommend Esland.', image: '/images/flower_paradise.png' },
+  { name: 'Gaurav', client: 'Ash Groove', title: 'Quick Respond !!!', quote: 'Esland IT services was very quick to respond to any query, and completed the task of transferring my website from joomla to WordPress, and transferring my blogger blog to within the website very quickly. I found this company very self-sufficient and easy to get along with.', image: '/images/ash_groove.png' },
+  { name: 'Amdip Traders Ltd', client: 'Amdip Traders', title: 'Great job !!!', quote: 'Could not have been easier!!! They did great job . Am about to use them again. Very happy customer!', image: '/images/amdip_traders.png' },
+  { name: 'Pat', client: 'Ilford Kitchens', title: 'SEO-Satisfied !!!', quote: 'We are a very satisfied client of Eland. Our traffic has increased substantially as well as a significant increase in the quality of our leads. Their efforts have contributed to a 40% increase in our sales.', image: '/images/ilford_kitchens.png' }
 ];
 
 const pricingPlans = [
@@ -522,12 +522,19 @@ export default function Home() {
             <motion.div {...fadeUp} className="flex flex-col items-center gap-6 w-full">
               <div className="rounded-[2.5rem] border border-slate-700/50 bg-slate-900 p-2 shadow-lg relative overflow-hidden group">
                 <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 to-indigo-500/10 opacity-0 group-hover:opacity-100 transition duration-500 pointer-events-none" />
-                <img
-                  src="/chel-4.png"
-                  alt="Happy customer representation"
-                  loading="lazy"
-                  className="rounded-[2.2rem] h-[260px] sm:h-[340px] w-full max-w-[280px] lg:w-[260px] object-cover relative z-10 transition duration-500 group-hover:scale-[1.02]"
-                />
+                <AnimatePresence mode="wait">
+                  <motion.img
+                    key={activeTestimonial}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    src={testimonials[activeTestimonial].image || '/chel-4.png'}
+                    alt={`Client representation for ${testimonials[activeTestimonial].client}`}
+                    loading="lazy"
+                    className="rounded-[2.2rem] h-[260px] sm:h-[340px] w-full max-w-[280px] lg:w-[260px] object-cover relative z-10 transition duration-500 group-hover:scale-[1.02]"
+                  />
+                </AnimatePresence>
               </div>
               <div className="flex gap-3 flex-wrap justify-center">
                 {[
