@@ -39,6 +39,7 @@ app.use('/api/crm/leads', leadRoutes);
 app.use('/api/crm/quotes', quoteRoutes);
 app.use('/api/crm/dashboard', dashboardRoutes);
 
+app.get('/', (req, res) => res.json({ name: 'Esland IT Solutions API', status: 'running', docs: '/api/health' }));
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 
 app.use((req, res) => res.status(404).json({ message: 'Endpoint not found.' }));
