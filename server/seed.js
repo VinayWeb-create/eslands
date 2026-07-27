@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import Career from './models/Career.js';
+import Admin from './models/Admin.js';
 
 dotenv.config();
 
@@ -11,11 +12,27 @@ const careers = [
   { title: 'DevOps Engineer', department: 'Operations', location: 'Remote', type: 'Full-time', description: 'Build CI/CD pipelines, observability, and scalable release automation.', requirements: ['Kubernetes', 'CI/CD tooling', 'monitoring'] },
 ];
 
+const defaultAdmin = {
+  name: 'Admin',
+  email: 'admin@eslanditsolutions.com',
+  password: 'admin123',
+  role: 'admin',
+};
+
 async function seed() {
   await connectDB(process.env.MONGO_URI);
   await Career.deleteMany({});
   await Career.create(careers);
   console.log('Seeded careers data');
+
+  const existingAdmin = await Admin.findOne({ email: defaultAdmin.email });
+  if (!existingAdmin) {
+    await Admin.create(defaultAdmin);
+    console.log('Seeded default admin: admin@eslanditsolutions.com / admin123');
+  } else {
+    console.log('Admin already exists, skipping.');
+  }
+
   process.exit(0);
 }
 

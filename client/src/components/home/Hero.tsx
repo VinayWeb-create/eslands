@@ -118,9 +118,9 @@ export default function Hero() {
     >
       <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-[2]" />
 
-      <div className="pointer-events-none absolute left-0 top-0 h-[600px] w-[600px] rounded-full bg-sky-500/20 blur-[180px] z-[1]" />
-      <div className="pointer-events-none absolute right-0 top-1/4 h-[550px] w-[550px] rounded-full bg-purple-600/20 blur-[170px] z-[1]" />
-      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[400px] w-[500px] rounded-full bg-cyan-500/15 blur-[150px] z-[1]" />
+      <div className="pointer-events-none absolute left-0 top-0 h-[300px] w-[300px] sm:h-[600px] sm:w-[600px] rounded-full bg-sky-500/10 sm:bg-sky-500/20 blur-[100px] sm:blur-[180px] z-[1]" />
+      <div className="pointer-events-none absolute right-0 top-1/4 h-[250px] w-[250px] sm:h-[550px] sm:w-[550px] rounded-full bg-purple-600/10 sm:bg-purple-600/20 blur-[80px] sm:blur-[170px] z-[1]" />
+      <div className="pointer-events-none absolute bottom-0 left-1/3 h-[200px] w-[250px] sm:h-[400px] sm:w-[500px] rounded-full bg-cyan-500/10 sm:bg-cyan-500/15 blur-[80px] sm:blur-[150px] z-[1]" />
 
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">
@@ -136,17 +136,17 @@ export default function Hero() {
             <img
               src={heroSlides[activeSlide].src}
               alt={heroSlides[activeSlide].alt}
-              className="w-full h-full object-cover filter brightness-[0.88] contrast-115 saturate-110 transition-all duration-700"
+              className="w-full h-full object-cover filter brightness-[0.95] sm:brightness-[0.88] contrast-110 sm:contrast-115 saturate-110 transition-all duration-700"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/15 to-slate-950/70" />
-            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/55 via-slate-950/20 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/20 via-transparent to-slate-950/40 sm:from-slate-950/45 sm:via-slate-950/15 sm:to-slate-950/70" />
+            <div className="absolute inset-0 bg-gradient-to-r from-slate-950/20 via-transparent to-transparent sm:from-slate-950/55 sm:via-slate-950/20" />
           </motion.div>
         </AnimatePresence>
       </div>
 
       <motion.div
         style={{ x: parallaxReverseX, y: parallaxReverseY }}
-        className="absolute inset-0 z-[1] opacity-[0.05] bg-[linear-gradient(rgba(56,189,248,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.5)_1px,transparent_1px)] bg-[size:70px_70px] pointer-events-none"
+        className="absolute inset-0 z-[1] opacity-[0.03] sm:opacity-[0.05] bg-[linear-gradient(rgba(56,189,248,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.5)_1px,transparent_1px)] bg-[size:70px_70px] pointer-events-none"
       />
 
       <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center lg:text-left my-auto">

@@ -8,6 +8,10 @@ import connectDB from './config/db.js';
 import contactRoutes from './routes/contactRoutes.js';
 import careerRoutes from './routes/careerRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import leadRoutes from './routes/leadRoutes.js';
+import quoteRoutes from './routes/quoteRoutes.js';
+import dashboardRoutes from './routes/dashboardRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -30,6 +34,10 @@ app.use('/api/newsletter', limiter);
 app.use('/api/contact', contactRoutes);
 app.use('/api/careers', careerRoutes);
 app.use('/api/newsletter', newsletterRoutes);
+app.use('/api/crm/auth', authRoutes);
+app.use('/api/crm/leads', leadRoutes);
+app.use('/api/crm/quotes', quoteRoutes);
+app.use('/api/crm/dashboard', dashboardRoutes);
 
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));
 

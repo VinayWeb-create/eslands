@@ -11,6 +11,14 @@ const Careers = lazy(() => import('./pages/Careers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Products = lazy(() => import('./pages/Products'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const CrmLogin = lazy(() => import('./pages/crm/Login'));
+const CrmLayout = lazy(() => import('./components/crm/CrmLayout'));
+const CrmDashboard = lazy(() => import('./pages/crm/Dashboard'));
+const CrmLeads = lazy(() => import('./pages/crm/Leads'));
+const CrmLeadDetail = lazy(() => import('./pages/crm/LeadDetail'));
+const CrmQuotes = lazy(() => import('./pages/crm/Quotes'));
+const CrmQuoteDetail = lazy(() => import('./pages/crm/QuoteDetail'));
+const CrmQuoteNew = lazy(() => import('./pages/crm/QuoteNew'));
 import Seo from './components/Seo';
 import ScrollIndicator from './components/ScrollIndicator';
 import ScrollToTop from './components/ScrollToTop';
@@ -39,6 +47,17 @@ function App() {
               <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
               <Route path="/careers" element={<PageWrapper><Careers /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+
+              <Route path="/admin-panel-xyz/login" element={<CrmLogin />} />
+              <Route path="/admin-panel-xyz" element={<CrmLayout />}>
+                <Route index element={<CrmDashboard />} />
+                <Route path="leads" element={<CrmLeads />} />
+                <Route path="leads/:id" element={<CrmLeadDetail />} />
+                <Route path="quotes" element={<CrmQuotes />} />
+                <Route path="quotes/:id" element={<CrmQuoteDetail />} />
+                <Route path="quotes/new/:leadId" element={<CrmQuoteNew />} />
+              </Route>
+
               <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
             </Routes>
           </Suspense>

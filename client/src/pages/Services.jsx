@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {
   Globe, Smartphone, Search, Code2, Network, Tag,
   Palette, PlayCircle, ShoppingCart, RotateCcw, Aperture, Megaphone,
-  ArrowRight, Check, Phone
+  ArrowRight, Check, Phone, Mail
 } from 'lucide-react';
 
 export const services = [
@@ -372,11 +372,22 @@ export default function Services() {
                   <Phone size={15} /> Direct Line: 020 3819 0333
                 </a>
                 <Link
-                  to="/contact"
+                  to={`/contact?service=${active.id}`}
                   className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-slate-950/80 px-8 py-4 text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 transition-all uppercase tracking-wider"
                 >
                   Schedule Technical Demo <ArrowRight size={15} />
                 </Link>
+              </div>
+
+              <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-xs font-semibold text-slate-300">
+                <a href="tel:02038190333" className="flex items-center gap-2 hover:text-sky-300 transition-colors">
+                  <Phone size={14} className="text-sky-400" />
+                  020 3819 0333
+                </a>
+                <a href="mailto:info@eslanditsolutions.com" className="flex items-center gap-2 hover:text-sky-300 transition-colors">
+                  <Mail size={14} className="text-sky-400" />
+                  info@eslanditsolutions.com
+                </a>
               </div>
             </motion.div>
           </AnimatePresence>
