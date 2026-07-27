@@ -13,7 +13,9 @@ const Products = lazy(() => import('./pages/Products'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import Seo from './components/Seo';
 import ScrollIndicator from './components/ScrollIndicator';
+import ScrollToTop from './components/ScrollToTop';
 import CookieBanner from './components/CookieBanner';
+import MobileStickyCTA from './components/MobileStickyCTA';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -21,10 +23,11 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 selection:bg-sky-100 selection:text-sky-900">
-      <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-white px-4 py-2 font-semibold text-slate-950 focus:not-sr-only">Skip to content</a>
+    <div className="min-h-screen bg-slate-950 text-slate-300 selection:bg-sky-500/20 selection:text-sky-300">
+      <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-lg bg-slate-900 px-4 py-2 font-semibold text-white focus:not-sr-only">Skip to content</a>
       <Seo />
       <ScrollIndicator />
+      <ScrollToTop />
       <Navbar />
       <MotionConfig reducedMotion="user">
         <AnimatePresence mode="wait">
@@ -42,6 +45,7 @@ function App() {
         </AnimatePresence>
       </MotionConfig>
       <Footer />
+      <MobileStickyCTA />
       <ToastContainer position="top-right" theme="light" />
       <CookieBanner />
     </div>

@@ -1,88 +1,77 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Phone, Star, Search, Sparkles, MessageSquare, Tag } from 'lucide-react';
+import { Phone, Star, Search, Sparkles, MessageSquare, Tag, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const products = [
   { id: 1, title: 'Enterprise Server Pro', image: '/images/Product-1.jpg', badge: 'Popular', category: 'Computers', rating: 5, price: '£2,499' },
   { id: 2, title: 'Cloud Storage Unit', image: '/images/Product-2.jpeg', badge: 'New', category: 'Networking', rating: 4, price: '£899' },
   { id: 3, title: 'Secure Gateway Firewall', image: '/images/Product-3.jpeg', badge: 'Sale', category: 'Networking', rating: 5, price: '£1,250' },
-  { id: 4, title: 'Esland ERP Suite', image: '/images/Product-7.jpg', badge: 'Top Rated', category: 'Software', rating: 5, price: 'Call Us' },
+  { id: 4, title: 'Esland ERP Suite', image: '/images/Product-7.jpg', badge: 'Top Rated', category: 'Software', rating: 5, price: 'Custom SLA' },
   { id: 5, title: 'Developer Workstation', image: '/images/Product-5.jpg', badge: 'Custom', category: 'Computers', rating: 4, price: '£1,850' },
   { id: 6, title: 'Wireless Access Point X', image: '/images/Product-6.jpg', badge: 'New', category: 'Networking', rating: 4, price: '£299' }
 ];
 
 const categories = ['All', 'Computers', 'Networking', 'Software', 'Electronics'];
 
-const categoryColors = {
-  Computers: 'bg-sky-50 text-sky-600 border-sky-100',
-  Networking: 'bg-orange-50 text-orange-600 border-orange-100',
-  Software: 'bg-purple-50 text-purple-600 border-purple-100',
-  Electronics: 'bg-emerald-50 text-emerald-600 border-emerald-100'
-};
-
 export default function Products() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Filter products based on search query & selected category
   const filteredProducts = products.filter((p) => {
     const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
-    const matchesSearch = searchQuery === '' || 
+    const matchesSearch = searchQuery === '' ||
       p.id.toString() === searchQuery.trim() ||
-      `Product ${p.id}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
   return (
-    <div className="relative min-h-screen bg-white text-slate-700 overflow-x-hidden pt-[65px]">
+    <div className="relative min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden pt-[65px]">
       {/* Background Glows */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[400px] w-[400px] rounded-full bg-sky-500/5 blur-3xl" />
-      <div className="pointer-events-none fixed right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-indigo-500/5 blur-3xl" />
+      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[150px]" />
+      <div className="pointer-events-none fixed right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-purple-600/10 blur-[150px]" />
 
-      {/* 1. Page Header with ban-4.jpg Background */}
-      <section className="relative h-[300px] flex items-center justify-center border-b border-slate-200 overflow-hidden">
+      {/* Hero Header */}
+      <section className="relative py-20 px-6 border-b border-white/10 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img
             src="/images/ban-4.jpg"
             alt="Products banner background"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover filter brightness-[0.3]"
           />
-          <div className="absolute inset-0 bg-slate-900/60 mix-blend-multiply" />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950" />
         </div>
 
-        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <p className="text-xs uppercase tracking-[0.35em] text-sky-300 mb-2">Esland IT Solutions</p>
+        <div className="relative z-10 mx-auto max-w-7xl text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
+              <Sparkles size={14} /> Enterprise Catalog
+            </span>
             <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-4 uppercase">
-              Enterprise Solutions
+              Hardware & Software Solutions
             </h1>
-            <p className="text-slate-200 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
-              Discover our enterprise-grade hardware and software solutions tailored for your business.
+            <p className="text-slate-300 max-w-xl mx-auto text-base leading-relaxed font-medium">
+              Enterprise-grade hardware, firewall gateways, and cloud software infrastructure engineered for maximum performance.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* 2. Main content section */}
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14">
-        {/* Filtering & Search panel */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 rounded-[2rem] border border-slate-200/80 bg-slate-50 p-6 shadow-sm">
-          {/* Category tabs */}
+      {/* Main Content */}
+      <section className="mx-auto max-w-7xl px-6 py-16">
+        {/* Filter & Search Bar */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 rounded-[2rem] border border-white/10 bg-slate-900/80 backdrop-blur-xl p-6 shadow-2xl">
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-5 py-2.5 text-xs font-bold transition duration-300 border ${
+                className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-wider transition duration-300 border ${
                   selectedCategory === cat
-                    ? 'bg-sky-500 border-sky-400 text-white shadow-lg'
-                    : 'border-slate-200 text-slate-650 hover:border-slate-350 hover:text-slate-900 bg-white'
+                    ? 'bg-gradient-to-r from-sky-500 to-indigo-600 border-sky-400 text-white shadow-lg shadow-sky-500/20'
+                    : 'border-white/10 text-slate-400 hover:text-white bg-slate-950/50'
                 }`}
               >
                 {cat}
@@ -90,162 +79,69 @@ export default function Products() {
             ))}
           </div>
 
-          {/* Search bar */}
           <div className="relative w-full md:max-w-xs">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-400" size={16} />
             <input
               type="text"
-              placeholder="Search products by ID..."
+              placeholder="Search catalog..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-slate-200 bg-white py-3.5 pl-11 pr-4 text-xs text-slate-900 placeholder:text-slate-400 focus:border-sky-500 focus:outline-none"
+              className="w-full rounded-full border border-white/10 bg-slate-950/80 py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition"
             />
           </div>
         </div>
 
-        {/* Head Inner */}
-        <div className="mb-10 text-center lg:text-left">
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-            Our Extensive <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-600 to-indigo-600">Products</span> Showcase
-          </h2>
-          <p className="text-xs text-slate-500 tracking-wider">
-            Showing {filteredProducts.length} premium tech items
-          </p>
-        </div>
-
         {/* Product Cards Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          <AnimatePresence mode="popLayout">
-            {filteredProducts.map((p, idx) => (
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence>
+            {filteredProducts.map((p) => (
               <motion.div
                 key={p.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.35, delay: (idx % 8) * 0.04 }}
-                whileHover={{ y: -6 }}
-                className="group rounded-3xl border border-slate-200/60 bg-white hover:border-sky-500/30 p-5 flex flex-col relative transition-all duration-300 overflow-hidden shadow-sm hover:shadow-md"
+                transition={{ duration: 0.4 }}
+                className="group relative rounded-[2.2rem] border border-white/10 bg-slate-900/80 backdrop-blur-xl p-6 transition-all duration-500 hover:-translate-y-2 hover:border-sky-400/40 hover:shadow-2xl overflow-hidden flex flex-col justify-between"
               >
-                {/* Badge "New" */}
-                <div className="absolute top-4 left-4 z-10">
-                  <span className="rounded-full bg-sky-500 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white">
-                    {p.badge}
-                  </span>
-                </div>
+                <div>
+                  <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 bg-slate-950">
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+                    />
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-sky-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow">
+                      {p.badge}
+                    </span>
+                  </div>
 
-                {/* Product ID Label */}
-                <div className="absolute top-4 right-4 z-10">
-                  <span className="text-[10px] font-bold text-slate-400">
-                    ID: #{String(p.id).padStart(2, '0')}
-                  </span>
-                </div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-sky-400">{p.category}</span>
+                    <div className="flex text-amber-400 gap-0.5">
+                      {[...Array(p.rating)].map((_, i) => (
+                        <Star key={i} size={12} fill="currentColor" />
+                      ))}
+                    </div>
+                  </div>
 
-                {/* Image frame (Light grey fill to pop images cleanly) */}
-                <div className="h-44 w-full rounded-2xl border border-slate-100 bg-slate-50 p-4 flex items-center justify-center overflow-hidden mb-5">
-                  <img
-                    src={p.image}
-                    alt={`Product ${p.id}`}
-                    className="max-h-full max-w-full object-contain transition duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-                </div>
-
-                {/* Product details */}
-                <div className="flex-1 flex flex-col">
-                  {/* Category */}
-                  <span className={`inline-block border self-start rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider mb-3 ${
-                    categoryColors[p.category] || 'bg-slate-100 text-slate-500 border-slate-200'
-                  }`}>
-                    {p.category}
-                  </span>
-
-                  {/* Title */}
-                  <h3 className="text-sm font-bold text-slate-800 mb-2 group-hover:text-sky-600 transition duration-200">
-                    Product {p.id} ({p.title})
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition-colors">
+                    {p.title}
                   </h3>
+                </div>
 
-                  {/* Pricing / Call Us */}
-                  <div className="my-3 flex items-center justify-between">
-                    <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold">Pricing</span>
-                    <span className="text-sm font-black text-sky-600">{p.price}</span>
-                  </div>
-
-                  {/* Rating (Warm Gold color) */}
-                  <div className="flex gap-0.5 text-amber-400 my-2">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        size={12}
-                        fill={i < p.rating ? 'currentColor' : 'none'}
-                        className={i < p.rating ? 'text-amber-400' : 'text-slate-200'}
-                      />
-                    ))}
-                  </div>
-
-                  {/* CTA Area */}
-                  <div className="mt-5 grid grid-cols-2 gap-2 pt-4 border-t border-slate-100">
-                    <a
-                      href="tel:02038190333"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 py-2.5 text-[10px] font-bold text-slate-700 hover:bg-slate-100 transition-all duration-300"
-                    >
-                      <Phone size={10} /> Call Us
-                    </a>
-                    <a
-                      href="/contact"
-                      className="inline-flex items-center justify-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 py-2.5 text-[10px] font-bold text-white hover:brightness-110 shadow-lg shadow-sky-500/10 transition-all duration-300"
-                    >
-                      <MessageSquare size={10} /> Book a Consultation
-                    </a>
-                  </div>
+                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
+                  <div className="text-lg font-black text-white">{p.price}</div>
+                  <Link
+                    to="/contact"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-sky-400 hover:bg-sky-500 hover:text-white transition-all"
+                  >
+                    Inquire <ArrowRight size={13} />
+                  </Link>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
-
-        {/* Empty state */}
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-20 border border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50">
-            <Tag className="mx-auto text-slate-400 mb-4" size={40} />
-            <h3 className="text-lg font-bold text-slate-800 mb-1">No products found</h3>
-            <p className="text-sm text-slate-500">Try adjusting your search query or selected category.</p>
-          </div>
-        )}
-
-        {/* Bottom Procurement Banner */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mt-20 rounded-[2.5rem] border border-sky-200 bg-gradient-to-r from-sky-50 to-indigo-50/50 p-10 flex flex-col md:flex-row md:items-center justify-between gap-8 relative overflow-hidden shadow-sm"
-        >
-          <div className="absolute -right-24 -top-24 h-60 w-60 rounded-full bg-sky-500/5 blur-3xl" />
-          <div className="relative z-10 space-y-3">
-            <div className="inline-flex items-center gap-2 rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-600">
-              <Sparkles size={10} /> CUSTOM HARDWARE PROCUREMENT
-            </div>
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900">Need a customized product or bulk quote?</h3>
-            <p className="text-sm text-slate-600 max-w-xl">
-              Our hardware procurement specialists work with top tier vendors to source custom specifications for servers, storage, enterprise networking, and workstations.
-            </p>
-          </div>
-
-          <div className="relative z-10 flex flex-col sm:flex-row gap-3">
-            <a
-              href="tel:02038190333"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-3.5 text-sm font-bold text-white shadow-lg hover:brightness-110 transition"
-            >
-              <Phone size={14} /> Call 02038190333
-            </a>
-            <a
-              href="/contact"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-slate-200 bg-white px-8 py-3.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition"
-            >
-              Book a Consultation
-            </a>
-          </div>
-        </motion.div>
       </section>
     </div>
   );
