@@ -2,9 +2,12 @@ node_modules
 dist
 .env
 .DS_Store
-*.log
 *.mp4
 *.avi
 *.mov
+!client/public/**/*.mp4
+!client/public/**/*.avi
+!client/public/**/*.mov
+
 client/node_modules
 server/node_modules
