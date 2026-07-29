@@ -27,7 +27,7 @@ function getTransporter() {
 
 const companyName = 'Esland IT Solutions';
 const supportEmail = 'support@eslanditsolutions.com';
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
+const clientUrl = process.env.CLIENT_URL || 'https://eslanditsolutions.com';
 
 function wrapHtml(title, body) {
   return `
