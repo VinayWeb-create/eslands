@@ -12,6 +12,11 @@ import authRoutes from './routes/authRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
 import quoteRoutes from './routes/quoteRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import demoRoutes from './routes/demoRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
+import invoiceRoutes from './routes/invoiceRoutes.js';
+import certificateRoutes from './routes/certificateRoutes.js';
+import portalRoutes from './routes/portalRoutes.js';
 
 dotenv.config();
 const app = express();
@@ -38,6 +43,11 @@ app.use('/api/crm/auth', authRoutes);
 app.use('/api/crm/leads', leadRoutes);
 app.use('/api/crm/quotes', quoteRoutes);
 app.use('/api/crm/dashboard', dashboardRoutes);
+app.use('/api/crm/demos', demoRoutes);
+app.use('/api/crm/payments', paymentRoutes);
+app.use('/api/crm/invoices', invoiceRoutes);
+app.use('/api/crm/certificates', certificateRoutes);
+app.use('/api/portal', portalRoutes);
 
 app.get('/', (req, res) => res.json({ name: 'Esland IT Solutions API', status: 'running', docs: '/api/health' }));
 app.get('/api/health', (req, res) => res.json({ status: 'OK' }));

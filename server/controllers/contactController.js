@@ -1,22 +1,28 @@
 import nodemailer from 'nodemailer';
 import Contact from '../models/Contact.js';
 import Lead from '../models/Lead.js';
+import { sendLeadReceivedEmail } from '../config/emailService.js';
 
 export async function submitContact(req, res) {
-  const { name, email, phone, subject, service, message } = req.body;
+  const { name, email, phone, subject, service, message, company, country, source } = req.body;
   try {
     const selectedService = service || 'General Inquiry';
     const contact = new Contact({ name, email, phone, subject, service: selectedService, message });
     await contact.save();
 
+    let lead;
     try {
-      await Lead.create({
+      lead = await Lead.create({
         name, email, phone: phone || '', service: selectedService,
-        subject: subject || '', message: message || '', source: 'contact_form',
+        subject: subject || '', message: message || '', 
+        company: company || '', country: country || '',
+        source: source || 'contact_form',
         contactRef: contact._id,
       });
+      // Send auto email confirmation
+      await sendLeadReceivedEmail(lead);
     } catch (leadErr) {
-      console.error('Auto-lead creation failed:', leadErr.message);
+      console.error('Auto-lead creation or email failed:', leadErr.message);
     }
 
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS && !process.env.EMAIL_USER.includes('example.com')) {
@@ -40,7 +46,7 @@ export async function submitContact(req, res) {
       }
     }
 
-    return res.status(201).json({ message: 'Contact request submitted successfully.' });
+    return res.status(201).json({ message: 'Contact request submitted successfully.', leadId: lead ? lead._id : null });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Server error while submitting contact form.' });

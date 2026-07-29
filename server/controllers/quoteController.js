@@ -1,5 +1,7 @@
 import Quote from '../models/Quote.js';
 import Lead from '../models/Lead.js';
+import { generateQuotePDF } from '../config/pdfService.js';
+import { sendQuoteEmail, sendPaymentRequestEmail } from '../config/emailService.js';
 
 async function generateQuoteNumber() {
   const count = await Quote.countDocuments();
@@ -72,8 +74,8 @@ export async function createQuote(req, res) {
       validUntil: validUntil || new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
       createdBy: req.admin._id,
     });
-    if (lead.status === 'new' || lead.status === 'contacted') {
-      lead.status = 'proposal_sent';
+    if (lead.status === 'new' || lead.status === 'contacted' || lead.status === 'demo_completed') {
+      lead.status = 'quote_sent';
       lead.notes.push({ text: `Quote ${quoteNumber} created (Total: £${total.toFixed(2)})`, createdBy: req.admin._id });
       await lead.save();
     }
@@ -135,7 +137,13 @@ export async function updateQuoteStatus(req, res) {
       if (lead) {
         lead.notes.push({ text: `Quote ${quote.quoteNumber} status changed to "${status}"`, createdBy: req.admin._id });
         if (status === 'accepted') {
-          lead.status = 'converted';
+          lead.status = 'payment_pending';
+          try {
+            await sendPaymentRequestEmail(lead, quote);
+            lead.notes.push({ text: `Payment request email automatically sent to ${lead.email}`, createdBy: req.admin._id });
+          } catch (err) {
+            console.error('Failed to send payment request email:', err);
+          }
         }
         await lead.save();
       }
@@ -155,5 +163,120 @@ export async function deleteQuote(req, res) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Unable to delete quote.' });
+  }
+}
+
+export async function downloadQuotePDF(req, res) {
+  try {
+    const quote = await Quote.findById(req.params.id);
+    if (!quote) return res.status(404).json({ message: 'Quote not found.' });
+
+    const lead = await Lead.findById(quote.lead);
+    if (!lead) return res.status(404).json({ message: 'Lead not found.' });
+
+    const pdfBuffer = await generateQuotePDF(quote, lead);
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=Quote_${quote.quoteNumber}.pdf`);
+    return res.send(pdfBuffer);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Unable to generate PDF.' });
+  }
+}
+
+export async function emailQuote(req, res) {
+  try {
+    const quote = await Quote.findById(req.params.id);
+    if (!quote) return res.status(404).json({ message: 'Quote not found.' });
+
+    const lead = await Lead.findById(quote.lead);
+    if (!lead) return res.status(404).json({ message: 'Lead not found.' });
+
+    const pdfBuffer = await generateQuotePDF(quote, lead);
+    await sendQuoteEmail(lead, quote, pdfBuffer);
+
+    lead.notes.push({
+      text: `Quote ${quote.quoteNumber} emailed to client (${lead.email}).`,
+      createdBy: req.admin._id
+    });
+    await lead.save();
+
+    return res.json({ message: 'Quote proposal emailed successfully.' });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Unable to email quote.' });
+  }
+}
+
+export async function acceptQuotePortal(req, res) {
+  try {
+    const quote = await Quote.findById(req.params.id).populate('lead');
+    if (!quote) return res.status(404).json({ message: 'Quote not found.' });
+
+    // Validate ownership
+    if (quote.lead._id.toString() !== req.user.leadRef.toString()) {
+      return res.status(403).json({ message: 'Access denied.' });
+    }
+
+    if (quote.status !== 'sent') {
+      return res.status(400).json({ message: 'Only sent quotes can be accepted.' });
+    }
+
+    quote.status = 'accepted';
+    quote.acceptedAt = new Date();
+    await quote.save();
+
+    const lead = await Lead.findById(quote.lead._id);
+    if (lead) {
+      lead.status = 'payment_pending';
+      lead.notes.push({ text: `Quote ${quote.quoteNumber} accepted by customer via portal.`, createdBy: null });
+      await lead.save();
+
+      // Automatically send payment instructions email
+      try {
+        await sendPaymentRequestEmail(lead, quote);
+      } catch (err) {
+        console.error('Failed to send payment request email:', err);
+      }
+    }
+
+    return res.json({ message: 'Quote accepted successfully.', quote });
+  } catch (error) {
+    console.error('Portal Quote Acceptance Failed:', error);
+    return res.status(500).json({ message: 'Error accepting quote.' });
+  }
+}
+
+export async function publicAcceptQuote(req, res) {
+  try {
+    const quote = await Quote.findById(req.params.id).populate('lead');
+    if (!quote) return res.status(404).json({ message: 'Quote not found.' });
+
+    if (quote.status === 'draft') {
+      return res.status(400).json({ message: 'Quote is not active yet.' });
+    }
+
+    quote.status = 'accepted';
+    quote.acceptedAt = new Date();
+    await quote.save();
+
+    const lead = await Lead.findById(quote.lead._id);
+    if (lead) {
+      lead.status = 'payment_pending';
+      lead.notes.push({ text: `Quote ${quote.quoteNumber} accepted by customer via email link.`, createdBy: null });
+      await lead.save();
+
+      try {
+        await sendPaymentRequestEmail(lead, quote);
+      } catch (err) {
+        console.error('Failed to send payment request email:', err);
+      }
+    }
+
+    return res.json({ message: 'Quote accepted successfully.', leadId: lead._id });
+  } catch (error) {
+    console.error('Public Quote Acceptance Failed:', error);
+    return res.status(500).json({ message: 'Error confirming proposal.' });
   }
 }

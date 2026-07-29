@@ -19,6 +19,14 @@ const CrmLeadDetail = lazy(() => import('./pages/crm/LeadDetail'));
 const CrmQuotes = lazy(() => import('./pages/crm/Quotes'));
 const CrmQuoteDetail = lazy(() => import('./pages/crm/QuoteDetail'));
 const CrmQuoteNew = lazy(() => import('./pages/crm/QuoteNew'));
+
+// Portal Views
+const PortalLogin = lazy(() => import('./pages/portal/PortalLogin'));
+const StudentPortal = lazy(() => import('./pages/portal/StudentPortal'));
+const ClientPortal = lazy(() => import('./pages/portal/ClientPortal'));
+const PublicPay = lazy(() => import('./pages/portal/PublicPay'));
+const PublicAcceptQuote = lazy(() => import('./pages/crm/PublicAcceptQuote'));
+
 import Seo from './components/Seo';
 import ScrollIndicator from './components/ScrollIndicator';
 import ScrollToTop from './components/ScrollToTop';
@@ -29,6 +37,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const location = useLocation();
+  const hideNavFooter = location.pathname.startsWith('/admin-panel-xyz') || location.pathname.startsWith('/portal') || location.pathname.startsWith('/pay') || location.pathname.includes('/public-accept');
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-300 selection:bg-sky-500/20 selection:text-sky-300">
@@ -36,7 +45,7 @@ function App() {
       <Seo />
       <ScrollIndicator />
       <ScrollToTop />
-      <Navbar />
+      {!hideNavFooter && <Navbar />}
       <MotionConfig reducedMotion="user">
         <AnimatePresence mode="wait">
           <Suspense fallback={<div className="flex h-screen items-center justify-center text-white">Loading...</div>}>
@@ -48,6 +57,7 @@ function App() {
               <Route path="/careers" element={<PageWrapper><Careers /></PageWrapper>} />
               <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
 
+              {/* Admin Panel */}
               <Route path="/admin-panel-xyz/login" element={<CrmLogin />} />
               <Route path="/admin-panel-xyz" element={<CrmLayout />}>
                 <Route index element={<CrmDashboard />} />
@@ -58,13 +68,22 @@ function App() {
                 <Route path="quotes/new/:leadId" element={<CrmQuoteNew />} />
               </Route>
 
+              {/* Student & Client Portals */}
+              <Route path="/portal/login" element={<PortalLogin />} />
+              <Route path="/portal/student" element={<StudentPortal />} />
+              <Route path="/portal/client" element={<ClientPortal />} />
+
+              {/* Public Checkout Funnel */}
+              <Route path="/pay/:leadId" element={<PublicPay />} />
+              <Route path="/quotes/public-accept/:quoteId" element={<PublicAcceptQuote />} />
+
               <Route path="*" element={<PageWrapper><NotFound /></PageWrapper>} />
             </Routes>
           </Suspense>
         </AnimatePresence>
       </MotionConfig>
-      <Footer />
-      <MobileStickyCTA />
+      {!hideNavFooter && <Footer />}
+      {!hideNavFooter && <MobileStickyCTA />}
       <ToastContainer position="top-right" theme="light" />
       <CookieBanner />
     </div>

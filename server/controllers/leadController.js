@@ -1,4 +1,9 @@
 import Lead from '../models/Lead.js';
+import User from '../models/User.js';
+import Demo from '../models/Demo.js';
+import Payment from '../models/Payment.js';
+import Certificate from '../models/Certificate.js';
+import { sendEnrollmentConfirmationEmail } from '../config/emailService.js';
 
 export async function getLeads(req, res) {
   try {
@@ -32,7 +37,20 @@ export async function getLeadById(req, res) {
   try {
     const lead = await Lead.findById(req.params.id).populate('assignedTo', 'name email').populate('contactRef');
     if (!lead) return res.status(404).json({ message: 'Lead not found.' });
-    return res.json(lead);
+    
+    // Aggregate related records
+    const portalUser = await User.findOne({ email: lead.email }).select('-password');
+    const demos = await Demo.find({ lead: lead._id }).sort({ createdAt: -1 });
+    const payments = await Payment.find({ lead: lead._id }).sort({ createdAt: -1 });
+    const certificates = portalUser ? await Certificate.find({ student: portalUser._id }).sort({ issuedDate: -1 }) : [];
+    
+    const leadObj = lead.toObject();
+    leadObj.portalUser = portalUser;
+    leadObj.demos = demos;
+    leadObj.payments = payments;
+    leadObj.certificates = certificates;
+
+    return res.json(leadObj);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Unable to fetch lead.' });
@@ -114,5 +132,42 @@ export async function deleteLead(req, res) {
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: 'Unable to delete lead.' });
+  }
+}
+
+export async function createPortalAccount(req, res) {
+  const { role } = req.body;
+  if (!role || !['student', 'client'].includes(role)) {
+    return res.status(400).json({ message: 'Role must be student or client.' });
+  }
+  try {
+    const lead = await Lead.findById(req.params.id);
+    if (!lead) return res.status(404).json({ message: 'Lead not found.' });
+
+    let user = await User.findOne({ email: lead.email });
+    if (user) return res.status(400).json({ message: 'A portal user with this email already exists.' });
+
+    const plainPassword = `Esland-${Math.floor(1000 + Math.random() * 9000)}`;
+    user = await User.create({
+      name: lead.name,
+      email: lead.email,
+      password: plainPassword,
+      role,
+      leadRef: lead._id,
+      courseOrProjectName: lead.service
+    });
+
+    lead.notes.push({
+      text: `Portal account (${role}) manually created. Access credentials sent to ${lead.email}`,
+      createdBy: req.admin._id
+    });
+    await lead.save();
+
+    await sendEnrollmentConfirmationEmail(lead, user, plainPassword);
+
+    return res.status(201).json({ message: 'Portal account created.', user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: 'Unable to create portal account.' });
   }
 }
