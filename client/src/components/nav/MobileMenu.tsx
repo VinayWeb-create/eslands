@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { ChevronDown, ArrowRight, X, Mail, LucideIcon } from 'lucide-react';
 import { useAccessibleAnimations } from '../../lib/animations';
 import Logo from '../brand/Logo';
@@ -37,7 +37,7 @@ export default function MobileMenu({
 }: MobileMenuProps) {
   const { prefersReducedMotion } = useAccessibleAnimations();
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -45,7 +45,7 @@ export default function MobileMenu({
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, x: prefersReducedMotion ? 0 : 40, scale: 0.95 },
     show: { opacity: 1, x: 0, scale: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
   };

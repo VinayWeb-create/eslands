@@ -122,7 +122,7 @@ export default function Hero() {
       <div className="pointer-events-none absolute right-0 top-1/4 h-[250px] w-[250px] sm:h-[550px] sm:w-[550px] rounded-full bg-purple-600/10 sm:bg-purple-600/20 blur-[80px] sm:blur-[170px] z-[1]" />
       <div className="pointer-events-none absolute bottom-0 left-1/3 h-[200px] w-[250px] sm:h-[400px] sm:w-[500px] rounded-full bg-cyan-500/10 sm:bg-cyan-500/15 blur-[80px] sm:blur-[150px] z-[1]" />
 
-      <div className="absolute inset-0 z-0">
+      <div className="hidden sm:block absolute inset-0 z-0">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeSlide}
