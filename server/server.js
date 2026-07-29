@@ -20,6 +20,8 @@ import portalRoutes from './routes/portalRoutes.js';
 
 dotenv.config();
 const app = express();
+app.set('trust proxy', 1);
+
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/onebridge';
 
