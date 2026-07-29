@@ -27,6 +27,7 @@ function getTransporter() {
 
 const companyName = 'Esland IT Solutions';
 const supportEmail = 'support@eslanditsolutions.com';
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
 function wrapHtml(title, body) {
   return `
@@ -151,7 +152,7 @@ export async function sendDemoReminderEmail(lead, demo) {
 }
 
 export async function sendQuoteEmail(lead, quote, pdfBuffer) {
-  const acceptUrl = `http://localhost:3000/quotes/public-accept/${quote._id}`;
+  const acceptUrl = `${clientUrl}/quotes/public-accept/${quote._id}`;
   const html = wrapHtml(
     'Your Quotation Proposal',
     `
@@ -180,7 +181,7 @@ export async function sendQuoteEmail(lead, quote, pdfBuffer) {
 }
 
 export async function sendPaymentRequestEmail(lead, quote) {
-  const checkoutUrl = `http://localhost:3000/pay/${lead._id}`;
+  const checkoutUrl = `${clientUrl}/pay/${lead._id}`;
   const html = wrapHtml(
     'Quotation Acceptance & Payment Request',
     `
@@ -255,7 +256,7 @@ export async function sendEnrollmentConfirmationEmail(lead, user, plainPassword)
       <p><strong>Your Access Details:</strong></p>
       <ul>
         <li><strong>Role:</strong> ${user.role === 'student' ? 'Student' : 'Client'}</li>
-        <li><strong>Portal Login URL:</strong> <a href="${process.env.CLIENT_URL || 'http://localhost:5173'}/portal/login">${process.env.CLIENT_URL || 'http://localhost:5173'}/portal/login</a></li>
+        <li><strong>Portal Login URL:</strong> <a href="${clientUrl}/portal/login">${clientUrl}/portal/login</a></li>
         <li><strong>Username / Email:</strong> ${user.email}</li>
         <li><strong>Password:</strong> ${plainPassword}</li>
       </ul>
