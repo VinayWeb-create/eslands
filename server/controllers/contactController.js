@@ -1,7 +1,6 @@
-import nodemailer from 'nodemailer';
 import Contact from '../models/Contact.js';
 import Lead from '../models/Lead.js';
-import { sendLeadReceivedEmail } from '../config/emailService.js';
+import { sendLeadReceivedEmail, sendEmail } from '../config/emailService.js';
 
 export async function submitContact(req, res) {
   const { name, email, phone, subject, service, message, company, country, source } = req.body;
@@ -25,24 +24,27 @@ export async function submitContact(req, res) {
       console.error('Auto-lead creation or email failed:', leadErr.message);
     }
 
-    if (process.env.EMAIL_USER && process.env.EMAIL_PASS && !process.env.EMAIL_USER.includes('example.com')) {
+    const adminEmail = process.env.EMAIL_USER;
+    if (adminEmail && !adminEmail.includes('example.com')) {
       try {
-        const transporter = nodemailer.createTransport({
-          service: 'gmail',
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-          },
-        });
-
-        await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: process.env.EMAIL_USER,
-          subject: `New contact request: ${subject} [${selectedService}]`,
-          text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nService Selected: ${selectedService}\nSubject: ${subject}\nMessage:\n${message}`,
+        await sendEmail({
+          to: adminEmail,
+          subject: `New contact request: ${subject || 'Inquiry'} [${selectedService}]`,
+          html: `
+            <p><strong>New Contact Inquiry Received:</strong></p>
+            <ul>
+              <li><strong>Name:</strong> ${name}</li>
+              <li><strong>Email:</strong> ${email}</li>
+              <li><strong>Phone:</strong> ${phone || 'N/A'}</li>
+              <li><strong>Service:</strong> ${selectedService}</li>
+              <li><strong>Subject:</strong> ${subject || 'N/A'}</li>
+            </ul>
+            <p><strong>Message:</strong></p>
+            <p>${message || 'N/A'}</p>
+          `
         });
       } catch (mailErr) {
-        console.error('Email notification failed:', mailErr.message);
+        console.error('Admin Email notification failed:', mailErr.message);
       }
     }
 
