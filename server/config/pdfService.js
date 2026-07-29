@@ -27,9 +27,11 @@ export function generateQuotePDF(quote, lead) {
     if (lead.company) doc.text(`Company: ${lead.company}`);
 
     doc.font('Helvetica-Bold').text('Proposal Summary:', 350, metaY);
-    doc.font('Helvetica').text(`Date Issued: ${new Date(quote.createdAt).toLocaleDateString()}`, 350);
-    doc.text(`Valid Until: ${new Date(quote.validUntil).toLocaleDateString()}`, 350);
-    doc.text(`Status: ${quote.status.toUpperCase()}`, 350);
+    const dateIssued = quote.createdAt ? new Date(quote.createdAt).toLocaleDateString() : new Date().toLocaleDateString();
+    const validUntil = quote.validUntil ? new Date(quote.validUntil).toLocaleDateString() : '—';
+    doc.font('Helvetica').text(`Date Issued: ${dateIssued}`, 350);
+    doc.text(`Valid Until: ${validUntil}`, 350);
+    doc.text(`Status: ${quote.status ? quote.status.toUpperCase() : 'SENT'}`, 350);
     
     doc.moveDown(2);
 
@@ -105,7 +107,8 @@ export function generateInvoicePDF(invoice, lead) {
     doc.text(`Phone: ${lead.phone || 'N/A'}`);
 
     doc.font('Helvetica-Bold').text('Invoice Details:', 350, metaY);
-    doc.font('Helvetica').text(`Invoice Date: ${new Date(invoice.issuedAt).toLocaleDateString()}`, 350);
+    const invoiceDate = invoice.issuedAt ? new Date(invoice.issuedAt).toLocaleDateString() : new Date().toLocaleDateString();
+    doc.font('Helvetica').text(`Invoice Date: ${invoiceDate}`, 350);
     doc.text(`Payment Status: PAID`, 350);
     
     doc.moveDown(2);
