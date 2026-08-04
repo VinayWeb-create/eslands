@@ -70,19 +70,9 @@ export async function processSuccessfulPayment(payment, lead, portalRole, adminI
   });
 
   // 2. Auto advance Lead status based on workflow role
-  const resolvedRole = portalRole || 
-    ((lead.service && (
-      lead.service.toLowerCase().includes('course') || 
-      lead.service.toLowerCase().includes('training') ||
-      lead.service.toLowerCase().includes('academy')
-    )) ? 'student' : 'client');
+  const resolvedRole = 'client';
 
-  if (resolvedRole === 'student') {
-    lead.status = 'fees_paid';
-  } else {
-    lead.status = 'project_started';
-  }
-
+  lead.status = 'project_started';
   await lead.save();
 
   // 3. Auto create Client/Student Portal Credentials

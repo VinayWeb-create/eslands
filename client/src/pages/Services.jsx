@@ -13,9 +13,8 @@ export const services = [
     id: 'web-development',
     label: 'Web Development',
     icon: Globe,
-    color: '#38bdf8',
-    colorClass: 'from-slate-900 via-slate-900 to-sky-950/40 border-sky-500/30',
-    iconBg: 'from-sky-500 to-sky-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Enterprise Web & Cloud Application Engineering',
     subheading: 'High-converting, resilient web platforms built to scale.',
     image: '/images/web.png',
@@ -33,9 +32,8 @@ export const services = [
     id: 'mobile-development',
     label: 'Mobile Development',
     icon: Smartphone,
-    color: '#a855f7',
-    colorClass: 'from-slate-900 via-slate-900 to-purple-950/40 border-purple-500/30',
-    iconBg: 'from-purple-500 to-indigo-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Native & Cross-Platform Mobile Applications',
     subheading: 'iOS & Android mobile solutions for seamless client engagement.',
     image: '/images/mobile.png',
@@ -53,9 +51,8 @@ export const services = [
     id: 'software-development',
     label: 'Software Development',
     icon: Code2,
-    color: '#38bdf8',
-    colorClass: 'from-slate-900 via-slate-900 to-blue-950/40 border-blue-500/30',
-    iconBg: 'from-sky-500 to-blue-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Bespoke Enterprise Software Engineering',
     subheading: 'Tailored software solutions designed around complex business workflows.',
     image: '/images/software-des.png',
@@ -73,9 +70,8 @@ export const services = [
     id: 'networking',
     label: 'Networking & Infrastructure',
     icon: Network,
-    color: '#34d399',
-    colorClass: 'from-slate-900 via-slate-900 to-emerald-950/40 border-emerald-500/30',
-    iconBg: 'from-emerald-500 to-teal-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Zero-Trust Network Infrastructure & Management',
     subheading: 'Robust stability, security, and flexibility for enterprise networks.',
     image: '/images/network.png',
@@ -93,63 +89,59 @@ export const services = [
     id: 'naming',
     label: 'Professional Naming',
     icon: Tag,
-    color: '#c084fc',
-    colorClass: 'from-slate-900 via-slate-900 to-purple-950/40 border-purple-500/30',
-    iconBg: 'from-purple-500 to-indigo-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Strategic Enterprise Brand Naming & Positioning',
     subheading: 'Establishing authoritative brand identities from day one.',
-    image: '/images/business_name.jpg',
-    body: 'Strategic brand naming and product architecture that communicates trust, innovation, and corporate identity across global markets.',
+    image: null,
+    body: 'We conduct trademark verification, linguistic checks, and brand positioning analysis to craft authoritative product and company names that command instant recognition in modern enterprise domains.',
     features: [
-      'Enterprise brand naming strategy',
-      'Global domain & trademark validation',
-      'Market positioning & messaging rules',
-      'Target demographic resonance testing',
+      'Linguistic & cultural validation checks',
+      'Trademark availability screening',
+      'Strategic market alignment analysis',
+      'Complete corporate identity positioning',
     ],
   },
   {
     id: 'branding',
     label: 'Branding & Identity',
     icon: Palette,
-    color: '#f87171',
-    colorClass: 'from-slate-900 via-slate-900 to-red-950/40 border-red-500/30',
-    iconBg: 'from-red-500 to-rose-600',
-    heading: 'Enterprise Brand Identity & Motion Systems',
-    subheading: 'Command market authority with a modern digital brand system.',
-    image: '/images/brand.jpg',
-    body: 'Comprehensive brand identity design including vector logos, style guides, motion assets, and digital design systems engineered for consistency across all touchpoints.',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
+    heading: 'Cohesive Design Systems & Corporate Branding',
+    subheading: 'Unified visual assets crafted for premium market authority.',
+    image: '/images/brand.jpeg',
+    body: 'We design complete corporate visual systems—encompassing corporate colors, typography scales, vector assets, and responsive UI components that project premium market quality across all endpoints.',
     features: [
-      'Logo design & scalable vector assets',
-      'Brand design token guidelines & typography',
-      'Corporate stationery & presentation decks',
-      'Digital collateral & social media design',
+      'Corporate color palette definition',
+      'Typography systems & brand guidelines',
+      'Responsive component libraries (Figma)',
+      'Vector asset & collateral creation',
     ],
   },
   {
     id: 'animation',
-    label: '2D Animation & Motion',
+    label: '2D & Motion Branding',
     icon: PlayCircle,
-    color: '#38bdf8',
-    colorClass: 'from-slate-900 via-slate-900 to-sky-950/40 border-sky-500/30',
-    iconBg: 'from-sky-500 to-cyan-600',
-    heading: 'High-Impact Motion Graphics & Product Demos',
-    subheading: 'Transform complex technical concepts into engaging motion storytelling.',
-    image: '/images/video.jpg',
-    body: 'Explainer videos, 2D motion graphics, and animated product visualizers built to showcase enterprise software capabilities to executive buyers.',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
+    heading: 'Premium Explainer & System Motion Graphics',
+    subheading: 'Simplifying complex enterprise processes with high-quality visual stories.',
+    image: '/images/ani.png',
+    body: 'From conceptual architectural breakdowns to software product demos, our custom motion graphics clearly translate advanced infrastructure designs into simple, engaging executive stories.',
     features: [
-      'Explainer & architecture walk-through videos',
-      'UI motion reveals & 2D animation',
-      'Social media motion collateral',
-      'Voiceover & sound design coordination',
+      'Storyboard conceptual development',
+      'Professional explainer scripting',
+      '2D vector character & flow animations',
+      'Bespoke product demo overlays',
     ],
   },
   {
     id: 'ecommerce',
     label: 'E-commerce Platforms',
     icon: ShoppingCart,
-    color: '#2dd4bf',
-    colorClass: 'from-slate-900 via-slate-900 to-teal-950/40 border-teal-500/30',
-    iconBg: 'from-teal-500 to-emerald-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Scalable Enterprise E-Commerce Engines',
     subheading: 'Omnichannel online storefronts designed for high transaction volume.',
     image: '/images/eco-mm.png',
@@ -165,9 +157,8 @@ export const services = [
     id: 'seo-marketing',
     label: 'SEO & Growth Marketing',
     icon: Search,
-    color: '#38bdf8',
-    colorClass: 'from-slate-900 via-slate-900 to-sky-950/40 border-sky-500/30',
-    iconBg: 'from-sky-500 to-indigo-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Search Engine Dominance & Growth Marketing',
     subheading: 'Organic search rankings and targeted B2B conversion engines.',
     image: '/images/s-1.png',
@@ -183,9 +174,8 @@ export const services = [
     id: 'redesign',
     label: 'System Modernization',
     icon: RotateCcw,
-    color: '#38bdf8',
-    colorClass: 'from-slate-900 via-slate-900 to-blue-950/40 border-blue-500/30',
-    iconBg: 'from-sky-500 to-blue-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Zero-Downtime System & UX Modernization',
     subheading: 'Transform legacy applications into modern, cloud-native platforms.',
     image: '/images/re-1.png',
@@ -201,9 +191,8 @@ export const services = [
     id: 'logo-design',
     label: 'Logo & Brand Systems',
     icon: Aperture,
-    color: '#c084fc',
-    colorClass: 'from-slate-900 via-slate-900 to-purple-950/40 border-purple-500/30',
-    iconBg: 'from-purple-500 to-indigo-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Iconic Enterprise Logo & Vector Design',
     subheading: 'Crafting memorable visual identities for technology companies.',
     image: '/images/log-des.png',
@@ -219,9 +208,8 @@ export const services = [
     id: 'social-media',
     label: 'Social Media Marketing',
     icon: Megaphone,
-    color: '#f87171',
-    colorClass: 'from-slate-900 via-slate-900 to-red-950/40 border-red-500/30',
-    iconBg: 'from-red-500 to-rose-600',
+    color: '#003087',
+    iconBg: 'from-[#003087] to-[#0057D8]',
     heading: 'Enterprise B2B Social & Digital Campaigns',
     subheading: 'Expand brand reach and engage decision-makers across LinkedIn & social channels.',
     image: '/images/social-2.png',
@@ -251,31 +239,21 @@ export default function Services() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden pt-[65px]">
+    <div className="relative min-h-screen bg-white text-gray-700 overflow-x-hidden pt-[65px]">
       {/* Background ambient lighting */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[150px]" />
-      <div className="pointer-events-none fixed right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[150px]" />
+      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-50/40 blur-[150px]" />
 
       {/* Page Banner */}
-      <section className="relative h-[280px] flex items-center justify-center border-b border-white/10 overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/service.jpg"
-            alt="Services banner background"
-            className="w-full h-full object-cover opacity-35 filter brightness-75"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
-        </div>
-
+      <section className="relative h-[240px] flex items-center justify-center border-b border-[#E4E9F0] overflow-hidden bg-[#F8FAFC]">
         <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-3 inline-block">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="section-badge mb-3 inline-flex">
               Esland Capabilities
             </span>
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-3 uppercase">
+            <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-gray-900 mb-3 uppercase">
               Enterprise Services
             </h1>
-            <p className="text-slate-300 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
+            <p className="text-gray-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
               Mission-critical technology solutions engineered to scale your business.
             </p>
           </motion.div>
@@ -288,17 +266,17 @@ export default function Services() {
 
           {/* Sidebar */}
           <aside className="lg:sticky lg:top-[98px] lg:max-h-[calc(100vh-120px)] lg:overflow-y-auto">
-            <div className="spotlight-card rounded-[2rem] border border-white/10 bg-slate-900/90 backdrop-blur-2xl p-4 shadow-xl">
-              <p className="mb-4 px-3 text-[10px] uppercase tracking-[0.35em] text-sky-400 font-bold">Select Capability</p>
+            <div className="rounded-lg border border-[#E4E9F0] bg-white p-4 shadow-sm">
+              <p className="mb-4 px-3 text-[10px] uppercase tracking-[0.25em] text-[#003087] font-bold">Select Capability</p>
               <nav className="space-y-1.5">
                 {services.map((s) => (
                   <button
                     key={s.id}
                     onClick={() => selectService(s.id)}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-3 text-left text-xs font-bold transition-all duration-200 border ${
+                    className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 text-left text-xs font-bold transition-all duration-200 border ${
                       activeId === s.id
-                        ? 'bg-sky-500/20 text-sky-300 border-sky-400/40 shadow-lg shadow-sky-500/10'
-                        : 'border-transparent text-slate-400 hover:bg-white/5 hover:text-white'
+                        ? 'bg-blue-50 text-[#003087] border-[#DCE8FF]'
+                        : 'border-transparent text-gray-500 hover:bg-gray-50 hover:text-[#003087]'
                     }`}
                   >
                     <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${s.iconBg} text-white`}>
@@ -319,44 +297,44 @@ export default function Services() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.35 }}
-              className={`spotlight-card rounded-[2.5rem] border bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-12 shadow-2xl overflow-hidden ${active.colorClass}`}
+              className="rounded-lg border border-[#E4E9F0] bg-white p-8 sm:p-12 shadow-sm overflow-hidden"
             >
               {/* Service Header */}
               <div className="mb-8 flex items-start gap-6">
-                <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${active.iconBg} text-white shadow-xl shadow-sky-500/20`}>
+                <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br ${active.iconBg} text-white`}>
                   <active.icon size={30} />
                 </div>
                 <div>
-                  <span className="text-xs uppercase tracking-[0.3em] font-bold text-sky-400 block mb-1">Esland Capability</span>
-                  <h2 className="text-2xl sm:text-4xl font-black text-white leading-tight">{active.heading}</h2>
-                  <p className="mt-2 text-sm font-semibold text-sky-300">{active.subheading}</p>
+                  <span className="text-xs uppercase tracking-[0.25em] font-bold text-[#003087] block mb-1">Esland Capability</span>
+                  <h2 className="text-2xl sm:text-4xl font-display font-extrabold text-gray-900 leading-tight">{active.heading}</h2>
+                  <p className="mt-2 text-sm font-semibold text-[#003087]">{active.subheading}</p>
                 </div>
               </div>
 
               {/* Image & Description Grid */}
               <div className="grid gap-8 md:grid-cols-[1fr_2fr] items-start mt-8">
                 {active.image && (
-                  <div className="rounded-2xl overflow-hidden border border-white/10 bg-slate-950/80 p-4 flex items-center justify-center shadow-lg">
+                  <div className="rounded-lg overflow-hidden border border-[#E4E9F0] bg-[#F8FAFC] p-4 flex items-center justify-center shadow-sm">
                     <img src={active.image} alt={active.label} className="max-w-full h-auto object-contain max-h-[220px]" />
                   </div>
                 )}
                 <div className={active.image ? 'space-y-4' : 'md:col-span-2 space-y-4'}>
                   {active.body.split('\n\n').map((paragraph, index) => (
-                    <p key={index} className="text-slate-300 text-sm leading-relaxed font-medium">{paragraph}</p>
+                    <p key={index} className="text-gray-600 text-sm leading-relaxed font-medium">{paragraph}</p>
                   ))}
                 </div>
               </div>
 
               {/* Key Features */}
-              <div className="mt-10 pt-8 border-t border-white/10">
-                <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-sky-400">Core Engineering Features</h3>
+              <div className="mt-10 pt-8 border-t border-[#E4E9F0]">
+                <h3 className="mb-5 text-xs font-bold uppercase tracking-widest text-[#003087]">Core Engineering Features</h3>
                 <div className="grid gap-3 sm:grid-cols-2">
                   {active.features.map((feat) => (
                     <div
                       key={feat}
-                      className="flex items-center gap-3 rounded-xl border border-white/10 bg-slate-950/60 px-4 py-3 text-xs text-slate-200 font-semibold"
+                      className="flex items-center gap-3 rounded-lg border border-[#E4E9F0] bg-[#F8FAFC] px-4 py-3 text-xs text-gray-700 font-semibold"
                     >
-                      <Check size={14} className="text-emerald-400 shrink-0" />
+                      <Check size={14} className="text-[#0C7A48] shrink-0" />
                       <span>{feat}</span>
                     </div>
                   ))}
@@ -367,25 +345,25 @@ export default function Services() {
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
                 <a
                   href="tel:02038190333"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-xl shadow-sky-500/20 hover:brightness-110 transition-all uppercase tracking-wider"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#003087] px-8 py-4 text-xs font-bold text-white shadow hover:bg-[#002068] transition-all uppercase tracking-wider"
                 >
                   <Phone size={15} /> Direct Line: 020 3819 0333
                 </a>
                 <Link
                   to={`/contact?service=${active.id}`}
-                  className="inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-slate-950/80 px-8 py-4 text-xs font-bold text-slate-200 hover:text-white hover:bg-white/10 transition-all uppercase tracking-wider"
+                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-[#C5D0E0] bg-white px-8 py-4 text-xs font-bold text-[#003087] hover:bg-gray-50 transition-all uppercase tracking-wider"
                 >
-                  Schedule Technical Demo <ArrowRight size={15} />
+                  Book Free Consultation <ArrowRight size={15} />
                 </Link>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-xs font-semibold text-slate-300">
-                <a href="tel:02038190333" className="flex items-center gap-2 hover:text-sky-300 transition-colors">
-                  <Phone size={14} className="text-sky-400" />
+              <div className="mt-6 pt-6 border-t border-[#E4E9F0] flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-xs font-semibold text-gray-500">
+                <a href="tel:02038190333" className="flex items-center gap-2 hover:text-[#003087] transition-colors">
+                  <Phone size={14} className="text-[#003087]" />
                   020 3819 0333
                 </a>
-                <a href="mailto:info@eslanditsolutions.com" className="flex items-center gap-2 hover:text-sky-300 transition-colors">
-                  <Mail size={14} className="text-sky-400" />
+                <a href="mailto:info@eslanditsolutions.com" className="flex items-center gap-2 hover:text-[#003087] transition-colors">
+                  <Mail size={14} className="text-[#003087]" />
                   info@eslanditsolutions.com
                 </a>
               </div>

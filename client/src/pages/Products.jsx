@@ -28,31 +28,21 @@ export default function Products() {
   });
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden pt-[65px]">
+    <div className="relative min-h-screen bg-white text-gray-700 overflow-x-hidden pt-[65px]">
       {/* Background Glows */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[150px]" />
-      <div className="pointer-events-none fixed right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-purple-600/10 blur-[150px]" />
+      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-50/40 blur-[150px]" />
 
       {/* Hero Header */}
-      <section className="relative py-20 px-6 border-b border-white/10 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/ban-4.jpg"
-            alt="Products banner background"
-            className="w-full h-full object-cover filter brightness-[0.3]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950" />
-        </div>
-
+      <section className="relative py-20 px-6 border-b border-[#E4E9F0] overflow-hidden bg-[#F8FAFC]">
         <div className="relative z-10 mx-auto max-w-7xl text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
+          <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="section-badge mb-4 inline-flex">
               <Sparkles size={14} /> Enterprise Catalog
             </span>
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-4 uppercase">
+            <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-gray-900 mb-4 uppercase">
               Hardware & Software Solutions
             </h1>
-            <p className="text-slate-300 max-w-xl mx-auto text-base leading-relaxed font-medium">
+            <p className="text-gray-500 max-w-xl mx-auto text-sm sm:text-base leading-relaxed font-medium">
               Enterprise-grade hardware, firewall gateways, and cloud software infrastructure engineered for maximum performance.
             </p>
           </motion.div>
@@ -62,16 +52,16 @@ export default function Products() {
       {/* Main Content */}
       <section className="mx-auto max-w-7xl px-6 py-16">
         {/* Filter & Search Bar */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 rounded-[2rem] border border-white/10 bg-slate-900/80 backdrop-blur-xl p-6 shadow-2xl">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12 rounded-lg border border-[#E4E9F0] bg-white p-6 shadow-sm">
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-5 py-2 text-xs font-bold uppercase tracking-wider transition duration-300 border ${
+                className={`rounded-lg px-5 py-2 text-xs font-bold uppercase tracking-wider transition duration-200 border ${
                   selectedCategory === cat
-                    ? 'bg-gradient-to-r from-sky-500 to-indigo-600 border-sky-400 text-white shadow-lg shadow-sky-500/20'
-                    : 'border-white/10 text-slate-400 hover:text-white bg-slate-950/50'
+                    ? 'bg-[#003087] border-[#003087] text-white shadow'
+                    : 'border-[#E4E9F0] text-gray-500 hover:text-[#003087] hover:border-[#003087] bg-white'
                 }`}
               >
                 {cat}
@@ -80,13 +70,13 @@ export default function Products() {
           </div>
 
           <div className="relative w-full md:max-w-xs">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-sky-400" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#003087]" size={16} />
             <input
               type="text"
               placeholder="Search catalog..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-full border border-white/10 bg-slate-950/80 py-2.5 pl-11 pr-4 text-xs text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition"
+              className="w-full rounded-full border border-[#E4E9F0] bg-white py-2.5 pl-11 pr-4 text-xs text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition"
             />
           </div>
         </div>
@@ -101,22 +91,22 @@ export default function Products() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.4 }}
-                className="group relative rounded-[2.2rem] border border-white/10 bg-slate-900/80 backdrop-blur-xl p-6 transition-all duration-500 hover:-translate-y-2 hover:border-sky-400/40 hover:shadow-2xl overflow-hidden flex flex-col justify-between"
+                className="group relative rounded-lg border border-[#E4E9F0] bg-white p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-[#003087] hover:shadow-md overflow-hidden flex flex-col justify-between"
               >
                 <div>
-                  <div className="relative h-48 w-full rounded-2xl overflow-hidden mb-6 bg-slate-950">
+                  <div className="relative h-48 w-full rounded-lg overflow-hidden mb-6 bg-gray-50 border border-[#E4E9F0]">
                     <img
                       src={p.image}
                       alt={p.title}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-sky-500 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow">
+                    <span className="absolute top-3 right-3 px-3 py-1 rounded-md bg-[#003087] text-white text-[10px] font-bold uppercase tracking-wider shadow">
                       {p.badge}
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-sky-400">{p.category}</span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#003087]">{p.category}</span>
                     <div className="flex text-amber-400 gap-0.5">
                       {[...Array(p.rating)].map((_, i) => (
                         <Star key={i} size={12} fill="currentColor" />
@@ -124,18 +114,18 @@ export default function Products() {
                     </div>
                   </div>
 
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-sky-300 transition-colors">
+                  <h3 className="text-xl font-display font-extrabold text-gray-900 mb-2 group-hover:text-[#003087] transition-colors">
                     {p.title}
                   </h3>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between">
-                  <div className="text-lg font-black text-white">{p.price}</div>
+                <div className="mt-6 pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <div className="text-lg font-black text-gray-900">{p.price}</div>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-sky-400 hover:bg-sky-500 hover:text-white transition-all"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-blue-50 border border-blue-100 text-xs font-bold text-[#003087] hover:bg-[#003087] hover:text-white transition-all"
                   >
-                    Inquire <ArrowRight size={13} />
+                    Talk to Expert <ArrowRight size={13} />
                   </Link>
                 </div>
               </motion.div>

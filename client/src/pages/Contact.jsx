@@ -26,8 +26,9 @@ export default function Contact() {
   const [form, setForm] = useState({
     name: '',
     email: '',
+    company: '',
     phone: '',
-    subject: '',
+    subject: 'General Inquiry',
     service: 'General Inquiry',
     message: '',
   });
@@ -47,6 +48,17 @@ export default function Contact() {
       setForm((prev) => ({ ...prev, service: matched }));
     }
   }, [searchParams, location.state]);
+
+  useEffect(() => {
+    const mode = searchParams.get('mode');
+    if (mode === 'proposal') {
+      setForm(prev => ({ ...prev, subject: 'Get Proposal' }));
+    } else if (mode === 'consultation') {
+      setForm(prev => ({ ...prev, subject: 'Book Consultation' }));
+    } else {
+      setForm(prev => ({ ...prev, subject: 'General Inquiry' }));
+    }
+  }, [searchParams]);
 
   const handleInputChange = (field, value) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -89,8 +101,8 @@ export default function Contact() {
     setSuccessMsg('Sending your message. Please wait....');
     try {
       await api.post('/api/contact', form);
-      setSuccessMsg('Thank You for contacting us, We have received your message and our representative will contact you as soon as possible.');
-      setForm({ name: '', email: '', phone: '', subject: '', service: 'General Inquiry', message: '' });
+      setSuccessMsg('Enquiry submitted successfully! Thank you for contacting us, we have received your message and our representative will contact you as soon as possible.');
+      setForm({ name: '', email: '', company: '', phone: '', subject: 'General Inquiry', service: 'General Inquiry', message: '' });
     } catch (error) {
       setSuccessMsg('');
       setErrorMsg('Sorry. Something went wrong. Please try after sometime.');
@@ -101,35 +113,25 @@ export default function Contact() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-300 overflow-x-hidden pt-[65px]">
+    <div className="relative min-h-screen bg-white text-gray-700 overflow-x-hidden pt-[65px]">
       {/* Glow Backdrops */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[160px]" />
-      <div className="pointer-events-none fixed right-0 bottom-0 h-[500px] w-[500px] rounded-full bg-indigo-500/10 blur-[160px]" />
+      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-50/40 blur-[160px]" />
 
       {/* Page Banner */}
-      <section className="relative h-[280px] flex items-center justify-center border-b border-white/10 overflow-hidden bg-slate-900">
-        <div className="absolute inset-0 z-0">
-          <img
-            src="/images/ban-1.jpg"
-            alt="Get in touch banner background"
-            className="w-full h-full object-cover opacity-30 filter brightness-75"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent" />
-        </div>
-
+      <section className="relative h-[240px] flex items-center justify-center border-b border-[#E4E9F0] overflow-hidden bg-[#F8FAFC]">
         <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <span className="px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-3 inline-block">
-              <Sparkles size={13} className="inline mr-1" /> Enterprise Support
+            <span className="section-badge mb-3 inline-block">
+              <Sparkles size={13} className="inline mr-1 animate-pulse" /> Enterprise Support
             </span>
-            <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-3 uppercase">
+            <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-gray-900 mb-3 uppercase">
               Get In Touch
             </h1>
-            <p className="text-slate-300 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
+            <p className="text-gray-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
               We are ready to architect your next digital capability.
             </p>
           </motion.div>
@@ -145,132 +147,127 @@ export default function Contact() {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.55 }}
-            className="spotlight-card rounded-[2.5rem] border border-white/10 bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl relative overflow-hidden"
+            className="rounded-lg border border-[#E4E9F0] bg-white p-8 sm:p-10 shadow-sm relative overflow-hidden"
           >
-            <h2 className="text-2xl sm:text-3xl font-black text-white mb-2">
+            <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-gray-900 mb-2">
               Send Us A Message
             </h2>
-            <p className="text-sm leading-relaxed text-slate-400 mb-8 font-medium">
-              Need to discuss your project requirements? <span className="text-sky-400 font-bold">We respond within 24 hours.</span>
+            <p className="text-sm leading-relaxed text-gray-500 mb-8 font-medium">
+              Need to discuss your project requirements? <span className="text-[#003087] font-bold">We respond within 24 hours.</span>
             </p>
 
             <form className="space-y-5" onSubmit={handleValidationAndSubmit}>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="form-name" className="sr-only">Name</label>
+                  <label htmlFor="form-name" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Full Name *</label>
                   <input
                     id="form-name"
                     type="text"
-                    placeholder="Your Name"
+                    placeholder="John Doe"
                     value={form.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    className="w-full rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors"
+                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
                   />
-                  {errors.name && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.name}</p>}
+                  {errors.name && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.name}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="form-email" className="sr-only">Email</label>
+                  <label htmlFor="form-email" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Business Email *</label>
                   <input
                     id="form-email"
                     type="text"
-                    placeholder="Business Email"
+                    placeholder="john@company.com"
                     value={form.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors"
+                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
                   />
-                  {errors.email && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.email}</p>}
+                  {errors.email && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.email}</p>}
                 </div>
               </div>
 
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="form-phone" className="sr-only">Phone Number</label>
+                  <label htmlFor="form-company" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Company</label>
                   <input
-                    id="form-phone"
+                    id="form-company"
                     type="text"
-                    placeholder="Phone Number"
-                    value={form.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors"
+                    placeholder="Your Company"
+                    value={form.company}
+                    onChange={(e) => handleInputChange('company', e.target.value)}
+                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
                   />
-                  {errors.phone && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.phone}</p>}
                 </div>
 
                 <div>
-                  <label htmlFor="form-subject" className="sr-only">Subject</label>
+                  <label htmlFor="form-phone" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Phone *</label>
                   <input
-                    id="form-subject"
+                    id="form-phone"
                     type="text"
-                    placeholder="Subject"
-                    value={form.subject}
-                    onChange={(e) => handleInputChange('subject', e.target.value)}
-                    className="w-full rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors"
+                    placeholder="+91 00000 00000"
+                    value={form.phone}
+                    onChange={(e) => handleInputChange('phone', e.target.value)}
+                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
                   />
-                  {errors.subject && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.subject}</p>}
+                  {errors.phone && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.phone}</p>}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="form-service" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400 mb-1.5 ml-1">
-                  <Layers size={13} /> Select Service / Capability Required
+                <label htmlFor="form-service" className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">
+                  <Layers size={13} /> Service of Interest
                 </label>
                 <div className="relative">
                   <select
                     id="form-service"
                     value={form.service}
                     onChange={(e) => handleInputChange('service', e.target.value)}
-                    className="w-full appearance-none rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white focus:border-sky-400 focus:outline-none transition-colors pr-10 cursor-pointer font-medium"
+                    className="w-full appearance-none rounded-lg border border-[#E4E9F0] bg-white px-4 py-3.5 text-sm text-gray-700 focus:border-[#003087] focus:outline-none transition-colors pr-10 cursor-pointer font-medium"
                   >
-                    <option value="General Inquiry" className="bg-slate-900 text-white">General Inquiry / Consultation</option>
-                    <option value="Web Development" className="bg-slate-900 text-white">Web Development & Cloud Applications</option>
-                    <option value="Mobile Development" className="bg-slate-900 text-white">Mobile Development (iOS & Android)</option>
-                    <option value="Software Development" className="bg-slate-900 text-white">Bespoke Software Development</option>
-                    <option value="Networking & Infrastructure" className="bg-slate-900 text-white">Networking & Infrastructure</option>
-                    <option value="Professional Naming" className="bg-slate-900 text-white">Professional Brand Naming</option>
-                    <option value="Branding & Identity" className="bg-slate-900 text-white">Branding & Identity Systems</option>
-                    <option value="2D Animation & Motion" className="bg-slate-900 text-white">2D Animation & Motion Graphics</option>
-                    <option value="E-commerce Platforms" className="bg-slate-900 text-white">E-commerce Platforms</option>
-                    <option value="SEO & Growth Marketing" className="bg-slate-900 text-white">SEO & Growth Marketing</option>
-                    <option value="System Modernization" className="bg-slate-900 text-white">System & UX Modernization</option>
-                    <option value="Logo & Brand Systems" className="bg-slate-900 text-white">Logo & Brand Systems</option>
-                    <option value="Social Media Marketing" className="bg-slate-900 text-white">Social Media Marketing</option>
+                    <option value="General Inquiry" className="text-gray-700 bg-white">Select a service</option>
+                    <option value="Web Development" className="text-gray-700 bg-white">Web Development</option>
+                    <option value="Mobile Development" className="text-gray-700 bg-white">Mobile Development</option>
+                    <option value="Software Development" className="text-gray-700 bg-white">Software Development</option>
+                    <option value="Networking & Infrastructure" className="text-gray-700 bg-white">Networking & Infrastructure</option>
+                    <option value="Professional Naming" className="text-gray-700 bg-white">Professional Naming</option>
+                    <option value="Branding & Identity" className="text-gray-700 bg-white">Branding & Identity</option>
+                    <option value="2D Animation & Motion" className="text-gray-700 bg-white">2D Animation & Motion</option>
+                    <option value="E-commerce Platforms" className="text-gray-700 bg-white">E-commerce Platforms</option>
                   </select>
-                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400">
+                  <div className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400">
                     <ChevronDown size={18} />
                   </div>
                 </div>
               </div>
 
               <div>
-                <label htmlFor="form-message" className="sr-only">Message</label>
+                <label htmlFor="form-message" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Project Details *</label>
                 <textarea
                   id="form-message"
                   rows={5}
-                  placeholder="Tell us about your technical requirements..."
+                  placeholder="What are you trying to achieve? Current pain points, timeline, and any technical or compliance constraints..."
                   value={form.message}
                   onChange={(e) => handleInputChange('message', e.target.value)}
-                  className="w-full resize-none rounded-2xl border border-white/15 bg-slate-950/80 px-4 py-3.5 text-sm text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none transition-colors"
+                  className="w-full resize-none rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
                 />
-                {errors.message && <p className="text-red-400 text-xs mt-1.5 ml-1">{errors.message}</p>}
+                {errors.message && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.message}</p>}
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-sky-500 to-indigo-600 px-8 py-4 text-xs font-bold text-white shadow-xl shadow-sky-500/20 hover:brightness-110 transition-all uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#003087] px-8 py-4 text-xs font-bold text-white shadow hover:bg-[#002068] transition-all uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send size={14} />
-                Send Message
+                Submit Inquiry
               </button>
 
               {successMsg && (
-                <p className="text-emerald-400 text-xs font-semibold mt-4 border border-emerald-400/30 bg-emerald-500/10 rounded-2xl p-4 leading-6">
+                <p className="text-green-700 text-xs font-semibold mt-4 border border-green-200 bg-green-50 rounded-lg p-4 leading-6">
                   {successMsg}
                 </p>
               )}
               {errorMsg && (
-                <p className="text-red-400 text-xs font-semibold mt-4 border border-red-400/30 bg-red-500/10 rounded-2xl p-4 leading-6">
+                <p className="text-red-600 text-xs font-semibold mt-4 border border-red-200 bg-red-50 rounded-lg p-4 leading-6">
                   {errorMsg}
                 </p>
               )}
@@ -284,15 +281,15 @@ export default function Contact() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="space-y-6"
           >
-            <div className="spotlight-card rounded-[2.5rem] border border-white/10 bg-slate-900/90 backdrop-blur-2xl p-8 shadow-2xl">
+            <div className="rounded-lg border border-[#E4E9F0] bg-white p-8 shadow-sm">
               <div className="grid gap-8 sm:grid-cols-2">
                 <div className="space-y-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100">
                     <MapPin size={20} />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-white mb-2">Mailing Address</h4>
-                    <address className="text-xs leading-relaxed text-slate-300 not-italic font-medium">
+                    <h4 className="text-base font-display font-bold text-gray-900 mb-2">Mailing Address</h4>
+                    <address className="text-xs leading-relaxed text-gray-600 not-italic font-medium">
                       Suite-G,<br />
                       Weller House,<br />
                       58-60 Longbridge Rd, Barking,<br />
@@ -302,19 +299,19 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-400 border border-sky-400/30">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100">
                     <Phone size={20} />
                   </div>
                   <div>
-                    <h4 className="text-base font-bold text-white mb-2">Contact Info</h4>
-                    <ul className="text-xs leading-relaxed text-slate-300 space-y-2 font-medium">
+                    <h4 className="text-base font-display font-bold text-gray-900 mb-2">Contact Info</h4>
+                    <ul className="text-xs leading-relaxed text-gray-600 space-y-2 font-medium">
                       <li>
-                        <span className="text-slate-400">Phone: </span> 
-                        <a href="tel:02038190333" className="hover:text-sky-300 font-bold text-white transition">020 3819 0333</a>
+                        <span className="text-gray-400">Phone: </span> 
+                        <a href="tel:02038190333" className="hover:text-[#003087] font-bold text-gray-900 transition">020 3819 0333</a>
                       </li>
                       <li>
-                        <span className="text-slate-400">Mail: </span> 
-                        <a href="mailto:info@eslanditsolutions.com" className="hover:text-sky-300 transition text-sky-400 font-semibold">info@eslanditsolutions.com</a>
+                        <span className="text-gray-400">Mail: </span> 
+                        <a href="mailto:info@eslanditsolutions.com" className="hover:text-[#002068] transition text-[#003087] font-semibold">info@eslanditsolutions.com</a>
                       </li>
                     </ul>
                   </div>
@@ -323,11 +320,11 @@ export default function Contact() {
             </div>
 
             {/* Google Map Box */}
-            <div className="rounded-[2.5rem] border border-white/10 overflow-hidden h-[320px] shadow-2xl relative bg-slate-900">
+            <div className="rounded-lg border border-[#E4E9F0] overflow-hidden h-[320px] shadow-sm relative bg-gray-50">
               <iframe
                 title="Esland IT Solutions Office Map Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.691646495486!2d0.07895821577108171!3d51.53721527964005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a66d4184d01d%3A0x4fc9c915675b5d4b!2sRadial+House%2C+3-5+Ripple+Rd%2C+Barking+IG11+7NP%2C+UK!5e0!3m2!1sen!2sin!4v1483707062936"
-                className="w-full h-full border-0 filter invert-[0.9] hue-rotate-180 brightness-90 contrast-125"
+                className="w-full h-full border-0 brightness-95"
                 allowFullScreen
                 loading="lazy"
               />

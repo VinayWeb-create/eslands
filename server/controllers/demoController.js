@@ -13,7 +13,7 @@ export async function getDemos(req, res) {
 }
 
 export async function createDemo(req, res) {
-  const { leadId, demoDate, demoTime, meetingLink, trainer, salesPerson, notes } = req.body;
+  const { leadId, demoDate, demoTime, demoType, location, meetingLink, trainer, salesPerson, notes } = req.body;
   if (!leadId || !demoDate || !demoTime) {
     return res.status(400).json({ message: 'Lead ID, Date and Time are required.' });
   }
@@ -21,11 +21,14 @@ export async function createDemo(req, res) {
     const lead = await Lead.findById(leadId);
     if (!lead) return res.status(404).json({ message: 'Lead not found.' });
 
+    const isOnline = demoType !== 'offline';
     const demo = await Demo.create({
       lead: leadId,
       demoDate,
       demoTime,
-      meetingLink: meetingLink || 'https://meet.google.com/abc-defg-hij',
+      demoType: demoType || 'online',
+      location: location || '',
+      meetingLink: meetingLink || (isOnline ? 'https://meet.google.com/abc-defg-hij' : ''),
       trainer: trainer || '',
       salesPerson: salesPerson || '',
       notes: notes || ''
@@ -33,8 +36,11 @@ export async function createDemo(req, res) {
 
     // Update Lead status and audit trail
     lead.status = 'demo_scheduled';
+    const locationInfo = isOnline 
+      ? `Meeting link: ${demo.meetingLink}` 
+      : `Location: ${demo.location || 'In-Person Class/Office'}`;
     lead.notes.push({
-      text: `Demo scheduled on ${demoDate} at ${demoTime}. Meeting link: ${demo.meetingLink}`,
+      text: `Demo scheduled (${demo.demoType}) on ${demoDate} at ${demoTime}. ${locationInfo}`,
       createdBy: req.admin._id
     });
     await lead.save();

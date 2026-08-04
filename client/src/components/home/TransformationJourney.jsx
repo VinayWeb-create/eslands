@@ -105,6 +105,17 @@ export default function TransformationJourney() {
   const canvasRef = useRef(null);
   const { prefersReducedMotion } = useAccessibleAnimations();
 
+  // Auto-switch tabs
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveDimension((prev) => {
+        const currentIndex = transformationDimensions.findIndex((dim) => dim.id === prev.id);
+        return transformationDimensions[(currentIndex + 1) % transformationDimensions.length];
+      });
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [activeDimension]);
+
   // Neural Connection Canvas Animation
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -119,45 +130,53 @@ export default function TransformationJourney() {
     resize();
     window.addEventListener('resize', resize);
 
-    // Glowing Data Packets traveling from Left -> Center -> Right
-    const packets = Array.from({ length: 16 }, () => ({
-      x: Math.random() * canvas.width,
-      y: (canvas.height / 2) + (Math.random() - 0.5) * 80,
-      speed: Math.random() * 2 + 1.2,
-      size: Math.random() * 3 + 1.5,
-    }));
+    // Neural nodes
+    const nodeCount = 30;
+    const nodes = [];
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        radius: Math.random() * 2 + 1,
+      });
+    }
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(41, 112, 255, 0.15)';
+      ctx.strokeStyle = 'rgba(41, 112, 255, 0.12)';
+      ctx.lineWidth = 1.2;
 
-      // Central Processing Pipeline Line
-      const midY = canvas.height / 2;
-      ctx.beginPath();
-      ctx.moveTo(40, midY);
-      ctx.lineTo(canvas.width - 40, midY);
-      ctx.strokeStyle = 'rgba(56, 189, 248, 0.2)';
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 8]);
-      ctx.stroke();
-      ctx.setLineDash([]);
+      // Update & Draw Nodes
+      nodes.forEach((node) => {
+        if (!prefersReducedMotion) {
+          node.x += node.vx;
+          node.y += node.vy;
 
-      // Data Packets Animation
-      if (!prefersReducedMotion) {
-        packets.forEach((p) => {
-          p.x += p.speed;
-          if (p.x > canvas.width - 40) p.x = 40;
+          if (node.x < 0 || node.x > canvas.width) node.vx *= -1;
+          if (node.y < 0 || node.y > canvas.height) node.vy *= -1;
+        }
 
-          const isLeft = p.x < canvas.width / 2 - 60;
-          const isCenter = p.x >= canvas.width / 2 - 60 && p.x <= canvas.width / 2 + 60;
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-          ctx.fillStyle = isLeft ? '#ef4444' : isCenter ? '#a855f7' : '#38bdf8';
-          ctx.shadowBlur = 12;
-          ctx.shadowColor = isLeft ? '#ef4444' : isCenter ? '#a855f7' : '#38bdf8';
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        });
+      // Draw connections
+      for (let i = 0; i < nodeCount; i++) {
+        for (let j = i + 1; j < nodeCount; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 100) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
       }
 
       animationFrameId = requestAnimationFrame(render);
@@ -172,24 +191,20 @@ export default function TransformationJourney() {
   }, [activeDimension, prefersReducedMotion]);
 
   return (
-    <section className="py-28 px-6 relative bg-slate-950 overflow-hidden border-t border-white/10">
-      {/* Background Volumetric Lighting */}
-      <div className="pointer-events-none absolute left-1/4 top-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-red-500/5 blur-[170px]" />
-      <div className="pointer-events-none absolute right-1/4 top-1/2 -translate-y-1/2 h-[550px] w-[550px] rounded-full bg-sky-500/10 blur-[170px]" />
-
+    <section className="py-0 px-6 relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
-            <RefreshCw size={14} className="animate-spin-slow text-sky-400" /> Digital Transformation Engine
+          <span className="section-badge mb-4 inline-flex">
+            <RefreshCw size={14} className="animate-spin-slow" /> Digital Transformation Engine
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 tracking-tight leading-tight">
             Transform Legacy Complexity Into <br />
-            <span className="animate-text-shimmer">
+            <span className="text-shimmer">
               Enterprise Technology Leadership
             </span>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
+          <p className="text-gray-500 text-sm sm:text-base leading-relaxed mt-4 font-medium">
             Inspect how Esland's transformation engine converts brittle legacy architectures into high-availability cloud platforms.
           </p>
         </div>
@@ -202,10 +217,10 @@ export default function TransformationJourney() {
               <button
                 key={dim.id}
                 onClick={() => setActiveDimension(dim)}
-                className={`relative px-5 py-3 rounded-2xl border text-xs font-bold tracking-wide transition-all duration-300 backdrop-blur-xl ${
+                className={`relative px-5 py-3 rounded-lg border text-xs font-bold tracking-wide transition-all duration-200 ${
                   isSelected
-                    ? 'bg-gradient-to-r from-sky-500 to-indigo-600 border-sky-400 text-white shadow-xl shadow-sky-500/30 scale-105'
-                    : 'bg-slate-900/80 border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                    ? 'bg-[#003087] border-[#003087] text-white shadow-md scale-105'
+                    : 'bg-white border-[#E4E9F0] text-gray-500 hover:text-[#003087] hover:border-[#003087]'
                 }`}
               >
                 {dim.title}
@@ -226,32 +241,32 @@ export default function TransformationJourney() {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.4 }}
-              className="grid lg:grid-cols-12 gap-8 items-center relative z-10"
+              className="grid lg:grid-cols-12 gap-8 items-stretch relative z-10"
             >
               {/* STAGE 1: Left - Legacy Monolith Environment */}
-              <div className="lg:col-span-5 rounded-[2.5rem] border border-red-500/30 bg-slate-900/90 backdrop-blur-2xl p-8 shadow-2xl shadow-red-500/5 relative overflow-hidden flex flex-col justify-between h-full">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 to-rose-600" />
+              <div className="lg:col-span-5 rounded-2xl border-2 border-red-100 bg-white p-8 shadow-md relative overflow-hidden flex flex-col justify-between h-full hover:scale-[1.02] hover:border-red-300 hover:shadow-red-500/20 hover:shadow-2xl transition-all duration-500 group/left">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-red-500 via-rose-500 to-orange-500 opacity-80 group-hover/left:opacity-100 transition-opacity" />
                 
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-red-400">
+                    <span className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-red-600">
                       <AlertTriangle size={14} /> BEFORE ESLAND
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-xs font-bold text-red-400">
+                    <span className="px-3 py-1 rounded-full bg-red-50 border border-red-100 text-xs font-bold text-red-600">
                       {activeDimension.legacy.status}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-black text-slate-200 mb-3">
+                  <h3 className="text-2xl font-display font-extrabold text-gray-900 mb-3">
                     {activeDimension.legacy.title}
                   </h3>
 
                   {/* Legacy Risk Telemetry */}
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-950/80 border border-red-500/20 mb-6 text-center">
+                  <div className="grid grid-cols-3 gap-2 p-3 rounded-lg bg-red-50/50 border border-red-100 mb-6 text-center">
                     {Object.entries(activeDimension.legacy.metrics).map(([k, v]) => (
                       <div key={k}>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">{k}</span>
-                        <span className="text-xs font-extrabold text-red-400">{v}</span>
+                        <span className="text-[10px] uppercase font-bold text-gray-500 block mb-0.5">{k}</span>
+                        <span className="text-xs font-extrabold text-red-600">{v}</span>
                       </div>
                     ))}
                   </div>
@@ -259,63 +274,64 @@ export default function TransformationJourney() {
                   {/* Legacy Bottlenecks */}
                   <div className="space-y-2 mb-6">
                     {activeDimension.legacy.issues.map((issue) => (
-                      <div key={issue} className="flex items-center gap-2 text-xs text-slate-400 font-medium p-2.5 rounded-xl bg-slate-950/50 border border-red-500/10">
-                        <span className="h-1.5 w-1.5 rounded-full bg-red-400 shrink-0" />
+                      <div key={issue} className="flex items-center gap-2 text-xs text-gray-600 font-medium p-2.5 rounded-lg bg-gray-50 border border-gray-100">
+                        <span className="h-1.5 w-1.5 rounded-full bg-red-500 shrink-0" />
                         <span>{issue}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-red-500/10 flex items-center justify-between text-xs text-slate-500">
+                <div className="pt-4 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500">
                   <span>Architecture State: High Fragility</span>
-                  <span className="text-red-400 font-bold">Replacement Urgency</span>
+                  <span className="text-red-600 font-bold">Replacement Urgency</span>
                 </div>
               </div>
 
               {/* STAGE 2: Center - Esland Transformation Neural Engine */}
-              <div className="lg:col-span-2 flex flex-col items-center justify-center my-4 lg:my-0 text-center">
-                <div className="relative group cursor-pointer">
-                  {/* Rotating Outer Energy Rings */}
-                  <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-sky-400 via-indigo-500 to-purple-500 blur-lg opacity-50 group-hover:opacity-100 transition-opacity animate-pulse" />
+              <div className="lg:col-span-2 flex flex-col items-center justify-center my-4 lg:my-0 text-center relative z-20">
+                <div className="relative group cursor-pointer hover:scale-110 transition-transform duration-500">
+                  {/* Outer Rings */}
+                  <div className="absolute -inset-6 rounded-full bg-gradient-to-r from-sky-400 via-[#003087] to-indigo-500 blur-xl opacity-30 group-hover:opacity-60 transition-opacity animate-pulse" />
+                  <div className="absolute -inset-2 rounded-full border-2 border-dashed border-[#003087]/30 animate-[spin_8s_linear_infinite]" />
                   
-                  <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-slate-950 border-2 border-sky-400 text-sky-400 shadow-2xl shadow-sky-500/50">
-                    <Cpu size={36} className="animate-spin-slow text-sky-400" />
+                  <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-white border-2 border-[#003087] text-[#003087] shadow-[0_0_20px_rgba(0,48,135,0.2)]">
+                    <Cpu size={36} className="animate-spin-slow text-[#003087]" />
                   </div>
                 </div>
 
-                <span className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-sky-400 max-w-[140px]">
+                <span className="mt-4 text-[10px] font-bold uppercase tracking-[0.2em] text-[#003087] max-w-[140px]">
                   {activeDimension.engine}
                 </span>
-                <span className="mt-1 text-[9px] font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-400/20">
+                <span className="mt-1 text-[9px] font-semibold text-green-700 bg-green-50 px-2.5 py-0.5 rounded-full border border-green-100">
                   Processing Stream
                 </span>
               </div>
 
               {/* STAGE 3: Right - Modern Enterprise Platform Engine */}
-              <div className="lg:col-span-5 rounded-[2.5rem] border border-sky-500/40 bg-slate-900/90 backdrop-blur-2xl p-8 shadow-2xl shadow-sky-500/20 relative overflow-hidden flex flex-col justify-between h-full spotlight-card">
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400" />
+              <div className="lg:col-span-5 rounded-2xl border-2 border-green-100 bg-white p-8 shadow-md relative overflow-hidden flex flex-col justify-between h-full hover:scale-[1.02] hover:border-green-300 hover:shadow-green-500/20 hover:shadow-2xl transition-all duration-500 group/right">
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-[#0057D8] to-emerald-500 opacity-80 group-hover/right:opacity-100 transition-opacity" />
                 
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-sky-400">
-                      <Zap size={14} className="text-sky-400" /> AFTER ESLAND TRANSFORMATION
+                    <span className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-widest text-[#003087]">
+                      <Zap size={14} className="text-[#003087]" /> AFTER ESLAND
                     </span>
-                    <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-400/20 text-xs font-bold text-emerald-400">
+                    <span className="px-3 py-1 rounded-full bg-green-50 border border-green-100 text-xs font-bold text-green-700">
                       {activeDimension.modern.status}
                     </span>
                   </div>
 
-                  <h3 className="text-2xl font-black text-white mb-3">
+                  <h3 className="text-2xl font-display font-extrabold text-gray-900 mb-3">
                     {activeDimension.modern.title}
                   </h3>
 
                   {/* Modernized Telemetry */}
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-950/80 border border-sky-500/20 mb-6 text-center">
+                  <div className="grid grid-cols-3 gap-2 p-3 rounded-lg bg-green-50/30 border border-green-100 mb-6 text-center">
                     {Object.entries(activeDimension.modern.metrics).map(([k, v]) => (
                       <div key={k}>
-                        <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">{k}</span>
-                        <span className="text-xs font-extrabold text-sky-300">{v}</span>
+                        <span className="text-[10px] uppercase font-bold text-gray-500 block mb-0.5">{k}</span>
+                        <span className="text-xs font-extrabold text-[#003087]">{v}</span>
                       </div>
                     ))}
                   </div>
@@ -323,21 +339,21 @@ export default function TransformationJourney() {
                   {/* Modern Outcomes */}
                   <div className="space-y-2 mb-6">
                     {activeDimension.modern.outcomes.map((out) => (
-                      <div key={out} className="flex items-center gap-2 text-xs text-slate-200 font-semibold p-2.5 rounded-xl bg-slate-950/60 border border-white/10">
-                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <div key={out} className="flex items-center gap-2 text-xs text-gray-700 font-semibold p-2.5 rounded-lg bg-green-50/20 border border-green-50">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0" />
                         <span>{out}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs text-emerald-400 font-semibold flex items-center gap-1">
+                <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-xs text-green-700 font-semibold flex items-center gap-1">
                     <CheckCircle2 size={14} /> 100% SLA Guarantee
                   </span>
                   <Link
                     to="/contact"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400 hover:text-white transition group"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#003087] hover:text-[#002068] transition group"
                   >
                     Initiate Modernization <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </Link>

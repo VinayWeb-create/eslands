@@ -145,6 +145,17 @@ export default function TechVisualizer() {
   const [hoveredNode, setHoveredNode] = useState(null);
   const { prefersReducedMotion } = useAccessibleAnimations();
 
+  // Auto-switch tabs
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveNode((prev) => {
+        const currentIndex = enterpriseNodes.findIndex((n) => n.id === prev.id);
+        return enterpriseNodes[(currentIndex + 1) % enterpriseNodes.length];
+      });
+    }, 6500);
+    return () => clearInterval(timer);
+  }, [activeNode]);
+
   // Canvas Network Mesh Simulation with Glowing Packets
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -198,9 +209,10 @@ export default function TechVisualizer() {
             ctx.beginPath();
             ctx.moveTo((node.x * canvas.width) / 100, (node.y * canvas.height) / 100);
             ctx.lineTo((otherNode.x * canvas.width) / 100, (otherNode.y * canvas.height) / 100);
+            const isDark = document.documentElement.classList.contains('dark');
             ctx.strokeStyle = isConnectedToActive
-              ? 'rgba(56, 189, 248, 0.45)'
-              : 'rgba(255, 255, 255, 0.08)';
+              ? (isDark ? 'rgba(56, 189, 248, 0.45)' : 'rgba(37, 99, 235, 0.35)')
+              : (isDark ? 'rgba(255, 255, 255, 0.07)' : 'rgba(37, 99, 235, 0.10)');
             ctx.lineWidth = isConnectedToActive ? 1.8 : 1;
             if (isConnectedToActive) {
               ctx.setLineDash([5, 5]);
@@ -231,11 +243,12 @@ export default function TechVisualizer() {
           const currentX = startX + (endX - startX) * packet.progress;
           const currentY = startY + (endY - startY) * packet.progress;
 
+          const isDarkP = document.documentElement.classList.contains('dark');
           ctx.beginPath();
           ctx.arc(currentX, currentY, 3, 0, Math.PI * 2);
-          ctx.fillStyle = '#38bdf8';
+          ctx.fillStyle = isDarkP ? '#38bdf8' : '#2563eb';
           ctx.shadowBlur = 10;
-          ctx.shadowColor = '#38bdf8';
+          ctx.shadowColor = isDarkP ? '#38bdf8' : '#2563eb';
           ctx.fill();
           ctx.shadowBlur = 0;
         });
@@ -250,9 +263,10 @@ export default function TechVisualizer() {
           if (p.y < 0 || p.y > canvas.height) p.vy *= -1;
         }
 
+        const isDarkBg = document.documentElement.classList.contains('dark');
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(56, 189, 248, ${p.alpha})`;
+        ctx.fillStyle = isDarkBg ? `rgba(56,189,248,${p.alpha})` : `rgba(37,99,235,${p.alpha})`;
         ctx.fill();
       });
 
@@ -268,24 +282,22 @@ export default function TechVisualizer() {
   }, [activeNode, prefersReducedMotion]);
 
   return (
-    <section className="py-28 px-6 relative bg-slate-950 overflow-hidden border-t border-white/10">
+    <section className="py-0 px-6 relative bg-[var(--color-bg)] overflow-hidden border-t border-[var(--color-border)]">
       {/* Ambient Lighting Orbs */}
-      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[550px] w-[550px] rounded-full bg-sky-500/10 blur-[170px]" />
-      <div className="pointer-events-none absolute right-1/4 bottom-1/4 h-[500px] w-[500px] rounded-full bg-purple-600/10 blur-[150px]" />
+      <div className="pointer-events-none absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[170px]" />
+      <div className="pointer-events-none absolute right-1/4 bottom-1/4 h-[450px] w-[450px] rounded-full bg-accent-500/5 blur-[150px]" />
 
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
+          <span className="section-badge mb-4 inline-flex">
             <Activity size={14} className="animate-pulse" /> Live Enterprise Architecture Engine
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Interactive Architecture & <br />
-            <span className="animate-text-shimmer">
-              Digital Ecosystem Nodes
-            </span>
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
+            Interactive Architecture &amp;{' '}<br />
+            <span className="text-shimmer">Digital Ecosystem Nodes</span>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
+          <p className="text-gray-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
             Click on any capability node to inspect how Esland architects, secures, and scales enterprise workloads.
           </p>
         </div>
@@ -294,9 +306,9 @@ export default function TechVisualizer() {
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Panel: Interactive Network Canvas */}
-          <div className="lg:col-span-7 relative h-[480px] sm:h-[540px] rounded-[2.5rem] border border-white/15 bg-slate-900/80 backdrop-blur-2xl p-6 overflow-hidden shadow-2xl group">
-            {/* Subtle Blueprint Grid Backdrop */}
-            <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(56,189,248,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.4)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+          <div className="lg:col-span-7 relative h-[400px] sm:h-[460px] rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 overflow-hidden shadow-card group">
+            {/* Blueprint grid */}
+            <div className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06] bg-[radial-gradient(rgba(37,99,235,0.6)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
             {/* Canvas Mesh */}
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
@@ -322,16 +334,16 @@ export default function TechVisualizer() {
                     onClick={() => setActiveNode(node)}
                     onMouseEnter={() => setHoveredNode(node)}
                     onMouseLeave={() => setHoveredNode(null)}
-                    className={`relative flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border transition-all duration-300 backdrop-blur-xl shadow-xl focus:outline-none ${
+                    className={`relative flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border transition-all duration-300 backdrop-blur-xl shadow-lg focus:outline-none ${
                       isSelected
-                        ? 'bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-600 border-sky-300 text-slate-950 scale-110 shadow-sky-500/50 font-black'
+                        ? 'bg-gradient-to-r from-primary-500 to-primary-700 border-primary-300 dark:border-primary-400 text-white scale-110 shadow-primary-500/30 font-extrabold'
                         : isHovered
-                        ? 'bg-slate-800/90 border-sky-400/60 text-white scale-105 shadow-sky-500/20'
-                        : 'bg-slate-900/90 border-white/15 text-slate-300 hover:border-white/30'
+                        ? 'bg-[var(--color-bg-surface)] border-primary-200 dark:border-primary-400/60 text-primary-700 dark:text-white scale-105'
+                        : 'bg-[var(--color-bg)] border-[var(--color-border)] text-[var(--color-text-main)] hover:border-primary-200 dark:hover:border-white/30'
                     }`}
                   >
-                    <NodeIcon size={16} className={isSelected ? 'text-slate-950' : 'text-sky-400'} />
-                    <span className="text-xs font-bold tracking-wide">{node.label}</span>
+                     <NodeIcon size={16} className={isSelected ? 'text-white' : 'text-primary-600 dark:text-primary-400'} />
+                     <span className="text-xs font-bold tracking-wide">{node.label}</span>
                   </button>
 
                   {/* Tooltip on Hover */}
@@ -341,10 +353,10 @@ export default function TechVisualizer() {
                         initial={{ opacity: 0, y: 10, scale: 0.9 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 5, scale: 0.9 }}
-                        className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-48 p-3 rounded-xl bg-slate-950/95 border border-sky-400/40 text-[11px] text-slate-200 shadow-2xl pointer-events-none z-40 text-center backdrop-blur-xl"
+                        className="absolute left-1/2 -translate-x-1/2 top-full mt-2 w-48 p-3 rounded-xl bg-white dark:bg-slate-950/95 border border-primary-100 dark:border-primary-400/40 text-[11px] shadow-lg pointer-events-none z-40 text-center backdrop-blur-xl"
                       >
-                        <p className="font-bold text-sky-300">{node.headline}</p>
-                        <p className="text-[10px] text-slate-400 mt-1">Click to inspect live SLA telemetry</p>
+                        <p className="font-bold text-primary-600 dark:text-primary-300">{node.headline}</p>
+                        <p className="text-[10px] text-gray-400 dark:text-slate-400 mt-1">Click to inspect live SLA telemetry</p>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -358,23 +370,23 @@ export default function TechVisualizer() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeNode.id}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.4 }}
-                className="spotlight-card h-full rounded-[2.5rem] border border-sky-500/30 bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-sky-500/10 flex flex-col justify-between overflow-hidden relative"
+                initial={{ opacity: 0, x: 40, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -40, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 120, damping: 16, mass: 0.9 }}
+                className="spotlight-card h-full rounded-3xl border border-primary-100 dark:border-primary-500/30 bg-[var(--color-bg-card)] p-6 sm:p-8 shadow-card flex flex-col justify-between overflow-hidden relative"
               >
-                {/* Moving Light Sweep Accent */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-cyan-300 to-purple-500" />
-                <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 via-transparent to-transparent pointer-events-none" />
+                {/* Top accent bar */}
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary-500 via-accent-400 to-primary-700" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary-500/3 via-transparent to-transparent pointer-events-none" />
 
                 <div>
                   {/* Category & Badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <span className="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold text-sky-300 uppercase tracking-widest">
+                    <span className="section-badge">
                       {activeNode.tag}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-400/20 px-3 py-1 rounded-full">
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-success-600 dark:text-emerald-400 bg-success-50 dark:bg-emerald-500/10 border border-success-200 dark:border-emerald-400/20 px-3 py-1 rounded-full">
                       <ShieldCheck size={14} /> Active Node
                     </span>
                   </div>
@@ -385,45 +397,45 @@ export default function TechVisualizer() {
                       <activeNode.icon size={26} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black text-white leading-tight">
+                      <h3 className="text-xl sm:text-xl font-display font-extrabold text-gray-900 dark:text-white leading-tight">
                         {activeNode.headline}
                       </h3>
-                      <p className="text-xs text-sky-400 font-semibold mt-0.5">{activeNode.label} Pillar</p>
+                      <p className="text-xs text-primary-600 dark:text-primary-400 font-semibold mt-0.5">{activeNode.label} Pillar</p>
                     </div>
                   </div>
 
-                  <p className="text-slate-300 text-sm leading-relaxed mb-8 font-medium">
+                  <p className="text-gray-600 dark:text-slate-300 text-sm leading-relaxed mb-8 font-medium">
                     {activeNode.desc}
                   </p>
 
                   {/* Animated Live Telemetry Metrics Bar */}
-                  <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-950/80 border border-white/10 mb-6">
+                  <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border)] mb-6">
                     <div className="text-center">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Uptime SLA</span>
-                      <span className="text-base sm:text-lg font-black text-white">{activeNode.metrics.uptime}</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-400 tracking-wider block">Uptime SLA</span>
+                      <span className="text-base sm:text-lg font-display font-extrabold text-gray-900 dark:text-white">{activeNode.metrics.uptime}</span>
                     </div>
-                    <div className="text-center border-x border-white/10 px-2">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Latency</span>
-                      <span className="text-base sm:text-lg font-black text-sky-300">{activeNode.metrics.latency}</span>
+                    <div className="text-center border-x border-[var(--color-border)] px-2">
+                      <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-400 tracking-wider block">Latency</span>
+                      <span className="text-base sm:text-lg font-display font-extrabold text-primary-600 dark:text-primary-300">{activeNode.metrics.latency}</span>
                     </div>
                     <div className="text-center">
-                      <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Throughput</span>
-                      <span className="text-base sm:text-lg font-black text-emerald-400 truncate block">{activeNode.metrics.throughput}</span>
+                      <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-400 tracking-wider block">Throughput</span>
+                      <span className="text-base sm:text-lg font-display font-extrabold text-success-600 dark:text-emerald-400 truncate block">{activeNode.metrics.throughput}</span>
                     </div>
                   </div>
 
                   {/* Health Progress Indicator */}
                   <div className="mb-6 space-y-2">
                     <div className="flex items-center justify-between text-xs font-bold">
-                      <span className="text-slate-400 uppercase tracking-wider">Node Health Score</span>
-                      <span className="text-emerald-400">{activeNode.metrics.health}% Operational</span>
+                      <span className="text-gray-400 dark:text-slate-400 uppercase tracking-wider">Node Health Score</span>
+                      <span className="text-success-600 dark:text-emerald-400">{activeNode.metrics.health}% Operational</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-950 overflow-hidden p-0.5 border border-white/10">
+                    <div className="h-2 w-full rounded-full bg-gray-100 dark:bg-slate-950 overflow-hidden border border-[var(--color-border)]">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${activeNode.metrics.health}%` }}
                         transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="h-full rounded-full bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+                        className="h-full rounded-full bg-gradient-to-r from-primary-500 via-accent-400 to-success-500 shadow-[0_0_8px_rgba(37,99,235,0.5)]"
                       />
                     </div>
                   </div>
@@ -431,21 +443,21 @@ export default function TechVisualizer() {
                   {/* Key Features */}
                   <div className="space-y-2 mb-8">
                     {activeNode.features.map((feat) => (
-                      <div key={feat} className="flex items-center gap-2.5 text-xs text-slate-300 font-semibold p-2 rounded-xl bg-white/5 border border-white/5">
-                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <div key={feat} className="flex items-center gap-2.5 text-xs text-gray-600 dark:text-slate-300 font-semibold p-2.5 rounded-xl bg-[var(--color-bg-surface)] border border-[var(--color-border)]">
+                        <CheckCircle2 size={14} className="text-success-500 shrink-0" />
                         <span>{feat}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">ISO 27001 & SOC 2 Audited</span>
+                <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between">
+                  <span className="text-xs text-gray-400 dark:text-slate-400 font-semibold">ISO 27001 & SOC 2 Audited</span>
                   <a
                     href="/contact"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400 hover:text-white transition group"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-white transition group"
                   >
-                    Request Technical Spec <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    Request Technical Spec <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </a>
                 </div>
               </motion.div>

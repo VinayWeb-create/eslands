@@ -94,7 +94,7 @@ export default function Logo({
           fill={textColor}
           fontSize="68"
           fontWeight="900"
-          fontFamily="Inter, 'Segoe UI', system-ui, sans-serif"
+          fontFamily="Outfit, sans-serif"
           letterSpacing="-1.5"
         >
           Esland
@@ -107,7 +107,7 @@ export default function Logo({
           fill={subtextColor}
           fontSize="23"
           fontWeight="700"
-          fontFamily="Inter, 'Segoe UI', system-ui, sans-serif"
+          fontFamily="Outfit, sans-serif"
           letterSpacing="0.5"
         >
           IT Solutions

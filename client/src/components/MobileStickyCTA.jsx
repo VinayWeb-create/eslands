@@ -39,25 +39,25 @@ export default function MobileStickyCTA() {
         >
           {/* Main Container */}
           <div 
-            className="flex items-center justify-between bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-t-[2rem] p-3 shadow-[0_-10px_40px_-15px_rgba(0,0,0,0.5)]"
-            style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}
+            className="flex items-center justify-between bg-slate-900/90 backdrop-blur-2xl border border-white/[0.08] rounded-[2rem] mx-4 mb-2 p-2 shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+            style={{ paddingBottom: 'calc(0.5rem + env(safe-area-inset-bottom))' }}
           >
             {/* Book Consultation */}
             <Link
               to="/contact"
-              className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-bold py-3.5 px-4 rounded-[1.25rem] shadow-lg shadow-sky-500/20 active:scale-95 transition-transform"
+              className="flex-1 flex items-center justify-center gap-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-white font-black py-3.5 px-4 rounded-[1.5rem] border border-white/[0.05] active:scale-[0.98] transition-all"
             >
-              <Calendar size={18} />
-              <span className="text-[13px] tracking-wide uppercase">Book Consultation</span>
+              <Calendar size={18} className="text-emerald-400" />
+              <span className="text-[13px] tracking-[0.1em] uppercase bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">Book Consultation</span>
             </Link>
 
             {/* Divider */}
-            <div className="w-px h-8 bg-white/10 mx-3" />
+            <div className="w-px h-8 bg-white/10 mx-1.5" />
 
             {/* Call Now */}
             <a
               href="tel:02038190333"
-              className="flex items-center justify-center h-[3.25rem] w-[3.25rem] bg-white/5 border border-white/10 text-sky-400 rounded-[1.25rem] hover:bg-white/10 active:scale-95 transition-all shrink-0"
+              className="flex items-center justify-center h-[3.25rem] w-[3.25rem] bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-[1.5rem] hover:bg-emerald-500/20 active:scale-[0.95] transition-all shrink-0"
               aria-label="Call Now"
             >
               <Phone size={20} />

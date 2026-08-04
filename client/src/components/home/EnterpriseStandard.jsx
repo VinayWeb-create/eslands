@@ -106,6 +106,17 @@ export default function EnterpriseStandard() {
   const canvasRef = useRef(null);
   const { prefersReducedMotion } = useAccessibleAnimations();
 
+  // Auto-switch tabs
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCap((prev) => {
+        const currentIndex = standardCapabilities.findIndex((c) => c.id === prev.id);
+        return standardCapabilities[(currentIndex + 1) % standardCapabilities.length];
+      });
+    }, 7000);
+    return () => clearInterval(timer);
+  }, [activeCap]);
+
   // Dynamic Volumetric Canvas Ambient Particles
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -163,7 +174,7 @@ export default function EnterpriseStandard() {
   }, [activeCap, prefersReducedMotion]);
 
   return (
-    <section className="py-28 px-6 relative bg-slate-950 overflow-hidden border-t border-white/10">
+    <section className="py-0 px-6 relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
       {/* Dynamic Volumetric Background Lighting Shift */}
       <motion.div
         animate={{ background: activeCap.ambientGlow }}
@@ -174,16 +185,14 @@ export default function EnterpriseStandard() {
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
+          <span className="section-badge mb-4 inline-flex">
             <Activity size={14} className="animate-pulse" /> Flagship Product Experience
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            The Esland Enterprise <br />
-            <span className="animate-text-shimmer">
-              Digital Engineering Standard
-            </span>
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
+            The Esland Enterprise{' '}<br />
+            <span className="text-shimmer">Digital Engineering Standard</span>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
+          <p className="text-gray-500 dark:text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
             Explore our live capability matrix powering Fortune-caliber cloud systems and digital infrastructure.
           </p>
         </div>
@@ -197,18 +206,18 @@ export default function EnterpriseStandard() {
               <button
                 key={cap.id}
                 onClick={() => setActiveCap(cap)}
-                className={`relative flex items-center gap-2.5 px-4 py-3 rounded-2xl border transition-all duration-300 backdrop-blur-xl text-xs font-bold tracking-wide ${
+                className={`relative flex items-center gap-2.5 px-4 py-3 rounded-2xl border transition-all duration-300 text-xs font-bold tracking-wide ${
                   isSelected
-                    ? 'bg-gradient-to-r from-sky-500/20 via-indigo-600/20 to-slate-900 border-sky-400 text-white shadow-xl shadow-sky-500/10 scale-105'
-                    : 'bg-slate-900/70 border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                    ? 'bg-primary-600 border-primary-500 text-white shadow-lg shadow-primary-500/20 scale-105'
+                    : 'bg-[var(--color-bg-card)] border-[var(--color-border)] text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:border-primary-200 dark:hover:border-white/25'
                 }`}
               >
-                <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${isSelected ? 'bg-sky-500 text-slate-950 shadow' : 'bg-white/5 text-sky-400'}`}>
+                <div className={`flex h-6 w-6 items-center justify-center rounded-lg ${isSelected ? 'bg-white/20 text-white' : 'bg-primary-50 dark:bg-white/5 text-primary-600 dark:text-primary-400'}`}>
                   <Icon size={14} />
                 </div>
                 <span>{cap.title}</span>
                 {isSelected && (
-                  <span className="h-2 w-2 rounded-full bg-sky-400 animate-ping" />
+                  <span className="h-2 w-2 rounded-full bg-white/80 animate-ping" />
                 )}
               </button>
             );
@@ -219,19 +228,19 @@ export default function EnterpriseStandard() {
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Side: System Interactive Canvas & Architecture Orbit */}
-          <div className="lg:col-span-6 relative rounded-[2.5rem] border border-white/15 bg-slate-900/85 backdrop-blur-2xl p-8 overflow-hidden shadow-2xl flex flex-col justify-between group min-h-[460px]">
-            {/* Blueprint Grid Overlay */}
-            <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(56,189,248,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.4)_1px,transparent_1px)] bg-[size:36px_36px] pointer-events-none" />
+          <div className="lg:col-span-6 relative rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-card)] p-4 sm:p-6 overflow-hidden shadow-card flex flex-col justify-between group min-h-[300px]">
+            {/* Blueprint grid */}
+            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] bg-[radial-gradient(rgba(37,99,235,0.8)_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
 
             {/* Particle Canvas */}
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
 
             {/* System Pillar Header inside Canvas Stage */}
             <div className="relative z-10 flex items-center justify-between">
-              <span className="px-3.5 py-1.5 rounded-full bg-slate-950/80 border border-white/15 text-[10px] font-bold text-sky-300 uppercase tracking-widest backdrop-blur-xl">
+              <span className="px-3.5 py-1.5 rounded-full bg-[var(--color-bg-surface)] border border-[var(--color-border)] text-[10px] font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest">
                 SYSTEM NODE: {activeCap.category}
               </span>
-              <span className="flex items-center gap-1.5 text-[10px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-400/20 px-3 py-1 rounded-full">
+              <span className="flex items-center gap-1.5 text-[10px] font-bold text-success-600 dark:text-emerald-400 bg-success-50 dark:bg-emerald-500/10 border border-success-200 dark:border-emerald-400/20 px-3 py-1 rounded-full">
                 <ShieldCheck size={13} /> SLA Health: {activeCap.metrics.health}%
               </span>
             </div>
@@ -252,10 +261,10 @@ export default function EnterpriseStandard() {
                   </div>
                 </div>
 
-                <h3 className="text-2xl sm:text-3xl font-black text-white mb-2">
+                <h3 className="text-xl sm:text-2xl font-display font-extrabold text-gray-900 dark:text-white mb-2">
                   {activeCap.title}
                 </h3>
-                <p className="text-xs sm:text-sm font-semibold text-sky-300 max-w-md mx-auto">
+                <p className="text-xs sm:text-sm font-semibold text-primary-600 dark:text-primary-400 max-w-md mx-auto">
                   {activeCap.tagline}
                 </p>
               </motion.div>
@@ -263,10 +272,10 @@ export default function EnterpriseStandard() {
 
             {/* Telemetry Footer Status */}
             <div className="relative z-10 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
-              <span className="flex items-center gap-1.5 font-bold text-slate-300">
-                <Terminal size={14} className="text-sky-400" /> Operational State: Active
+              <span className="flex items-center gap-1.5 font-bold text-gray-700 dark:text-slate-300">
+                <Terminal size={14} className="text-primary-600 dark:text-primary-400" /> Operational State: Active
               </span>
-              <span className="font-mono text-emerald-400 font-bold">0 Vulnerabilities</span>
+              <span className="font-mono text-success-600 dark:text-emerald-400 font-bold">0 Vulnerabilities</span>
             </div>
           </div>
 
@@ -275,41 +284,41 @@ export default function EnterpriseStandard() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeCap.id}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.4 }}
-                className="spotlight-card h-full rounded-[2.5rem] border border-sky-500/30 bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-sky-500/10 flex flex-col justify-between relative overflow-hidden"
+                initial={{ opacity: 0, x: 40, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -40, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 120, damping: 16, mass: 0.9 }}
+                className="spotlight-card h-full rounded-3xl border border-primary-100 dark:border-primary-500/30 bg-[var(--color-bg-card)] p-4 sm:p-6 shadow-card flex flex-col justify-between relative overflow-hidden"
               >
                 {/* Accent Sweep Top Border */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-cyan-300 to-purple-500" />
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary-500 via-accent-400 to-primary-700" />
 
                 <div>
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-xs font-extrabold uppercase tracking-widest text-sky-400">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-primary-600 dark:text-primary-400">
                       {activeCap.category} Architecture
                     </span>
-                    <span className="text-xs font-bold text-slate-400">
+                    <span className="text-xs font-bold text-gray-400 dark:text-slate-400">
                       ISO 27001 Audited
                     </span>
                   </div>
 
-                  <h3 className="text-2xl sm:text-4xl font-black text-white mb-4 leading-tight">
+                  <h3 className="text-xl sm:text-3xl font-display font-extrabold text-gray-900 dark:text-white mb-4 leading-tight">
                     {activeCap.title}
                   </h3>
 
-                  <p className="text-slate-300 text-sm sm:text-base leading-relaxed mb-8 font-medium">
+                  <p className="text-gray-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-8 font-medium">
                     {activeCap.desc}
                   </p>
 
                   {/* Telemetry Metrics Bar */}
-                  <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-slate-950/80 border border-white/10 mb-6">
+                  <div className="grid grid-cols-3 gap-3 p-4 rounded-2xl bg-[var(--color-bg-surface)] border border-[var(--color-border)] mb-6">
                     {Object.entries(activeCap.metrics).filter(([key]) => key !== 'health').map(([key, val]) => (
                       <div key={key} className="text-center">
-                        <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block mb-1">
+                        <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-slate-400 tracking-wider block mb-1">
                           {key}
                         </span>
-                        <span className="text-sm sm:text-base font-black text-white">{val}</span>
+                        <span className="text-sm sm:text-base font-display font-extrabold text-gray-900 dark:text-white">{val}</span>
                       </div>
                     ))}
                   </div>
@@ -317,15 +326,15 @@ export default function EnterpriseStandard() {
                   {/* Operational Health Bar */}
                   <div className="mb-6 space-y-2">
                     <div className="flex items-center justify-between text-xs font-bold">
-                      <span className="text-slate-400 uppercase tracking-wider">System Availability Score</span>
-                      <span className="text-emerald-400">{activeCap.metrics.health}% Operational</span>
+                      <span className="text-gray-400 dark:text-slate-400 uppercase tracking-wider">System Availability Score</span>
+                      <span className="text-success-600 dark:text-emerald-400">{activeCap.metrics.health}% Operational</span>
                     </div>
-                    <div className="h-2 w-full rounded-full bg-slate-950 overflow-hidden p-0.5 border border-white/10">
+                    <div className="h-2 w-full rounded-full bg-gray-100 dark:bg-slate-950 overflow-hidden border border-[var(--color-border)]">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${activeCap.metrics.health}%` }}
                         transition={{ duration: 0.8, ease: 'easeOut' }}
-                        className="h-full rounded-full bg-gradient-to-r from-sky-400 via-cyan-300 to-emerald-400 shadow-[0_0_10px_rgba(56,189,248,0.8)]"
+                        className="h-full rounded-full bg-gradient-to-r from-primary-500 via-accent-400 to-success-500 shadow-[0_0_8px_rgba(37,99,235,0.5)]"
                       />
                     </div>
                   </div>
@@ -333,21 +342,21 @@ export default function EnterpriseStandard() {
                   {/* Features List */}
                   <div className="grid sm:grid-cols-2 gap-2.5 mb-8">
                     {activeCap.features.map((feat) => (
-                      <div key={feat} className="flex items-center gap-2.5 p-3 rounded-xl bg-slate-950/60 border border-white/5 text-xs text-slate-200 font-semibold">
-                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <div key={feat} className="flex items-center gap-2.5 p-3 rounded-xl bg-[var(--color-bg-surface)] border border-[var(--color-border)] text-xs text-gray-600 dark:text-slate-200 font-semibold">
+                        <CheckCircle2 size={14} className="text-success-500 shrink-0" />
                         <span>{feat}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">24/7 SLA Guaranteed</span>
+                <div className="pt-4 border-t border-[var(--color-border)] flex items-center justify-between">
+                  <span className="text-xs text-gray-400 dark:text-slate-400 font-semibold">24/7 SLA Guaranteed</span>
                   <a
                     href="/contact"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400 hover:text-white transition group"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-white transition group"
                   >
-                    Inspect Architecture Spec <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                    Inspect Architecture Spec <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                   </a>
                 </div>
               </motion.div>

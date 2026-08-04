@@ -4,172 +4,218 @@ import { Star, CheckCircle2, Quote, ChevronLeft, ChevronRight, Briefcase } from 
 import { useAccessibleAnimations } from '../../lib/animations';
 
 const testimonials = [
-  { name: 'Usman', client: 'Mobile Bitz, Dartford', industry: 'Retail Enterprise', title: 'Outstanding Results & SEO Dominance', quote: 'Esland IT Solutions engineered custom web & SEO infrastructure that propelled us to the top rankings on search engines. Their dedicated support and technical precision drive consistent client growth.', image: '/images/mobile_bitz.png' },
-  { name: 'Sami', client: 'Kingsburry School', industry: 'Education Sector', title: 'Genuine Solution-Oriented Partnership', quote: 'Esland genuinely evaluates business objectives to build high-availability software. Professional team, enterprise security standards, and seamless delivery every time.', image: '/images/kingsburry_school.png' },
-  { name: 'Ukrani', client: 'Private Technology Client', industry: 'Enterprise Consulting', title: 'Exceptional Engineering Quality', quote: 'Fantastic architectural design and execution from Esland. They handled complete backend integration and deployment while keeping our leadership team updated with full transparency.', image: '/chel-4.png' },
-  { name: 'Rupeesh', client: 'Flower Paradise', industry: 'E-Commerce Platform', title: 'Accelerated Revenue & Lead Conversion', quote: 'Delighted with our enterprise storefront and continuous cloud optimization. We saw an immediate surge in international orders and smooth customer checkout experiences.', image: '/images/flower_paradise.png' },
-  { name: 'Gaurav', client: 'Ash Groove', industry: 'Real Estate & Infrastructure', title: 'Seamless Legacy Migration', quote: 'Esland transferred our legacy portals to modern serverless infrastructure within record turnaround time. Zero downtime, zero data loss, and incredible speed.', image: '/images/ash_groove.png' },
-  { name: 'Pat', client: 'Ilford Kitchens', industry: 'Manufacturing & Supply', title: '40% Growth in High-Value Sales', quote: 'Substantial increase in qualified enterprise leads and organic traffic. Esland IT Solutions has contributed directly to a 40% growth in our annual revenues.', image: '/images/ilford_kitchens.png' }
+  {
+    name: 'Usman', client: 'Mobile Bitz, Dartford', industry: 'Retail Enterprise',
+    title: 'Outstanding Results & SEO Dominance',
+    quote: 'Esland IT Solutions engineered custom web & SEO infrastructure that propelled us to the top rankings on search engines. Their dedicated support and technical precision drive consistent client growth.',
+    image: '/images/mobile_bitz.png', rating: 5,
+  },
+  {
+    name: 'Sami', client: 'Kingsburry School', industry: 'Education Sector',
+    title: 'Genuine Solution-Oriented Partnership',
+    quote: 'Esland genuinely evaluates business objectives to build high-availability software. Professional team, enterprise security standards, and seamless delivery every time.',
+    image: '/images/kingsburry_school.png', rating: 5,
+  },
+  {
+    name: 'Ukrani', client: 'Private Technology Client', industry: 'Enterprise Consulting',
+    title: 'Exceptional Engineering Quality',
+    quote: 'Fantastic architectural design and execution from Esland. They handled complete backend integration and deployment while keeping our leadership team updated with full transparency.',
+    image: '/chel-4.png', rating: 5,
+  },
+  {
+    name: 'Rupeesh', client: 'Flower Paradise', industry: 'E-Commerce Platform',
+    title: 'Accelerated Revenue & Lead Conversion',
+    quote: 'Delighted with our enterprise storefront and continuous cloud optimization. We saw an immediate surge in international orders and smooth customer checkout experiences.',
+    image: '/images/flower_paradise.png', rating: 5,
+  },
+  {
+    name: 'Gaurav', client: 'Ash Groove', industry: 'Real Estate & Infrastructure',
+    title: 'Seamless Legacy Migration',
+    quote: 'Esland transferred our legacy portals to modern serverless infrastructure within record turnaround time. Zero downtime, zero data loss, and incredible speed.',
+    image: '/images/ash_groove.png', rating: 5,
+  },
+  {
+    name: 'Pat', client: 'Ilford Kitchens', industry: 'Manufacturing & Supply',
+    title: '40% Growth in High-Value Sales',
+    quote: 'Substantial increase in qualified enterprise leads and organic traffic. Esland IT Solutions has contributed directly to a 40% growth in our annual revenues.',
+    image: '/images/ilford_kitchens.png', rating: 5,
+  },
 ];
 
 export default function Testimonials() {
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-  const [testPaused, setTestPaused] = useState(false);
-  const { fadeUp, prefersReducedMotion } = useAccessibleAnimations();
+  const [active, setActive]   = useState(0);
+  const [paused, setPaused]   = useState(false);
+  const { fadeUp, slideInLeft, slideInRight, prefersReducedMotion } = useAccessibleAnimations();
 
   useEffect(() => {
-    if (testPaused || prefersReducedMotion) return;
-    const timer = window.setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 7000);
-    return () => window.clearInterval(timer);
-  }, [testPaused, prefersReducedMotion]);
+    if (paused || prefersReducedMotion) return;
+    const t = setInterval(() => setActive((p) => (p + 1) % testimonials.length), 7000);
+    return () => clearInterval(t);
+  }, [paused, prefersReducedMotion]);
+
+  const prev = () => setActive((p) => (p - 1 + testimonials.length) % testimonials.length);
+  const next = () => setActive((p) => (p + 1) % testimonials.length);
+
+  const t = testimonials[active];
 
   return (
-    <section id="testimonials" className="py-28 px-6 relative bg-slate-950 overflow-hidden border-t border-white/5">
-      {/* Background Ambience */}
-      <div className="pointer-events-none absolute right-1/3 top-1/4 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[150px]" />
-      <div className="pointer-events-none absolute left-1/4 bottom-1/4 h-[400px] w-[400px] rounded-full bg-purple-600/10 blur-[140px]" />
+    <section
+      id="testimonials"
+      className="relative overflow-hidden py-0 px-6 bg-[var(--color-bg)] border-t border-[var(--color-border)]"
+    >
+      {/* Ambient glow blobs */}
+      <div className="pointer-events-none absolute right-1/4 top-0 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[120px]" />
+      <div className="pointer-events-none absolute left-0 bottom-0 h-[400px] w-[400px] rounded-full bg-accent-500/5 blur-[120px]" />
 
       <div className="mx-auto max-w-7xl relative z-10">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
+        {/* Section header */}
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <motion.span {...fadeUp} className="section-badge mb-4 inline-flex">
             <Star size={13} fill="currentColor" /> Executive Endorsements
-          </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-            Trusted By Business Leaders & <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-purple-400">
-              Technology Directors
-            </span>
-          </h2>
+          </motion.span>
+          <motion.h2
+            {...fadeUp}
+            transition={{ delay: 0.1, duration: 0.65, ease: [0.22,1,0.36,1] }}
+            className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight"
+          >
+            Trusted By Business Leaders &{' '}
+            <span className="text-shimmer">Technology Directors</span>
+          </motion.h2>
         </div>
 
+        {/* Testimonial block */}
         <div
-          className="grid gap-8 lg:grid-cols-[1fr_1.6fr] items-stretch max-w-6xl mx-auto"
-          onMouseEnter={() => setTestPaused(true)}
-          onMouseLeave={() => setTestPaused(false)}
+          className="grid gap-8 lg:grid-cols-[1fr_1.7fr] items-stretch max-w-6xl mx-auto"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
         >
-          {/* Left Column: Client Avatar & Badges */}
-          <motion.div {...fadeUp} className="flex flex-col justify-between h-full w-full">
-            <div className="w-full relative overflow-hidden rounded-[2.5rem] border border-white/10 bg-slate-900/80 p-3 shadow-2xl group transition-all duration-500 hover:border-sky-400/40">
+          {/* Left — client image */}
+          <motion.div {...slideInLeft} className="flex flex-col gap-4">
+            <div className="relative overflow-hidden rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] shadow-card">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeTestimonial}
+                  key={active}
                   initial={{ opacity: 0, scale: prefersReducedMotion ? 1 : 1.04 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="relative h-[280px] sm:h-[340px] w-full rounded-[2.2rem] overflow-hidden"
+                  transition={{ duration: 0.45 }}
+                  className="relative h-[260px] sm:h-[320px] w-full"
                 >
                   <img
-                    src={testimonials[activeTestimonial].image || '/chel-4.png'}
-                    alt={`Client ${testimonials[activeTestimonial].client}`}
+                    src={t.image || '/chel-4.png'}
+                    alt={t.client}
                     loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition duration-700 group-hover:scale-105"
-                    onError={(e) => { e.target.style.display = 'none'; }}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => { e.target.src = '/chel-4.png'; }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
-
-                  <div className="absolute bottom-6 left-6 right-6">
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-900/80 backdrop-blur-xl border border-white/15 text-white text-xs font-bold shadow-lg">
-                      <Briefcase size={14} className="text-sky-400" />
-                      {testimonials[activeTestimonial].industry}
-                    </div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  {/* Industry badge */}
+                  <div className="absolute bottom-5 left-5">
+                    <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/95 border border-[var(--color-border)] text-xs font-bold text-gray-800 shadow">
+                      <Briefcase size={13} className="text-[#003087]" />
+                      {t.industry}
+                    </span>
                   </div>
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            <div className="flex gap-3 flex-wrap justify-center mt-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/80 px-4 py-2 text-xs font-bold text-slate-300 shadow-sm backdrop-blur-md">
-                <Star size={14} className="text-amber-400" fill="currentColor" /> 5.0 Rating Standard
-              </div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-slate-900/80 px-4 py-2 text-xs font-bold text-slate-300 shadow-sm backdrop-blur-md">
-                <CheckCircle2 size={14} className="text-emerald-400" /> Verified Case Studies
-              </div>
+            {/* Trust badges */}
+            <div className="flex gap-3 flex-wrap">
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-xs font-semibold text-gray-600 dark:text-slate-300 shadow-sm">
+                <Star size={13} className="text-amber-400" fill="currentColor" /> 5.0 Rating Standard
+              </span>
+              <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border)] bg-[var(--color-bg-card)] px-4 py-2 text-xs font-semibold text-gray-600 dark:text-slate-300 shadow-sm">
+                <CheckCircle2 size={13} className="text-success-500" /> Verified Reviews
+              </span>
             </div>
           </motion.div>
 
-          {/* Right Column: Testimonial Card */}
-          <div className="relative flex flex-col justify-between h-full">
+          {/* Right — quote card */}
+          <motion.div {...slideInRight} className="relative flex flex-col">
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTestimonial}
-                initial={{ opacity: 0, x: 20 }}
+                key={active}
+                initial={{ opacity: 0, x: 24 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
+                exit={{ opacity: 0, x: -24 }}
                 transition={{ duration: 0.4 }}
-                className="relative rounded-[2.5rem] border border-white/10 bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-12 shadow-2xl overflow-hidden flex-1 flex flex-col justify-between"
+                className="relative flex flex-col flex-1 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] p-8 sm:p-12 shadow-card overflow-hidden"
               >
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-sky-500/10 to-purple-600/10 rounded-bl-full pointer-events-none" />
-                <Quote size={72} className="text-white/[0.04] absolute right-8 top-8 pointer-events-none" />
+                {/* Decorative quote icon */}
+                <Quote
+                  size={80}
+                  className="absolute right-8 top-8 text-primary-100 dark:text-white/[0.04] pointer-events-none"
+                />
+                {/* Gradient corner */}
+                <div className="absolute top-0 right-0 w-56 h-56 bg-gradient-to-bl from-primary-50/60 dark:from-primary-900/10 to-transparent rounded-bl-full pointer-events-none" />
 
-                <div>
-                  <div className="flex gap-1 text-amber-400 mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" />
-                    ))}
-                  </div>
-
-                  <h3 className="text-2xl sm:text-3xl font-black text-white mb-6 leading-snug">
-                    &quot;{testimonials[activeTestimonial].title}&quot;
-                  </h3>
-
-                  <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-10 font-medium">
-                    {testimonials[activeTestimonial].quote}
-                  </p>
+                {/* Stars */}
+                <div className="flex gap-1 mb-6">
+                  {Array.from({ length: t.rating }).map((_, i) => (
+                    <Star key={i} size={18} className="text-amber-400" fill="currentColor" />
+                  ))}
                 </div>
 
-                <div className="flex items-center gap-5 pt-6 border-t border-white/10 mt-auto">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white font-black text-xl shadow-lg shadow-sky-500/30">
-                    {testimonials[activeTestimonial].name[0]}
-                  </div>
+                {/* Title */}
+                <h3 className="text-xl sm:text-2xl font-display font-extrabold text-gray-900 dark:text-white mb-5 leading-snug">
+                  &ldquo;{t.title}&rdquo;
+                </h3>
 
+                {/* Quote */}
+                <p className="text-gray-600 dark:text-slate-300 text-base sm:text-lg leading-relaxed flex-1 mb-8">
+                  {t.quote}
+                </p>
+
+                {/* Author */}
+                <div className="flex items-center gap-4 pt-6 border-t border-[var(--color-border)]">
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-[#003087] text-white font-extrabold text-lg shadow">
+                    {t.name[0]}
+                  </div>
                   <div>
-                    <h4 className="text-lg font-bold text-white">
-                      {testimonials[activeTestimonial].name}
-                    </h4>
-                    <p className="text-xs text-sky-400 font-semibold mt-0.5">
-                      {testimonials[activeTestimonial].client}
-                    </p>
+                    <h4 className="font-bold text-gray-900">{t.name}</h4>
+                    <p className="text-xs text-[#003087] font-semibold mt-0.5">{t.client}</p>
                   </div>
                 </div>
               </motion.div>
             </AnimatePresence>
 
-            {/* Slider Controls */}
-            <div className="flex items-center justify-between mt-8 px-2">
-              <div className="flex gap-3">
+            {/* Controls */}
+            <div className="flex items-center justify-between mt-6 px-1">
+              {/* Dots */}
+              <div className="flex gap-2.5">
                 {testimonials.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveTestimonial(i)}
-                    className={`h-2.5 rounded-full transition-all duration-500 ${
-                      activeTestimonial === i ? 'w-10 bg-gradient-to-r from-sky-400 to-indigo-500 shadow-[0_0_15px_rgba(56,189,248,0.5)]' : 'w-2.5 bg-white/10 hover:bg-white/20'
+                    onClick={() => setActive(i)}
+                    aria-label={`Go to testimonial ${i + 1}`}
+                    className={`h-2 rounded-full transition-all duration-400 ${
+                      active === i
+                        ? 'w-8 bg-[#003087]'
+                        : 'w-2 bg-gray-300 hover:bg-gray-400'
                     }`}
-                    aria-label={`Testimonial slide ${i + 1}`}
                   />
                 ))}
               </div>
+              {/* Arrows */}
               <div className="flex gap-2">
                 <button
-                  onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                  className="h-12 w-12 rounded-2xl border border-white/10 bg-slate-900/80 flex items-center justify-center text-white hover:bg-sky-500/20 hover:border-sky-400 transition-all duration-300 active:scale-95"
-                  aria-label="Previous testimonial"
+                  onClick={prev}
+                  aria-label="Previous"
+                  className="h-11 w-11 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-[#003087] transition-all duration-200 active:scale-95"
                 >
-                  <ChevronLeft size={20} />
+                  <ChevronLeft size={19} />
                 </button>
                 <button
-                  onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
-                  className="h-12 w-12 rounded-2xl border border-white/10 bg-slate-900/80 flex items-center justify-center text-white hover:bg-sky-500/20 hover:border-sky-400 transition-all duration-300 active:scale-95"
-                  aria-label="Next testimonial"
+                  onClick={next}
+                  aria-label="Next"
+                  className="h-11 w-11 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] flex items-center justify-center text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-[#003087] transition-all duration-200 active:scale-95"
                 >
-                  <ChevronRight size={20} />
+                  <ChevronRight size={19} />
                 </button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

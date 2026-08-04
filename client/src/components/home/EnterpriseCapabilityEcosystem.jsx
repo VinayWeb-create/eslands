@@ -118,29 +118,29 @@ const ecosystemServices = [
     metrics: { satisfaction: '98% Client CSAT', accessibility: 'WCAG AAA', speed: 'Design Scale' },
     outcomes: ['Enterprise design systems & token libraries', 'User-centric product interaction flows', 'High-contrast accessible digital brands'],
     desc: 'Modern enterprise visual identity systems, interactive UI design, and responsive design systems.',
-    x: 68, y: 32,
+    x: 32, y: 64,
   },
   {
     id: 'seo',
-    title: 'SEO & Growth Marketing',
+    title: 'SEO & Marketing',
     category: 'Growth Engine',
-    icon: Search,
-    techStack: ['Technical SEO', 'Schema Markup', 'GA4 Analytics', 'Core Web Vitals'],
-    metrics: { googleScore: '99+ Score', organicGrowth: '+150% Traffic', conversion: '+42% Lift' },
-    outcomes: ['High-ranking organic search authority', 'Lightning-fast mobile & desktop rendering', 'Data-driven B2B lead capture funnels'],
-    desc: 'Technical search optimization and growth marketing engineered for domain authority and customer acquisition.',
-    x: 68, y: 68,
+    icon: TrendingUp,
+    techStack: ['Google Search', 'Schema Markup', 'B2B Authority', 'Semrush Analytics'],
+    metrics: { trafficIncrease: '+240%', keywordRank: 'Top 3 Focus', conversion: '+3.4% Avg' },
+    outcomes: ['Data-driven organic search traffic', 'Local & international corporate positioning', 'High-intent B2B lead generation'],
+    desc: 'Strategic B2B search engine optimization to establish brand authority and drive customer acquisition.',
+    x: 68, y: 32,
   },
   {
     id: 'ecommerce',
-    title: 'E-commerce Solutions',
-    category: 'Global Commerce',
+    title: 'E-commerce Platforms',
+    category: 'Commerce Core',
     icon: ShoppingBag,
-    techStack: ['Shopify Plus', 'Headless Commerce', 'Stripe Payments', 'Redis Cache'],
-    metrics: { uptime: '99.99%', checkout: 'Sub-1s Processing', concurrency: '100k Users' },
-    outcomes: ['Headless high-volume checkout engines', 'Global multi-currency payment integration', 'Real-time inventory synchronization'],
-    desc: 'High-scale headless e-commerce solutions built to handle peak traffic surges and global payment processing.',
-    x: 32, y: 68,
+    techStack: ['Shopify Plus', 'Headless Commerce', 'Stripe', 'GraphQL APIs'],
+    metrics: { scaleLimit: 'Unlimited', checkoutSpeed: '<1.2s', loadTime: 'WCAG AAA' },
+    outcomes: ['API-first headless e-commerce architectures', 'Custom secure checkout flow integrations', 'Robust inventory sync logic'],
+    desc: 'Enterprise-grade online transactional systems engineered for extreme user concurrency and high-speed checkout flows.',
+    x: 68, y: 64,
   },
 ];
 
@@ -150,7 +150,18 @@ export default function EnterpriseCapabilityEcosystem() {
   const canvasRef = useRef(null);
   const { prefersReducedMotion } = useAccessibleAnimations();
 
-  // Radial Connection Rays & Data Packet Engine
+  // Auto-switch tabs
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveService((prev) => {
+        const currentIndex = ecosystemServices.findIndex((s) => s.id === prev.id);
+        return ecosystemServices[(currentIndex + 1) % ecosystemServices.length];
+      });
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [activeService]);
+
+  // Draw Ray & Connecting Mesh lines
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -164,19 +175,20 @@ export default function EnterpriseCapabilityEcosystem() {
     resize();
     window.addEventListener('resize', resize);
 
-    const packets = Array.from({ length: 18 }, () => ({
-      nodeIdx: Math.floor(Math.random() * ecosystemServices.length),
-      progress: Math.random(),
-      speed: Math.random() * 0.007 + 0.003,
-    }));
+    // Initial configuration for ray data packets
+    const packets = [];
+    ecosystemServices.forEach((_, idx) => {
+      // 2 data packets per ray with staggered progress
+      packets.push({ nodeIdx: idx, progress: 0, speed: Math.random() * 0.003 + 0.002 });
+      packets.push({ nodeIdx: idx, progress: 0.5, speed: Math.random() * 0.003 + 0.002 });
+    });
 
     const render = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
 
-      const centerX = canvas.width * 0.5;
-      const centerY = canvas.height * 0.5;
-
-      // 1. Draw Connecting Rays from Center Hub (50%, 50%) to Every Node
+      // 1. Draw Connecting Rays
       ecosystemServices.forEach((service) => {
         const nodeX = (service.x * canvas.width) / 100;
         const nodeY = (service.y * canvas.height) / 100;
@@ -188,11 +200,11 @@ export default function EnterpriseCapabilityEcosystem() {
         ctx.moveTo(centerX, centerY);
         ctx.lineTo(nodeX, nodeY);
         ctx.strokeStyle = isSelected
-          ? 'rgba(56, 189, 248, 0.65)'
+          ? 'rgba(0, 48, 135, 0.45)'
           : isHovered
-          ? 'rgba(56, 189, 248, 0.45)'
-          : 'rgba(255, 255, 255, 0.09)';
-        ctx.lineWidth = isSelected ? 2.2 : 1;
+          ? 'rgba(0, 48, 135, 0.28)'
+          : 'rgba(0, 48, 135, 0.08)';
+        ctx.lineWidth = isSelected ? 2 : 1;
         ctx.stroke();
       });
 
@@ -210,12 +222,9 @@ export default function EnterpriseCapabilityEcosystem() {
           const currentY = nodeY + (centerY - nodeY) * packet.progress;
 
           ctx.beginPath();
-          ctx.arc(currentX, currentY, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = '#38bdf8';
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = '#38bdf8';
+          ctx.arc(currentX, currentY, 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = '#0057D8';
           ctx.fill();
-          ctx.shadowBlur = 0;
         });
       }
 
@@ -231,24 +240,23 @@ export default function EnterpriseCapabilityEcosystem() {
   }, [activeService, hoveredService, prefersReducedMotion]);
 
   return (
-    <section id="services" className="py-28 px-6 relative bg-slate-950 overflow-hidden border-t border-white/10">
-      {/* Volumetric Radial Ambient Glow */}
-      <div className="pointer-events-none absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-sky-500/10 blur-[180px]" />
-      <div className="pointer-events-none absolute right-1/4 top-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-purple-600/10 blur-[160px]" />
+    <section id="ecosystem" className="py-28 px-6 relative bg-white overflow-hidden border-t border-[var(--color-border)]">
+      {/* Subtle background glow */}
+      <div className="pointer-events-none absolute left-1/3 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-blue-50/40 blur-[180px]" />
 
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold uppercase tracking-[0.25em] text-sky-400 mb-4">
-            <Sparkles size={14} className="text-sky-400" /> Enterprise Capability Network
+          <span className="section-badge mb-4 inline-flex">
+            <Sparkles size={14} /> Enterprise Capability Network
           </span>
-          <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 tracking-tight leading-tight">
             Integrated Ecosystem of <br />
-            <span className="animate-text-shimmer">
+            <span className="text-shimmer">
               12 Enterprise Technology Pillars
             </span>
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed mt-4 font-medium">
+          <p className="text-gray-500 text-sm sm:text-base leading-relaxed mt-4 font-medium">
             Every core capability remains active and connected to the central Esland Platform. Click any node to inspect SLA specs.
           </p>
         </div>
@@ -257,9 +265,9 @@ export default function EnterpriseCapabilityEcosystem() {
         <div className="grid lg:grid-cols-12 gap-8 items-stretch">
           
           {/* Left Panel: Scalable 2-Ring Interactive Capability Network Map */}
-          <div className="lg:col-span-7 relative h-[560px] sm:h-[640px] rounded-[2.5rem] border border-white/15 bg-slate-900/80 backdrop-blur-2xl p-4 overflow-hidden shadow-2xl flex items-center justify-center group">
+          <div className="lg:col-span-6 relative h-[400px] sm:h-[450px] rounded-lg border border-[#E4E9F0] bg-[#F8FAFC] p-2 overflow-hidden shadow-sm flex items-center justify-center group">
             {/* Blueprint Grid Overlay */}
-            <div className="absolute inset-0 opacity-[0.06] bg-[linear-gradient(rgba(56,189,248,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(56,189,248,0.4)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
+            <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(rgba(0,48,135,0.4)_1px,transparent_1px),linear-gradient(90deg,rgba(0,48,135,0.4)_1px,transparent_1px)] bg-[size:30px_30px] pointer-events-none" />
 
             {/* Connecting Mesh Canvas */}
             <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
@@ -267,98 +275,102 @@ export default function EnterpriseCapabilityEcosystem() {
             {/* Central Esland Platform Hub (Exact 50%, 50%) */}
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-30 flex flex-col items-center justify-center pointer-events-none">
               <div className="relative">
-                <div className="absolute -inset-6 rounded-full bg-sky-400/20 blur-xl animate-pulse" />
-                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-slate-950 border-2 border-sky-400/60 shadow-[0_0_50px_rgba(56,189,248,0.4)] p-3">
+                <div className="absolute -inset-6 rounded-full bg-blue-100/40 blur-xl animate-pulse" />
+                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-white border-2 border-[#003087] shadow-lg p-3">
                   <LogoIcon size={38} />
                 </div>
               </div>
-              <span className="mt-2.5 px-3 py-1 rounded-full bg-slate-950/95 border border-sky-400/30 text-[10px] font-black text-white uppercase tracking-widest shadow-xl">
+              <span className="mt-2.5 px-3 py-1 rounded-full bg-white border border-[#C5D0E0] text-[10px] font-black text-[#003087] uppercase tracking-widest shadow-md">
                 ESLAND PLATFORM
               </span>
             </div>
 
-            {/* 12 Visible Orbiting Service Nodes (No Overlaps!) */}
+            {/* 12 Visible Orbiting Service Nodes */}
             {ecosystemServices.map((service) => {
               const ServiceIcon = service.icon;
               const isSelected = activeService.id === service.id;
               const isHovered = hoveredService?.id === service.id;
 
               return (
-                <div
+                <motion.div
                   key={service.id}
                   style={{ left: `${service.x}%`, top: `${service.y}%` }}
                   className="absolute -translate-x-1/2 -translate-y-1/2 z-20"
+                  animate={!prefersReducedMotion ? { y: [0, -5, 0] } : {}}
+                  transition={{ repeat: Infinity, duration: 3 + (service.x % 3), ease: "easeInOut" }}
                 >
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setActiveService(service)}
                     onMouseEnter={() => setHoveredService(service)}
                     onMouseLeave={() => setHoveredService(null)}
-                    className={`relative flex items-center gap-2 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-2xl border transition-all duration-300 backdrop-blur-xl shadow-xl focus:outline-none ${
+                    className={`relative flex items-center gap-1.5 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg border transition-all duration-200 shadow-sm focus:outline-none ${
                       isSelected
-                        ? 'bg-gradient-to-r from-sky-500 via-cyan-400 to-indigo-600 border-sky-300 text-slate-950 scale-110 shadow-sky-500/50 font-black'
+                        ? 'bg-[#003087] border-[#003087] text-white font-bold shadow-md'
                         : isHovered
-                        ? 'bg-slate-800/95 border-sky-400/60 text-white scale-105 shadow-sky-500/20'
-                        : 'bg-slate-900/90 border-white/15 text-slate-300 hover:border-white/30'
+                        ? 'bg-white border-[#003087] text-[#003087] shadow-sm'
+                        : 'bg-white border-[#E4E9F0] text-gray-700 hover:border-[#003087]'
                     }`}
                   >
-                    <ServiceIcon size={14} className={isSelected ? 'text-slate-950' : 'text-sky-400'} />
-                    <span className="text-[10px] sm:text-xs font-bold tracking-wide whitespace-nowrap">{service.title}</span>
-                  </button>
-                </div>
+                    <ServiceIcon size={12} className={isSelected ? 'text-white' : 'text-[#003087]'} />
+                    <span className="text-[9px] sm:text-[10px] font-bold tracking-wide whitespace-nowrap">{service.title}</span>
+                  </motion.button>
+                </motion.div>
               );
             })}
           </div>
 
           {/* Right Panel: Live Service Telemetry Inspector */}
-          <div className="lg:col-span-5 flex flex-col justify-between">
+          <div className="lg:col-span-6 flex flex-col justify-between">
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeService.id}
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.4 }}
-                className="spotlight-card h-full rounded-[2.5rem] border border-sky-500/30 bg-slate-900/90 backdrop-blur-2xl p-8 sm:p-10 shadow-2xl shadow-sky-500/10 flex flex-col justify-between relative overflow-hidden"
+                initial={{ opacity: 0, x: 40, scale: 0.96 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: -40, scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 120, damping: 16, mass: 0.9 }}
+                className="h-full rounded-lg border border-[#E4E9F0] bg-white p-4 sm:p-5 shadow-sm flex flex-col justify-between relative overflow-hidden"
               >
                 {/* Accent Top Border */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-sky-400 via-cyan-300 to-purple-500" />
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#003087] via-[#0057D8] to-green-500" />
 
                 <div>
                   {/* Category & Badge */}
                   <div className="flex items-center justify-between mb-6">
-                    <span className="px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-xs font-bold text-sky-300 uppercase tracking-widest">
+                    <span className="px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-[#003087] uppercase tracking-widest">
                       {activeService.category}
                     </span>
-                    <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-400/20 px-3 py-1 rounded-full">
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-green-700 bg-green-50 border border-green-100 px-3 py-1 rounded-full">
                       <ShieldCheck size={14} /> Active Ecosystem Node
                     </span>
                   </div>
 
                   {/* Icon & Title */}
                   <div className="flex items-center gap-4 mb-4">
-                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-xl shadow-sky-500/30">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[#003087] to-[#0057D8] text-white shadow-sm">
                       <activeService.icon size={26} />
                     </div>
                     <div>
-                      <h3 className="text-2xl font-black text-white leading-tight">
+                      <h3 className="text-2xl font-display font-extrabold text-gray-900 leading-tight">
                         {activeService.title}
                       </h3>
-                      <p className="text-xs text-sky-400 font-semibold mt-0.5">Enterprise Solution Pillar</p>
+                      <p className="text-xs text-[#003087] font-semibold mt-0.5">Enterprise Solution Pillar</p>
                     </div>
                   </div>
 
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6 font-medium">
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6 font-medium">
                     {activeService.desc}
                   </p>
 
                   {/* Technology Stack Badges */}
                   <div className="mb-6">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-2.5">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-2.5">
                       Core Technology Stack
                     </span>
                     <div className="flex flex-wrap gap-2">
                       {activeService.techStack.map((tech) => (
-                        <span key={tech} className="rounded-xl bg-slate-950/80 border border-white/15 px-3 py-1.5 text-xs font-bold text-slate-200">
+                        <span key={tech} className="rounded-lg bg-gray-50 border border-[#E4E9F0] px-3 py-1.5 text-xs font-bold text-gray-700">
                           {tech}
                         </span>
                       ))}
@@ -366,11 +378,11 @@ export default function EnterpriseCapabilityEcosystem() {
                   </div>
 
                   {/* Telemetry Metrics Bar */}
-                  <div className="grid grid-cols-3 gap-2.5 p-3.5 rounded-2xl bg-slate-950/80 border border-white/10 mb-6 text-center">
+                  <div className="grid grid-cols-3 gap-2.5 p-3.5 rounded-lg bg-gray-50 border border-[#E4E9F0] mb-6 text-center">
                     {Object.entries(activeService.metrics).map(([k, v]) => (
                       <div key={k}>
-                        <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider block mb-0.5">{k}</span>
-                        <span className="text-xs sm:text-sm font-extrabold text-sky-300">{v}</span>
+                        <span className="text-[9px] uppercase font-bold text-gray-500 tracking-wider block mb-0.5">{k}</span>
+                        <span className="text-xs sm:text-sm font-extrabold text-[#003087]">{v}</span>
                       </div>
                     ))}
                   </div>
@@ -378,19 +390,19 @@ export default function EnterpriseCapabilityEcosystem() {
                   {/* Key Business Outcomes */}
                   <div className="space-y-2 mb-8">
                     {activeService.outcomes.map((outcome) => (
-                      <div key={outcome} className="flex items-center gap-2.5 text-xs text-slate-200 font-semibold p-2.5 rounded-xl bg-slate-950/60 border border-white/5">
-                        <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+                      <div key={outcome} className="flex items-center gap-2.5 text-xs text-gray-700 font-semibold p-2.5 rounded-lg bg-green-50/20 border border-green-50/40">
+                        <CheckCircle2 size={14} className="text-green-600 shrink-0" />
                         <span>{outcome}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                  <span className="text-xs text-slate-400 font-semibold">ISO 27001 & SOC 2 Audited</span>
+                <div className="pt-4 border-t border-gray-100 flex items-center justify-between">
+                  <span className="text-xs text-gray-500 font-semibold">ISO 27001 & SOC 2 Audited</span>
                   <Link
                     to="/services"
-                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-sky-400 hover:text-white transition group"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#003087] hover:text-[#002068] transition group"
                   >
                     Explore Service Architecture <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                   </Link>

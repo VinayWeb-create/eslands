@@ -1,34 +1,37 @@
+import { forwardRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useRef, useState, useEffect } from 'react';
 import useTiltCard from '../hooks/useTiltCard';
 
-export default function TiltCard({ children, className = '', maxTilt = 8, ...props }) {
+/**
+ * TiltCard — wraps children in a 3-D perspective tilt on hover.
+ * Uses forwardRef so ServiceCard can attach its spotlight-tracking ref.
+ */
+const TiltCard = forwardRef(function TiltCard(
+  { children, className = '', maxTilt = 8, as: Tag = 'div', ...props },
+  ref
+) {
   const [isTouch, setIsTouch] = useState(false);
 
   useEffect(() => {
-    setIsTouch(
-      !window.matchMedia('(hover: hover) and (pointer: fine)').matches
-    );
+    setIsTouch(!window.matchMedia('(hover: hover) and (pointer: fine)').matches);
   }, []);
 
-  const {
-    sheenOpacityMotion,
-    sheenBackground,
-    handleMouseMove,
-    handleMouseLeave,
-    style,
-  } = useTiltCard({ maxTilt });
+  const { sheenOpacityMotion, sheenBackground, handleMouseMove, handleMouseLeave, style } =
+    useTiltCard({ maxTilt });
 
   if (isTouch) {
     return (
-      <div className={className} {...props}>
+      <Tag ref={ref} className={className} {...props}>
         {children}
-      </div>
+      </Tag>
     );
   }
 
+  const MotionTag = motion[Tag] || motion.div;
+
   return (
-    <motion.div
+    <MotionTag
+      ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       style={style}
@@ -38,12 +41,11 @@ export default function TiltCard({ children, className = '', maxTilt = 8, ...pro
       {children}
       <motion.div
         aria-hidden
-        className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-        style={{
-          background: sheenBackground,
-          opacity: sheenOpacityMotion,
-        }}
+        className="pointer-events-none absolute inset-0 z-10 rounded-[inherit] transition-opacity duration-300"
+        style={{ background: sheenBackground, opacity: sheenOpacityMotion }}
       />
-    </motion.div>
+    </MotionTag>
   );
-}
+});
+
+export default TiltCard;

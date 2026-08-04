@@ -5,6 +5,8 @@ const DemoSchema = new mongoose.Schema({
   demoDate: { type: String, required: true }, // Format: YYYY-MM-DD
   demoTime: { type: String, required: true }, // Format: HH:MM
   meetingLink: { type: String, default: '' },
+  demoType: { type: String, enum: ['online', 'offline'], default: 'online' },
+  location: { type: String, default: '' },
   trainer: { type: String, default: '' },
   salesPerson: { type: String, default: '' },
   notes: { type: String, default: '' },

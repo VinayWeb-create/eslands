@@ -23,11 +23,7 @@ export default function PortalLogin() {
       
       toast.success(`Welcome back, ${data.user.name}!`);
       
-      if (data.user.role === 'student') {
-        navigate('/portal/student');
-      } else {
-        navigate('/portal/client');
-      }
+      navigate('/portal/client');
     } catch (err) {
       console.error(err);
       toast.error(err.response?.data?.message || 'Invalid credentials.');
@@ -52,7 +48,7 @@ export default function PortalLogin() {
         <div className="flex flex-col items-center mb-8">
           <Logo className="h-10 w-auto mb-4" />
           <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-sky-500/10 border border-sky-400/20 text-[10px] font-bold uppercase tracking-wider text-sky-400">
-            <Sparkles size={11} /> Client & Student Portal
+            <Sparkles size={11} /> Client Portal
           </span>
           <h2 className="text-xl font-black text-white uppercase tracking-wide mt-3 text-center">Log In</h2>
         </div>

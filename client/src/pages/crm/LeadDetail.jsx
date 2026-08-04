@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { 
   ArrowLeft, Loader2, Save, Plus, FileText, 
-  Calendar, CreditCard, ShieldCheck, Award, Link2 
+  Calendar, CreditCard, ShieldCheck, Award, Link2, Phone, MapPin 
 } from 'lucide-react';
 import api from '../../lib/api';
 import StatusBadge from '../../components/crm/StatusBadge';
@@ -10,8 +10,7 @@ import { toast } from 'react-toastify';
 
 const statusOptions = [
   'new', 'contacted', 'demo_scheduled', 'demo_completed', 'quote_sent', 'payment_pending', 
-  'project_started', 'project_completed', 'enrolled', 'fees_paid', 'batch_assigned', 
-  'in_progress', 'completed', 'certificate_issued', 'lost'
+  'project_started', 'project_completed', 'in_progress', 'completed', 'lost'
 ];
 const priorityOptions = ['low', 'medium', 'high', 'urgent'];
 
@@ -30,6 +29,8 @@ export default function LeadDetail() {
   const [demoForm, setDemoForm] = useState({
     demoDate: '',
     demoTime: '',
+    demoType: 'online',
+    location: '',
     meetingLink: '',
     trainer: '',
     salesPerson: '',
@@ -42,11 +43,11 @@ export default function LeadDetail() {
     transactionId: '',
     method: 'Credit Card',
     notes: '',
-    portalRole: 'student'
+    portalRole: 'client'
   });
 
   const [creatingPortal, setCreatingPortal] = useState(false);
-  const [manualRole, setManualRole] = useState('student');
+  const [manualRole, setManualRole] = useState('client');
 
   const [issuingCert, setIssuingCert] = useState(false);
   const [certCourse, setCertCourse] = useState('');
@@ -132,7 +133,7 @@ export default function LeadDetail() {
     setSchedulingDemo(true);
     try {
       await api.post('/api/crm/demos', { leadId: id, ...demoForm }, authHeaders);
-      setDemoForm({ demoDate: '', demoTime: '', meetingLink: '', trainer: '', salesPerson: '', notes: '' });
+      setDemoForm({ demoDate: '', demoTime: '', demoType: 'online', location: '', meetingLink: '', trainer: '', salesPerson: '', notes: '' });
       await fetchLead();
       toast.success('Demo scheduled successfully! Confirmation email sent.');
     } catch (err) {
@@ -163,7 +164,7 @@ export default function LeadDetail() {
     setLoggingPayment(true);
     try {
       await api.post('/api/crm/payments', { leadId: id, ...paymentForm }, authHeaders);
-      setPaymentForm({ amount: '', transactionId: '', method: 'Credit Card', notes: '', portalRole: 'student' });
+      setPaymentForm({ amount: '', transactionId: '', method: 'Credit Card', notes: '', portalRole: 'client' });
       await fetchLead();
       toast.success('Payment recorded successfully! Invoice generated & portal credentials emailed.');
     } catch (err) {
@@ -266,9 +267,36 @@ export default function LeadDetail() {
                 {lead.demos.map((d) => (
                   <div key={d._id} className="p-3.5 rounded-xl border border-white/5 bg-slate-950/40 text-xs flex flex-wrap justify-between items-center gap-3">
                     <div>
-                      <p className="font-bold text-white">Date: {d.demoDate} at {d.demoTime}</p>
-                      <p className="text-slate-400 text-[11px] mt-0.5">Trainer: {d.trainer || 'TBD'} | Sales: {d.salesPerson || 'TBD'}</p>
-                      {d.meetingLink && <a href={d.meetingLink} target="_blank" rel="noreferrer" className="text-sky-400 hover:underline flex items-center gap-1 mt-1 text-[11px]"><Link2 size={12} /> Join Session</a>}
+                      <p className="font-bold text-white">Date: {d.demoDate} at {d.demoTime} <span className="text-[9px] ml-1.5 px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 capitalize">{d.demoType || 'online'}</span></p>
+                      <p className="text-slate-400 text-[11px] mt-0.5">Project Manager: {d.trainer || 'TBD'} | Sales: {d.salesPerson || 'TBD'}</p>
+                      {d.demoType === 'offline' ? (
+                        d.location && (
+                          <div className="mt-1 space-y-1">
+                            <p className="text-slate-300 text-[11px] font-medium"><strong>Location:</strong> {d.location}</p>
+                            <div className="flex flex-wrap items-center gap-3 mt-1 text-[11px]">
+                              <a 
+                                href={d.meetingLink || `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(d.location)}`} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="text-sky-400 hover:underline flex items-center gap-1"
+                              >
+                                <Link2 size={12} /> Get Directions
+                              </a>
+                              <span className="text-slate-700">|</span>
+                              <a 
+                                href={d.meetingLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(d.location)}`} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="text-sky-400 hover:underline flex items-center gap-1"
+                              >
+                                <MapPin size={12} /> Share Live Location
+                              </a>
+                            </div>
+                          </div>
+                        )
+                      ) : (
+                        d.meetingLink && <a href={d.meetingLink} target="_blank" rel="noreferrer" className="text-sky-400 hover:underline flex items-center gap-1 mt-1 text-[11px]"><Link2 size={12} /> Join Session</a>
+                      )}
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${d.status === 'completed' ? 'bg-emerald-500/15 text-emerald-400' : d.status === 'cancelled' ? 'bg-red-500/15 text-red-400' : 'bg-amber-500/15 text-amber-400'}`}>{d.status}</span>
@@ -290,8 +318,31 @@ export default function LeadDetail() {
               <div className="grid gap-3 sm:grid-cols-2">
                 <div><label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Demo Date</label><input type="date" value={demoForm.demoDate} onChange={(e) => setDemoForm({ ...demoForm, demoDate: e.target.value })} className={inputCls} required /></div>
                 <div><label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Demo Time</label><input type="time" value={demoForm.demoTime} onChange={(e) => setDemoForm({ ...demoForm, demoTime: e.target.value })} className={inputCls} required /></div>
-                <div><label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Google Meet / Zoom Link</label><input type="url" placeholder="https://meet.google.com/..." value={demoForm.meetingLink} onChange={(e) => setDemoForm({ ...demoForm, meetingLink: e.target.value })} className={inputCls} /></div>
-                <div><label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Assigned Trainer</label><input type="text" placeholder="Trainer Name" value={demoForm.trainer} onChange={(e) => setDemoForm({ ...demoForm, trainer: e.target.value })} className={inputCls} /></div>
+                <div>
+                  <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Demo Type</label>
+                  <select value={demoForm.demoType} onChange={(e) => setDemoForm({ ...demoForm, demoType: e.target.value })} className={inputCls}>
+                    <option value="online">Online (Virtual)</option>
+                    <option value="offline">Offline (In-Person)</option>
+                  </select>
+                </div>
+                {demoForm.demoType === 'offline' ? (
+                  <>
+                    <div>
+                      <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Location / Office Address</label>
+                      <input type="text" placeholder="Office / Room / Address" value={demoForm.location} onChange={(e) => setDemoForm({ ...demoForm, location: e.target.value })} className={inputCls} required />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Google Maps Directions Link</label>
+                      <input type="url" placeholder="https://maps.app.goo.gl/... or google.com/maps/..." value={demoForm.meetingLink} onChange={(e) => setDemoForm({ ...demoForm, meetingLink: e.target.value })} className={inputCls} />
+                    </div>
+                  </>
+                ) : (
+                  <div>
+                    <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Google Meet / Zoom Link</label>
+                    <input type="url" placeholder="https://meet.google.com/..." value={demoForm.meetingLink} onChange={(e) => setDemoForm({ ...demoForm, meetingLink: e.target.value })} className={inputCls} />
+                  </div>
+                )}
+                <div><label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Assigned Project Manager</label><input type="text" placeholder="Project Manager Name" value={demoForm.trainer} onChange={(e) => setDemoForm({ ...demoForm, trainer: e.target.value })} className={inputCls} /></div>
               </div>
               <button type="submit" disabled={schedulingDemo} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg transition-all hover:brightness-110 uppercase tracking-wider disabled:opacity-50">
                 {schedulingDemo ? 'Scheduling...' : 'Schedule Demo'}
@@ -351,13 +402,6 @@ export default function LeadDetail() {
                     <option value="PayPal">PayPal</option>
                   </select>
                 </div>
-                <div>
-                  <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Portal Access Role</label>
-                  <select value={paymentForm.portalRole} onChange={(e) => setPaymentForm({ ...paymentForm, portalRole: e.target.value })} className={inputCls}>
-                    <option value="student">Student Portal</option>
-                    <option value="client">Client Portal</option>
-                  </select>
-                </div>
               </div>
               <button type="submit" disabled={loggingPayment} className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 px-5 py-2.5 text-xs font-bold text-white shadow-lg transition-all hover:brightness-110 uppercase tracking-wider disabled:opacity-50">
                 {loggingPayment ? 'Logging...' : 'Confirm & Log Payment'}
@@ -365,84 +409,30 @@ export default function LeadDetail() {
             </form>
           </div>
 
-          {/* Module 7 & 8: Portal Access & Certificate Manager Card */}
+          {/* Module 7 & 8: Portal Access Card */}
           <div className="rounded-2xl border border-white/10 bg-slate-900/90 p-6 shadow-xl space-y-5">
             <div className="flex items-center gap-2 border-b border-white/5 pb-3">
               <ShieldCheck size={16} className="text-sky-400" />
-              <h3 className="text-xs font-bold uppercase tracking-widest text-sky-400">Portal Credentials & Certificates</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-sky-400">Client Portal Access</h3>
             </div>
 
             {lead.portalUser ? (
               <div className="space-y-6">
                 {/* Portal account exists */}
                 <div className="p-4 rounded-xl border border-emerald-500/20 bg-emerald-950/10 text-xs space-y-2">
-                  <p className="font-bold text-emerald-400 flex items-center gap-1.5"><ShieldCheck size={14} /> Active Client/Student Account Linked</p>
+                  <p className="font-bold text-emerald-400 flex items-center gap-1.5"><ShieldCheck size={14} /> Active Client Account Linked</p>
                   <p className="text-slate-300"><strong>Portal Email:</strong> {lead.portalUser.email}</p>
                   <p className="text-slate-300"><strong>Assigned Role:</strong> <span className="capitalize font-bold text-white">{lead.portalUser.role}</span></p>
                   <p className="text-slate-300"><strong>User Status:</strong> <span className="capitalize text-emerald-400 font-semibold">{lead.portalUser.status}</span></p>
                 </div>
-
-                {/* If role is student: Certificate Issuer */}
-                {lead.portalUser.role === 'student' && (
-                  <div className="space-y-4 border-t border-white/5 pt-4">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-sky-400"><Award size={15} /> Academic Certificates Manager</div>
-                    
-                    {/* Certificates Issued List */}
-                    {lead.certificates && lead.certificates.length > 0 && (
-                      <div className="space-y-2.5">
-                        {lead.certificates.map((c) => (
-                          <div key={c._id} className="p-3 rounded-xl border border-white/5 bg-slate-950/40 text-xs flex justify-between items-center">
-                            <div>
-                              <p className="font-bold text-white">{c.course}</p>
-                              <p className="text-slate-500 text-[10px] mt-0.5">Ref: {c.certificateNumber} | Issued: {new Date(c.issuedDate).toLocaleDateString()}</p>
-                            </div>
-                            <a 
-                              href={`${api.defaults.baseURL || ''}/api/crm/certificates/${c._id}/pdf?token=${token}`}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="px-2.5 py-1.5 rounded-lg bg-sky-500/10 hover:bg-sky-500/20 border border-sky-400/30 text-sky-400 font-bold text-[10px] transition-all uppercase tracking-wider flex items-center gap-1"
-                            >
-                              View PDF
-                            </a>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Generate Certificate Form */}
-                    <form onSubmit={handleIssueCertificate} className="space-y-3 pt-2">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Issue New Certificate</p>
-                      <div className="flex gap-3">
-                        <input 
-                          type="text" 
-                          placeholder="e.g. Masterclass in Cyber Security & ISO Auditing" 
-                          value={certCourse} 
-                          onChange={(e) => setCertCourse(e.target.value)} 
-                          className="flex-1 rounded-xl border border-white/10 bg-slate-950/80 px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:border-sky-400 focus:outline-none" 
-                          required 
-                        />
-                        <button type="submit" disabled={issuingCert || !certCourse.trim()} className="inline-flex items-center gap-1.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 px-4 py-2.5 text-xs font-bold text-white hover:brightness-110 transition-all disabled:opacity-50 uppercase tracking-wider shrink-0">
-                          <Plus size={14} /> Issue Cert
-                        </button>
-                      </div>
-                    </form>
-                  </div>
-                )}
               </div>
             ) : (
               // No portal account exists
               <div className="space-y-4">
                 <p className="text-xs text-slate-400 leading-relaxed">No portal user credentials exist for this client email yet. Create account access manually below, or it will be generated automatically when a payment is processed.</p>
                 <div className="flex flex-wrap items-end gap-3 pt-2">
-                  <div className="w-44">
-                    <label className="text-[9px] font-bold text-slate-500 uppercase tracking-wider">Select Portal Role</label>
-                    <select value={manualRole} onChange={(e) => setManualRole(e.target.value)} className={inputCls}>
-                      <option value="student">Student Portal</option>
-                      <option value="client">Client Portal</option>
-                    </select>
-                  </div>
                   <button onClick={handleCreatePortalManual} disabled={creatingPortal} className="inline-flex items-center gap-2 rounded-xl bg-sky-500/15 border border-sky-400/30 px-5 py-2.5 text-xs font-bold text-sky-400 hover:bg-sky-500/25 transition-all uppercase tracking-wider disabled:opacity-50">
-                    {creatingPortal ? 'Creating Access...' : 'Create Portal Access'}
+                    {creatingPortal ? 'Creating Access...' : 'Create Client Portal Access'}
                   </button>
                 </div>
               </div>

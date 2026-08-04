@@ -25,13 +25,9 @@ async function seed() {
   await Career.create(careers);
   console.log('Seeded careers data');
 
-  const existingAdmin = await Admin.findOne({ email: defaultAdmin.email });
-  if (!existingAdmin) {
-    await Admin.create(defaultAdmin);
-    console.log('Seeded default admin: admin@eslanditsolutions.com / admin123');
-  } else {
-    console.log('Admin already exists, skipping.');
-  }
+  await Admin.deleteMany({});
+  await Admin.create(defaultAdmin);
+  console.log('Seeded default admin: admin@eslanditsolutions.com / admin123');
 
   process.exit(0);
 }

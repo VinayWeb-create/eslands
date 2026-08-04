@@ -42,16 +42,13 @@ export default function Dashboard() {
     { label: 'Quotes Pending', value: stats.quotes.pending, icon: FileText, color: 'from-amber-500 to-orange-600', detail: `Total quotes: ${stats.quotes.total}` },
     { label: 'Payments Pending', value: stats.pendingPayments, icon: CreditCard, color: 'from-rose-500 to-red-600', detail: 'Awaiting transaction logging' },
     { label: 'Revenue Won', value: `£${stats.revenue.total.toLocaleString()}`, icon: PoundSterling, color: 'from-emerald-500 to-teal-600', detail: `£${stats.revenue.pending.toLocaleString()} pending` },
-    { label: 'Active Students', value: stats.activeStudents, icon: ShieldCheck, color: 'from-cyan-500 to-blue-600', detail: 'Access-granted students' },
-    { label: 'Active Projects', value: stats.leads.activeProjects, icon: TrendingUp, color: 'from-indigo-500 to-purple-600', detail: 'In-progress projects' },
-    { label: 'Certificates Issued', value: stats.certificatesIssued, icon: Award, color: 'from-orange-500 to-amber-600', detail: 'Academic certificates' }
+    { label: 'Active Projects', value: stats.leads.activeProjects, icon: TrendingUp, color: 'from-indigo-500 to-purple-600', detail: 'In-progress projects' }
   ];
 
   const statusBreakdown = [
     { key: 'new', count: stats.leads.new, color: 'bg-sky-500' },
     { key: 'contacted', count: stats.leads.contacted, color: 'bg-purple-500' },
     { key: 'demo_scheduled', count: stats.leads.demoScheduled, color: 'bg-indigo-500' },
-    { key: 'fees_paid', count: stats.leads.fees_paid || 0, color: 'bg-emerald-500' },
     { key: 'project_started', count: stats.leads.activeProjects, color: 'bg-cyan-500' },
     { key: 'lost', count: stats.leads.lost, color: 'bg-red-500' }
   ];

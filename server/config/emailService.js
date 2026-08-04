@@ -97,38 +97,66 @@ export async function sendEmail({ to, subject, html, attachments }) {
 
 export async function sendLeadReceivedEmail(lead) {
   const html = wrapHtml(
-    'Enquiry Received Successfully',
+    'Enquiry Submitted Successfully',
     `
       <p>Dear ${lead.name},</p>
       <p>Thank you for reaching out to <strong>${companyName}</strong>. We have successfully received your enquiry regarding <strong>${lead.service}</strong>.</p>
-      <p>One of our sales representatives or training advisors will review your enquiry and get back to you within 24 hours.</p>
+      <p>One of our solution architects or technical specialists will review your enquiry and get back to you within 24 hours.</p>
       <p>Best regards,<br>The ${companyName} Team</p>
     `
   );
-  return sendEmail({ to: lead.email, subject: `We have received your enquiry - ${companyName}`, html });
+  return sendEmail({ to: lead.email, subject: `Enquiry Submitted Successfully - ${companyName}`, html });
 }
 
 export async function sendDemoConfirmationEmail(lead, demo) {
+  const isOnline = demo.demoType !== 'offline';
+  const modeText = isOnline ? 'Online (Virtual)' : 'Offline (In-Person)';
+  const detailsHtml = isOnline
+    ? `
+      <li><strong>Mode:</strong> ${modeText}</li>
+      <li><strong>Date:</strong> ${demo.demoDate}</li>
+      <li><strong>Time:</strong> ${demo.demoTime}</li>
+      <li><strong>Meeting Link:</strong> <a href="${demo.meetingLink || '#'}" target="_blank">${demo.meetingLink || 'To be shared'}</a></li>
+      ${demo.trainer ? `<li><strong>Project Manager:</strong> ${demo.trainer}</li>` : ''}
+    `
+    : `
+      <li><strong>Mode:</strong> ${modeText}</li>
+      <li><strong>Date:</strong> ${demo.demoDate}</li>
+      <li><strong>Time:</strong> ${demo.demoTime}</li>
+      <li><strong>Address:</strong> ${demo.location || 'To be shared'}</li>
+      ${demo.trainer ? `<li><strong>Project Manager:</strong> ${demo.trainer}</li>` : ''}
+    `;
+
+  const actionButtonHtml = isOnline && demo.meetingLink
+    ? `
+      <p>Please join the session using the button below at the scheduled time:</p>
+      <p style="text-align: center;">
+        <a href="${demo.meetingLink}" class="button" target="_blank">Join Online Meet</a>
+      </p>
+      `
+    : `
+      <p>You can get directions from your current location or view the map marker using the buttons below:</p>
+      <p style="text-align: center;">
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(demo.location || 'Esland IT Solutions')}" class="button" target="_blank">Get Directions</a>
+        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(demo.location || 'Esland IT Solutions')}" class="button" target="_blank" style="background: #4f46e5 !important; margin-left: 10px;">Share Live Location</a>
+      </p>
+      `;
+
   const html = wrapHtml(
-    'Demo Session Confirmed',
+    'Consultation & Demo Confirmed',
     `
       <p>Dear ${lead.name},</p>
-      <p>Your demo session for <strong>${lead.service}</strong> has been scheduled and confirmed.</p>
-      <p><strong>Session Details:</strong></p>
+      <p>Your business consultation demo for <strong>${lead.service}</strong> has been scheduled and confirmed.</p>
+      <p><strong>Session & Meeting Details:</strong></p>
       <ul>
-        <li><strong>Date:</strong> ${demo.demoDate}</li>
-        <li><strong>Time:</strong> ${demo.demoTime}</li>
-        ${demo.trainer ? `<li><strong>Trainer:</strong> ${demo.trainer}</li>` : ''}
+        ${detailsHtml}
       </ul>
-      <p>Please join the session using the button below:</p>
-      <p style="text-align: center;">
-        <a href="${demo.meetingLink || '#'}" class="button" target="_blank">Join Demo Session</a>
-      </p>
-      <p>We look forward to seeing you there!</p>
+      ${actionButtonHtml}
+      <p>If you have any questions or need to reschedule, please contact our support team.</p>
       <p>Best regards,<br>The ${companyName} Team</p>
     `
   );
-  return sendEmail({ to: lead.email, subject: `Demo Confirmed: ${lead.service} - ${companyName}`, html });
+  return sendEmail({ to: lead.email, subject: `Consultation Confirmed: ${lead.service} - ${companyName}`, html });
 }
 
 export async function sendDemoReminderEmail(lead, demo) {
