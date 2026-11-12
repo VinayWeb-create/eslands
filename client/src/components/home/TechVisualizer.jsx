@@ -282,7 +282,7 @@ export default function TechVisualizer() {
   }, [activeNode, prefersReducedMotion]);
 
   return (
-    <section className="py-0 px-6 relative bg-[var(--color-bg)] overflow-hidden border-t border-[var(--color-border)]">
+    <section className="ui-section relative bg-[var(--color-bg)] overflow-hidden border-t border-[var(--color-border)]">
       {/* Ambient Lighting Orbs */}
       <div className="pointer-events-none absolute left-1/4 top-1/4 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[170px]" />
       <div className="pointer-events-none absolute right-1/4 bottom-1/4 h-[450px] w-[450px] rounded-full bg-accent-500/5 blur-[150px]" />

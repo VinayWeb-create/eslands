@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useAccessibleAnimations } from '../../lib/animations';
 import CountUp from '../CountUp';
+import { MagneticButton, ParticleField } from '../ui/primitives';
 
 const heroStats = [
   { value: 10,   suffix: '+',  label: 'Years\nExperience' },
@@ -57,37 +58,13 @@ export default function Hero() {
   return (
     <section
       onMouseMove={handleMouseMove}
-      className="relative min-h-[92vh] flex flex-col items-center justify-center overflow-hidden bg-[#FFFFFF]"
+      className="relative isolate min-h-[92vh] flex flex-col items-center justify-center overflow-hidden bg-[var(--color-bg)]"
     >
-      {/* Subtle corporate grid lines */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[1]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(0,48,135,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,48,135,0.03) 1px, transparent 1px)',
-          backgroundSize: '56px 56px',
-        }}
-      />
-
-      {/* Ambient glows */}
-      <div
-        className="pointer-events-none absolute z-[1]"
-        style={{
-          top: '-15%', left: '-8%',
-          width: '55vw', height: '55vw',
-          background: 'radial-gradient(circle, rgba(0,87,216,0.06) 0%, transparent 65%)',
-          filter: 'blur(80px)',
-        }}
-      />
-      <div
-        className="pointer-events-none absolute z-[1]"
-        style={{
-          bottom: '-15%', right: '-8%',
-          width: '45vw', height: '45vw',
-          background: 'radial-gradient(circle, rgba(0,48,135,0.04) 0%, transparent 65%)',
-          filter: 'blur(100px)',
-        }}
-      />
+      {/* Gradient mesh, masked grid and a soft particle network */}
+      <div className="ui-mesh" aria-hidden="true" />
+      <div className="ui-grid" aria-hidden="true" />
+      <ParticleField density={0.00005} color="0,87,216" linkDist={120} className="z-0 opacity-50" />
+      <div className="ui-orb hidden md:block" aria-hidden="true" style={{ width: 380, height: 380, left: '-6%', bottom: '-10%', background: 'radial-gradient(circle, rgba(14,165,233,.35), transparent 70%)' }} />
 
       <div className="relative z-10 mx-auto max-w-[90vw] lg:max-w-[1440px] px-6 w-full pt-28 pb-20">
         <div className="grid gap-12 lg:gap-10 lg:grid-cols-12 items-center">
@@ -100,27 +77,19 @@ export default function Hero() {
               transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
             >
               {/* Authority badges */}
-              <div className="mb-7 flex items-center gap-3 flex-wrap">
+              <div className="mb-7 flex items-center gap-2.5 flex-wrap">
                 <span
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em]"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] backdrop-blur"
                   style={{
                     background: 'rgba(184,134,11,0.08)',
                     border: '1px solid rgba(184,134,11,0.22)',
                     color: '#8B6800',
-                    borderRadius: '3px',
                   }}
                 >
                   ★ Enterprise Grade
                 </span>
-                <span
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em]"
-                  style={{
-                    background: 'rgba(0,48,135,0.06)',
-                    border: '1px solid rgba(0,48,135,0.15)',
-                    color: '#003087',
-                    borderRadius: '3px',
-                  }}
-                >
+                <span className="ui-eyebrow !tracking-[0.14em] !text-[10px]">
+                  <span className="ui-eyebrow__dot" aria-hidden="true" />
                   IT Solutions & Digital Transformation
                 </span>
               </div>
@@ -128,19 +97,11 @@ export default function Hero() {
               {/* Headline */}
               <h1
                 className="font-display font-black tracking-tight leading-[1.05] mb-6"
-                style={{ fontSize: 'clamp(2.8rem, 5.5vw, 4.6rem)', color: '#0F1729' }}
+                style={{ fontSize: 'clamp(2.5rem, 5.5vw, 4.6rem)', color: 'var(--color-text)', letterSpacing: '-0.035em' }}
               >
                 Engineering Digital<br />
                 Excellence For{' '}
-                <span
-                  style={{
-                    display: 'inline-block',
-                    background: 'linear-gradient(135deg, #003087 0%, #0057D8 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
-                  }}
-                >
+                <span className="ui-gradient-text inline-block pb-1">
                   Enterprise Growth
                 </span>
               </h1>
@@ -175,52 +136,14 @@ export default function Hero() {
               </div>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link
-                  to="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold text-white transition-all duration-200"
-                  style={{
-                    background: '#003087',
-                    borderRadius: '5px',
-                    border: '1px solid #003087',
-                    boxShadow: '0 2px 12px rgba(0,48,135,0.25)',
-                    letterSpacing: '0.02em',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = '#002068';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,48,135,0.35)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = '#003087';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,48,135,0.25)';
-                  }}
-                >
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-12">
+                <MagneticButton to="/contact" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                   Schedule a Consultation
-                  <ArrowRight size={15} />
-                </Link>
-                <Link
-                  to="/services"
-                  className="inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold transition-all duration-200"
-                  style={{
-                    background: 'transparent',
-                    border: '1.5px solid #003087',
-                    color: '#003087',
-                    borderRadius: '5px',
-                    letterSpacing: '0.02em',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(0,48,135,0.05)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = 'transparent';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
+                  <ArrowRight size={16} />
+                </MagneticButton>
+                <MagneticButton to="/services" variant="ghost" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                   Explore Services
-                </Link>
+                </MagneticButton>
               </div>
 
               {/* Trust Badges */}

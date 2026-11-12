@@ -61,7 +61,7 @@ export default function Testimonials() {
   return (
     <section
       id="testimonials"
-      className="relative overflow-hidden py-0 px-6 bg-[var(--color-bg)] border-t border-[var(--color-border)]"
+      className="relative overflow-hidden ui-section bg-[var(--color-bg)] border-t border-[var(--color-border)]"
     >
       {/* Ambient glow blobs */}
       <div className="pointer-events-none absolute right-1/4 top-0 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[120px]" />

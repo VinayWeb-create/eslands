@@ -9,6 +9,7 @@ import { useTheme } from '../context/ThemeContext';
 import MegaMenu from './nav/MegaMenu';
 import MobileMenu from './nav/MobileMenu';
 import Logo from './brand/Logo';
+import { MagneticButton } from './ui/primitives';
 
 const serviceIcons = { Code, Smartphone, Server, Shield, Palette, TrendingUp, ShoppingCart, RotateCcw };
 
@@ -27,6 +28,7 @@ const navItems = [
   { label: 'Home',     path: '/' },
   { label: 'Services', path: '/services', hasDropdown: true },
   { label: 'Products', path: '/products' },
+  { label: 'Startup360', path: '/startup360' },
   { label: 'About',    path: '/about' },
   { label: 'Careers',  path: '/careers' },
   { label: 'Contact',  path: '/contact' },
@@ -95,10 +97,10 @@ export default function Navbar() {
         }`}
         style={{
           background: scrolled
-            ? (isDark ? 'rgba(7,17,31,0.97)' : 'rgba(255,255,255,0.98)')
-            : (isDark ? 'rgba(7,17,31,0.7)'  : 'rgba(255,255,255,0.0)'),
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+            ? (isDark ? 'rgba(7,17,31,0.82)' : 'rgba(255,255,255,0.78)')
+            : (isDark ? 'rgba(7,17,31,0.5)'  : 'rgba(255,255,255,0.0)'),
+          backdropFilter: scrolled ? 'blur(20px) saturate(160%)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(160%)' : 'none',
           borderBottom: scrolled
             ? `1px solid ${isDark ? 'rgba(255,255,255,0.07)' : 'rgba(228,233,240,0.9)'}`
             : '1px solid transparent',
@@ -130,8 +132,8 @@ export default function Navbar() {
                     {isHovered && (
                       <motion.div
                         layoutId="navHover"
-                        className="absolute inset-0 rounded-md"
-                        style={{ background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,48,135,0.05)' }}
+                        className="absolute inset-0 rounded-xl"
+                        style={{ background: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,87,216,0.07)' }}
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -160,8 +162,8 @@ export default function Navbar() {
                       {isServicesActive && (
                         <motion.div
                           layoutId="navActiveBar"
-                          className="absolute left-3 right-3 -bottom-0.5 h-[2px] rounded-none"
-                          style={{ background: '#003087' }}
+                          className="absolute left-4 right-4 -bottom-0.5 h-[2px] rounded-full"
+                          style={{ background: 'linear-gradient(90deg, #003087, #0057D8, #8B5CF6)' }}
                           transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                         />
                       )}
@@ -191,8 +193,8 @@ export default function Navbar() {
                           {isActive && (
                             <motion.div
                               layoutId="navActiveBar"
-                              className="absolute left-3 right-3 -bottom-0.5 h-[2px] rounded-none"
-                              style={{ background: '#003087' }}
+                              className="absolute left-4 right-4 -bottom-0.5 h-[2px] rounded-full"
+                              style={{ background: 'linear-gradient(90deg, #003087, #0057D8, #8B5CF6)' }}
                               transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                             />
                           )}
@@ -208,43 +210,21 @@ export default function Navbar() {
           {/* Desktop Actions */}
           <div className="hidden items-center gap-3 lg:flex">
 
-            <Link
-              to="/contact?mode=proposal"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-semibold transition-all duration-200"
-              style={{
-                border: '1.5px solid',
-                borderColor: isDark ? 'rgba(64,128,255,0.35)' : '#C5D0E0',
-                borderRadius: '5px',
-                color: isDark ? '#8ABFFF' : '#003087',
-                background: isDark ? 'rgba(64,128,255,0.04)' : 'transparent',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = isDark ? 'rgba(64,128,255,0.6)' : '#003087'; e.currentTarget.style.background = isDark ? 'rgba(64,128,255,0.08)' : 'rgba(0,48,135,0.04)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = isDark ? 'rgba(64,128,255,0.35)' : '#C5D0E0'; e.currentTarget.style.background = isDark ? 'rgba(64,128,255,0.04)' : 'transparent'; }}
-            >
+            <MagneticButton to="/contact?mode=proposal" variant="ghost" className="ui-btn--sm">
               Get Proposal
-            </Link>
-            <Link
-              to="/contact?mode=consultation"
-              className="inline-flex items-center gap-1.5 px-4 py-2 text-[13px] font-semibold text-white transition-all duration-200"
-              style={{
-                background: '#003087',
-                borderRadius: '5px',
-                border: '1px solid #003087',
-                boxShadow: '0 2px 8px rgba(0,48,135,0.25)',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#002068'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 14px rgba(0,48,135,0.35)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#003087'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,48,135,0.25)'; }}
-            >
+            </MagneticButton>
+            <MagneticButton to="/contact?mode=consultation" className="ui-btn--sm">
               Book Consultation
               <ArrowRight size={13} />
-            </Link>
+            </MagneticButton>
           </div>
 
           {/* Mobile Hamburger */}
           <div className="flex items-center gap-2 lg:hidden">
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="inline-flex items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-slate-900/80 p-2.5 text-gray-600 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-white/10 transition-all z-50 relative"
+              aria-expanded={mobileOpen}
+              className="inline-flex items-center justify-center rounded-xl border border-gray-200 dark:border-white/10 bg-white/80 backdrop-blur dark:bg-slate-900/80 p-2.5 shadow-sm text-gray-600 dark:text-slate-300 hover:bg-primary-50 dark:hover:bg-white/10 transition-all z-50 relative"
               aria-label="Toggle menu"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}

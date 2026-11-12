@@ -50,7 +50,7 @@ export default function IndustriesBento() {
   const { staggerContainer, staggerItem, fadeUp } = useAccessibleAnimations();
 
   return (
-    <section className="py-0 px-6 relative overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-bg-surface)]">
+    <section className="ui-section relative overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-bg-surface)]">
       <div className="pointer-events-none absolute right-1/4 top-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[160px]" />
 
       <div className="mx-auto max-w-7xl relative z-10">

@@ -10,6 +10,7 @@ const About = lazy(() => import('./pages/About'));
 const Careers = lazy(() => import('./pages/Careers'));
 const Contact = lazy(() => import('./pages/Contact'));
 const Products = lazy(() => import('./pages/Products'));
+const Startup360 = lazy(() => import('./pages/Startup360'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const CrmLogin = lazy(() => import('./pages/crm/Login'));
 const CrmLayout = lazy(() => import('./components/crm/CrmLayout'));
@@ -27,6 +28,7 @@ const PublicPay = lazy(() => import('./pages/portal/PublicPay'));
 const PublicAcceptQuote = lazy(() => import('./pages/crm/PublicAcceptQuote'));
 
 import Seo from './components/Seo';
+import { SpotlightTracker } from './components/ui/primitives';
 import ScrollIndicator from './components/ScrollIndicator';
 import ScrollToTop from './components/ScrollToTop';
 import MobileStickyCTA from './components/MobileStickyCTA';
@@ -52,6 +54,7 @@ function App() {
         Skip to content
       </a>
       <Seo />
+      <SpotlightTracker />
       <ScrollIndicator />
       <ScrollToTop />
       {!hideNavFooter && <Navbar />}
@@ -71,6 +74,7 @@ function App() {
               <Route path="/"          element={<PageWrapper><Home /></PageWrapper>} />
               <Route path="/services"  element={<PageWrapper><Services /></PageWrapper>} />
               <Route path="/products"  element={<PageWrapper><Products /></PageWrapper>} />
+              <Route path="/startup360" element={<PageWrapper><Startup360 /></PageWrapper>} />
               <Route path="/about"     element={<PageWrapper><About /></PageWrapper>} />
               <Route path="/careers"   element={<PageWrapper><Careers /></PageWrapper>} />
               <Route path="/contact"   element={<PageWrapper><Contact /></PageWrapper>} />
@@ -116,7 +120,7 @@ function PageWrapper({ children }) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
       id="main-content"
-      className="relative overflow-hidden"
+      className="relative overflow-x-clip"
     >
       {children}
     </motion.main>

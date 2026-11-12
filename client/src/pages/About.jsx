@@ -8,6 +8,7 @@ import {
   Play, Pause, Volume2, VolumeX, Maximize2
 } from 'lucide-react';
 import { useAccessibleAnimations } from '../lib/animations';
+import { MagneticButton, ParticleField } from '../components/ui/primitives';
 
 const stats = [
   { value: '15+', label: 'Years of Experience', icon: Calendar, accent: 'from-blue-50 to-indigo-50 text-[#003087]' },
@@ -160,12 +161,13 @@ export default function About() {
   };
 
   return (
-    <div className="relative overflow-hidden bg-white text-gray-700 pt-[65px]">
-      {/* Background ambient lighting */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-50/40 blur-[160px]" />
+    <div className="relative overflow-x-clip bg-[var(--color-bg)] text-gray-700">
 
       {/* ── Hero Section ────────────────────────────────────── */}
-      <section className="relative min-h-[50vh] flex items-center justify-center bg-[#F8FAFC] pt-24 pb-20 border-b border-[#E4E9F0]">
+      <section className="relative isolate overflow-hidden min-h-[60vh] flex items-center justify-center bg-[var(--color-bg)] pt-32 pb-20 sm:pt-40 sm:pb-24 border-b border-[#E4E9F0]">
+        <div className="ui-mesh" aria-hidden="true" />
+        <div className="ui-grid" aria-hidden="true" />
+        <ParticleField density={0.00005} color="0,87,216" className="z-0 opacity-40" />
         <div className="relative z-10 mx-auto max-w-7xl px-6 sm:px-10 lg:px-14 text-center">
           <FadeUp>
             <span className="section-badge mb-6 inline-flex">
@@ -174,9 +176,9 @@ export default function About() {
           </FadeUp>
 
           <FadeUp delay={0.1}>
-            <h1 className="text-4xl sm:text-6xl font-display font-extrabold tracking-tight text-gray-900 leading-[1.1] uppercase">
+            <h1 className="text-[2.6rem] sm:text-6xl lg:text-7xl font-display font-extrabold tracking-[-0.04em] text-gray-900 leading-[1.04]">
               Enterprise IT, <br />
-              <span className="text-shimmer">
+              <span className="ui-gradient-text inline-block pb-1">
                 Personal Touch
               </span>
             </h1>
@@ -189,13 +191,13 @@ export default function About() {
           </FadeUp>
 
           <FadeUp delay={0.3}>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-              <a href="#our-story" className="inline-flex items-center gap-2 rounded-lg bg-[#003087] px-8 py-4 text-xs font-bold text-white shadow hover:bg-[#002068] transition-all uppercase tracking-wider">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+              <MagneticButton href="#our-story" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                 Our Story <ArrowRight className="w-4 h-4" />
-              </a>
-              <a href="#values" className="inline-flex items-center gap-2 rounded-lg border border-[#C5D0E0] bg-white px-8 py-4 text-xs font-bold text-[#003087] hover:bg-gray-50 transition-all uppercase tracking-wider">
+              </MagneticButton>
+              <MagneticButton href="#values" variant="ghost" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                 Our Values
-              </a>
+              </MagneticButton>
             </div>
           </FadeUp>
         </div>
@@ -204,11 +206,11 @@ export default function About() {
       {/* ── Stats ────────────────────────────────────────────── */}
       <section className="relative bg-white py-16 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
             {stats.map((stat, i) => (
               <FadeUp key={stat.label} delay={i * 0.08}>
-                <div className="rounded-lg border border-[#E4E9F0] bg-white p-8 text-center shadow-sm hover:border-[#003087] transition-all duration-300">
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100">
+                <div className="ui-card ui-spot h-full p-5 sm:p-8 text-center">
+                  <div className="mx-auto mb-4 ui-icon-tile">
                     <stat.icon className="w-6 h-6" />
                   </div>
                   <div className="text-3xl font-black text-gray-900">
@@ -330,7 +332,7 @@ export default function About() {
       </section>
 
       {/* ── Timeline ─────────────────────────────────────────── */}
-      <section className="relative bg-[#F8FAFC] py-24 border-b border-[#E4E9F0]">
+      <section className="relative bg-[#F8FAFC] py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14 relative z-10">
           <FadeUp>
             <div className="text-center mb-16 max-w-3xl mx-auto">
@@ -351,7 +353,7 @@ export default function About() {
 
                   {/* Card wrapper */}
                   <div className={`w-full md:w-1/2 pl-8 md:pl-0 ${i % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
-                    <div className="rounded-lg border border-[#E4E9F0] bg-white p-6 shadow-sm hover:border-[#003087] transition-all">
+                    <div className="ui-card ui-spot p-6">
                       <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#003087] mb-2">{step.year}</span>
                       <h3 className="text-lg font-display font-bold text-gray-900 mb-2">{step.title}</h3>
                       <p className="text-xs text-gray-600 leading-relaxed font-medium">{step.description}</p>
@@ -365,7 +367,7 @@ export default function About() {
       </section>
 
       {/* ── Mission & Vision ─────────────────────────────────── */}
-      <section className="relative bg-white py-28 border-b border-[#E4E9F0]">
+      <section className="relative bg-white py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
           <div className="grid md:grid-cols-2 gap-10">
             {/* Mission Card */}
@@ -436,7 +438,7 @@ export default function About() {
       </section>
 
       {/* ── Core Values ──────────────────────────────────────── */}
-      <section id="values" className="relative bg-[#F8FAFC] py-28 border-b border-[#E4E9F0]">
+      <section id="values" className="relative bg-[#F8FAFC] py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
           <FadeUp>
             <div className="text-center mb-20 max-w-3xl mx-auto">
@@ -451,7 +453,7 @@ export default function About() {
           <div className="grid sm:grid-cols-2 gap-8">
             {values.map((val, i) => (
               <FadeUp key={val.title} delay={i * 0.1}>
-                <div className="rounded-lg overflow-hidden border border-[#E4E9F0] bg-white shadow-sm hover:border-[#003087] transition-all">
+                <div className="ui-card ui-spot group h-full overflow-hidden">
                   <div className="flex flex-col sm:flex-row h-full">
                     <div className="flex items-center justify-center p-8 bg-gray-50 sm:w-40 shrink-0 border-b sm:border-b-0 sm:border-r border-[#E4E9F0]">
                       <div className="flex h-20 w-20 items-center justify-center rounded-lg bg-gradient-to-br from-[#003087] to-[#0057D8] text-white shadow-md">
@@ -471,7 +473,7 @@ export default function About() {
       </section>
 
       {/* ── Why Choose Us ────────────────────────────────────── */}
-      <section className="relative bg-white py-28 border-b border-[#E4E9F0]">
+      <section className="relative bg-white py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <FadeUp>
@@ -546,7 +548,7 @@ export default function About() {
       </section>
 
       {/* ── Development Process ──────────────────────────────── */}
-      <section className="relative bg-[#F8FAFC] py-28 border-b border-[#E4E9F0]">
+      <section className="relative bg-[#F8FAFC] py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
           <FadeUp>
             <div className="text-center mb-20 max-w-3xl mx-auto">
@@ -561,7 +563,7 @@ export default function About() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {processSteps.map((step, i) => (
               <FadeUp key={step.title} delay={i * 0.08}>
-                <div className="rounded-lg bg-white border border-[#E4E9F0] p-6 hover:border-[#003087] transition-all shadow-sm">
+                <div className="ui-card ui-spot h-full p-6">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100 shadow-sm">
                       <step.icon className="w-6 h-6" />
@@ -583,7 +585,7 @@ export default function About() {
       </section>
 
       {/* ── Leadership ───────────────────────────────────────── */}
-      <section className="relative bg-white py-24 border-b border-[#E4E9F0]">
+      <section className="relative bg-white py-20 sm:py-28 border-b border-[#E4E9F0]">
         <div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-14">
           <FadeUp>
             <div className="text-center mb-16 max-w-3xl mx-auto">
@@ -597,7 +599,7 @@ export default function About() {
           <div className="grid md:grid-cols-3 gap-8">
             {leadership.map((leader, i) => (
               <FadeUp key={leader.name} delay={i * 0.1}>
-                <div className="rounded-lg bg-white border border-[#E4E9F0] p-8 text-center hover:border-[#003087] transition-all shadow-sm">
+                <div className="ui-card ui-spot h-full p-8 text-center">
                   <div className="mx-auto h-20 w-20 rounded-full bg-blue-50 border border-blue-100 mb-6 flex items-center justify-center text-[#003087] shadow-sm">
                     <leader.icon className="w-9 h-9" />
                   </div>
@@ -631,26 +633,28 @@ export default function About() {
       </section>
 
       {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="relative bg-[#07111F] py-24">
+      <section className="ui-dark relative isolate overflow-hidden py-24 sm:py-32">
+        <div className="ui-cta-aurora" aria-hidden="true" />
+        <ParticleField density={0.00006} color="147,197,253" className="z-0 opacity-60" />
         <div className="mx-auto max-w-7xl px-6 text-center relative z-10">
           <FadeUp>
             <div className="mx-auto max-w-2xl">
-              <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white leading-tight">
+              <h2 className="text-[2rem] sm:text-5xl font-display font-extrabold tracking-[-0.035em] text-white leading-[1.08]">
                 Ready to Build <br />
-                <span className="text-shimmer">
+                <span className="ui-gradient-text--dark">
                   Something Great?
                 </span>
               </h2>
               <p className="mt-6 text-slate-300 text-sm sm:text-base leading-relaxed font-medium">
                 Let's talk about how Esland IT Solutions can help you achieve your digital transformation goals.
               </p>
-              <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-                <a href="/contact" className="inline-flex items-center gap-2 rounded-lg bg-[#003087] px-8 py-4 text-xs font-bold text-white shadow hover:bg-[#002068] transition-all uppercase tracking-wider">
+              <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                <MagneticButton to="/contact" variant="light" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                   Schedule Discovery Call <ArrowRight className="w-4 h-4" />
-                </a>
-                <a href="/careers" className="inline-flex items-center gap-2 rounded-lg border border-white/20 bg-white/5 px-8 py-4 text-xs font-bold text-slate-200 hover:text-white transition-all uppercase tracking-wider">
+                </MagneticButton>
+                <MagneticButton to="/careers" variant="ghost-dark" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                   View Open Roles
-                </a>
+                </MagneticButton>
               </div>
             </div>
           </FadeUp>

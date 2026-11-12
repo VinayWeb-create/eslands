@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 const pages = {
   '/': ['Engineering Digital Excellence | Esland IT Solutions', 'Enterprise software, AI solutions, cloud infrastructure and digital transformation services from Esland IT Solutions.'],
   '/services': ['Technology Services | Esland IT Solutions', 'Explore Esland IT Solutions services spanning product engineering, AI, cloud, security, design and digital transformation.'],
+  '/startup360': ['Startup360: Idea to Scale, One Team | Esland IT Solutions', 'Startup360 takes founders from idea to scale with validation, company registration, branding, web and mobile engineering, AI, marketing, automation and funding support under one team.'],
   '/products': ['Technology Solutions | Esland IT Solutions', 'Explore tailored technology solutions from Esland IT Solutions.'],
   '/about': ['About Esland IT Solutions', 'Meet the technology partner helping ambitious organisations build secure, scalable digital systems.'],
   '/careers': ['Careers | Esland IT Solutions', 'Explore opportunities to build meaningful technology with Esland IT Solutions.'],

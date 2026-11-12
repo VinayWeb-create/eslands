@@ -63,7 +63,7 @@ export default function AttributedProofGrid() {
   const { staggerContainer, staggerItem, fadeUp } = useAccessibleAnimations();
 
   return (
-    <section className="py-0 px-6 relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
+    <section className="ui-section relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
       <div className="pointer-events-none absolute left-1/4 top-1/3 h-[500px] w-[500px] rounded-full bg-primary-500/5 blur-[160px]" />
 
       <div className="mx-auto max-w-7xl relative z-10">

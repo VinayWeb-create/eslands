@@ -19,6 +19,7 @@ import EnterpriseStandard from '../components/home/EnterpriseStandard';
 import EnterpriseCapabilityEcosystem from '../components/home/EnterpriseCapabilityEcosystem';
 import ServiceCard from '../components/ServiceCard';
 import { useAccessibleAnimations } from '../lib/animations';
+import { MagneticButton, ParticleField } from '../components/ui/primitives';
 
 const faqs = [
   {
@@ -82,14 +83,14 @@ export default function Home() {
 
   /* ── Shared section header helper ── */
   const SectionHeader = ({ badge, title, subtitle, center = true }) => (
-    <div className={`max-w-3xl mb-6 ${center ? 'mx-auto text-center' : ''}`}>
+    <div className={`max-w-3xl mb-12 sm:mb-16 ${center ? 'mx-auto text-center' : ''}`}>
       <motion.span {...fadeUp} className="section-badge mb-4 inline-flex">
         {badge}
       </motion.span>
       <motion.h2
         {...fadeUp}
         transition={{ delay: 0.08, duration: 0.65, ease: [0.22,1,0.36,1] }}
-        className="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight"
+        className="text-[2rem] sm:text-5xl font-display font-extrabold text-[var(--color-text)] tracking-[-0.035em] leading-[1.08]"
       >
         {title}
       </motion.h2>
@@ -105,7 +106,7 @@ export default function Home() {
     </div>
   );
 
-  const sectionCls = 'py-0 px-6 relative overflow-hidden';
+  const sectionCls = 'ui-section relative overflow-hidden';
   const sectionBorder = { borderTop: '1px solid var(--color-border)' };
   const bgPrimary = 'bg-[var(--color-bg)]';
   const bgAlt = 'bg-[var(--color-bg-surface)]';
@@ -165,9 +166,9 @@ export default function Home() {
             ))}
           </motion.div>
           <div className="text-center mt-12">
-            <Link to="/services" className="btn-primary inline-flex">
+            <MagneticButton to="/services">
               View All Services <ArrowRight size={16} />
-            </Link>
+            </MagneticButton>
           </div>
         </div>
       </motion.section>
@@ -209,9 +210,9 @@ export default function Home() {
                 <motion.div
                   key={i}
                   variants={staggerItem}
-                  className={`group flex gap-5 p-7 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg-card)] transition-all duration-300 hover:-translate-y-1 ${hoverStyle.b} ${hoverStyle.s}`}
+                  className={`ui-card ui-spot group flex gap-5 p-6 sm:p-7 h-full ${hoverStyle.b}`}
                 >
-                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[rgba(0,48,135,0.06)] dark:bg-[rgba(64,128,255,0.09)] border border-[rgba(0,48,135,0.12)] dark:border-[rgba(64,128,255,0.16)] text-[#003087] dark:text-[#7ABAFF] group-hover:text-white dark:group-hover:text-white transition-all duration-250 ${hoverStyle.ibg} ${hoverStyle.ib}`}>
+                  <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[rgba(0,48,135,0.06)] dark:bg-[rgba(64,128,255,0.09)] border border-[rgba(0,48,135,0.12)] dark:border-[rgba(64,128,255,0.16)] text-[#003087] dark:text-[#7ABAFF] group-hover:text-white dark:group-hover:text-white transition-all duration-250 ${hoverStyle.ibg} ${hoverStyle.ib}`}>
                     <item.icon size={22} />
                   </div>
                   <div>
@@ -300,10 +301,10 @@ export default function Home() {
                 <motion.div
                   key={step.num}
                   variants={staggerItem}
-                  className="group relative text-center"
+                  className="group relative text-center rounded-2xl bg-[var(--color-bg-surface)] lg:bg-transparent py-2"
                 >
                   {/* Number circle */}
-                  <div className="relative mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-white dark:bg-dark-800 border-2 border-primary-200 dark:border-primary-800 group-hover:border-primary-500 dark:group-hover:border-primary-400 group-hover:bg-primary-600 dark:group-hover:bg-primary-600 transition-all duration-300 shadow-card z-10">
+                  <div className="relative mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-[var(--color-bg)] border border-primary-200 group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-[#003087] group-hover:to-[#0057D8] group-hover:-translate-y-1 group-hover:shadow-[0_14px_30px_-10px_rgba(0,87,216,0.7)] transition-all duration-300 shadow-card z-10">
                     <span className="text-sm font-extrabold text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors duration-300">
                       {step.num}
                     </span>
@@ -357,10 +358,10 @@ export default function Home() {
                   key={idx}
                   {...scaleIn}
                   transition={{ delay: idx * 0.07 }}
-                  className={`group relative rounded-xl border transition-all duration-500 overflow-hidden ${
+                  className={`group relative rounded-2xl border transition-all duration-500 overflow-hidden ${
                     isOpen 
-                      ? `border-transparent ${fC.glow} bg-white dark:bg-[#0a0f1e] scale-[1.02] z-10 my-4` 
-                      : 'border-[var(--color-border)] bg-[var(--color-bg-card)] hover:border-gray-300 dark:hover:border-gray-600 hover:shadow-lg'
+                      ? `border-transparent ${fC.glow} bg-[var(--color-bg-card)] sm:scale-[1.02] z-10 my-4` 
+                      : 'border-[var(--color-border)] bg-[var(--color-bg-card)] hover:border-[var(--color-border-strong)] hover:shadow-lg'
                   }`}
                 >
                   {/* Colorful Left Accent Line (Animated) */}
@@ -413,74 +414,37 @@ export default function Home() {
         whileInView={{ opacity: 1, scale: 1 }}
         viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.6 }}
-        className="relative overflow-hidden py-0 px-6"
-        style={{
-          background: 'linear-gradient(160deg, #071829 0%, #0A2040 45%, #071524 100%)',
-          borderTop: '1px solid rgba(255,255,255,0.06)',
-        }}
+        className="ui-section ui-dark relative isolate overflow-hidden"
       >
-        {/* Subtle grid overlay */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px)',
-            backgroundSize: '64px 64px',
-          }}
-        />
-        {/* Subtle ambient glow */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{ background: 'radial-gradient(ellipse at 50% 60%, rgba(0,87,216,0.09), transparent 65%)' }}
-        />
+        <div className="ui-cta-aurora" aria-hidden="true" />
+        <div className="ui-grid opacity-60" aria-hidden="true" />
+        <ParticleField density={0.00006} color="147,197,253" className="z-0 opacity-60" />
 
         <div className="mx-auto max-w-5xl relative z-10 text-center">
           <motion.div {...fadeUp}>
-            <span className="inline-flex items-center gap-2 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] mb-6" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)', borderLeft: '3px solid #4080FF', color: 'rgba(200,220,255,0.85)', borderRadius: '3px' }}>
+            <span className="ui-eyebrow ui-eyebrow--dark mb-6 !tracking-[0.16em]">
               <Sparkles size={13} className="text-blue-400" />
               Ready to Build Your Next Digital Product?
             </span>
             <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-white tracking-tight mb-6 leading-tight">
               Architect Your Digital Future{' '}<br className="hidden sm:block" />
               With{' '}
-              <span className="text-shimmer">Esland IT Solutions</span>
+              <span className="ui-gradient-text--dark">Esland IT Solutions</span>
             </h2>
             <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 font-medium leading-relaxed">
               Schedule a strategic discovery session with our senior solution architects to evaluate your technology infrastructure, security compliance, and custom software requirements.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-bold text-white uppercase tracking-wider transition-all"
-                style={{
-                  background: '#003087',
-                  borderRadius: '5px',
-                  border: '1px solid rgba(64,128,255,0.3)',
-                  boxShadow: '0 4px 16px rgba(0,48,135,0.4)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = '#0045C0';
-                  e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,48,135,0.55)';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = '#003087';
-                  e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,48,135,0.4)';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
+            <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 mb-10">
+              <MagneticButton to="/contact" variant="light" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                 Schedule Free Consultation <ArrowRight size={16} />
-              </Link>
-              <Link
-                to="/services"
-                className="inline-flex items-center justify-center gap-2 rounded-md border px-8 py-4 text-sm font-bold text-slate-200 hover:text-white transition-all uppercase tracking-wider"
-                style={{ borderColor: 'rgba(255,255,255,0.20)', background: 'rgba(255,255,255,0.06)' }}
-              >
+              </MagneticButton>
+              <MagneticButton to="/services" variant="ghost-dark" wrapperClassName="w-full sm:w-auto" className="w-full sm:w-auto">
                 Explore Solutions
-              </Link>
+              </MagneticButton>
             </div>
 
             {/* Newsletter */}
-            <div className="max-w-xl mx-auto pt-8 border-t border-white/10">
+            <div className="ui-dark-panel max-w-xl mx-auto rounded-3xl p-5 sm:p-7 text-left">
               <h3 className="text-sm font-bold text-white mb-3">Subscribe to Esland Enterprise Insights</h3>
               <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
                 <input
@@ -489,19 +453,12 @@ export default function Home() {
                   placeholder="Enter business email address"
                   value={newsletterEmail}
                   onChange={(e) => setNewsletterEmail(e.target.value)}
-                  className="flex-1 rounded-md border border-white/20 bg-white/10 px-4 py-3 text-sm text-white placeholder-slate-400 focus:border-[#4080FF] focus:outline-none transition-colors"
+                  className="ui-input-dark flex-1"
                 />
                 <button
                   type="submit"
                   disabled={newsLoading}
-                  className="rounded-md text-white font-bold px-6 py-3 text-sm transition-all disabled:opacity-50"
-                  style={{
-                    background: '#003087',
-                    border: '1px solid rgba(255,255,255,0.15)',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#002068'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#003087'}
+                  className="ui-btn ui-btn--primary ui-btn--sm !py-3"
                 >
                   {newsLoading ? 'Subscribing…' : 'Subscribe'}
                 </button>

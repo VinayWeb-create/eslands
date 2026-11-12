@@ -1,0 +1,292 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ───────────────────────────────────────────────────────────
+   Startup360 design tokens
+   Every colour is a token so light + dark stay in lockstep.
+   ─────────────────────────────────────────────────────────── */
+:root {
+  --bg: #f6f5f1;
+  --bg-soft: #efede7;
+  --surface: #ffffff;
+  --surface-2: #f9f8f5;
+  --fg: #0a0d14;
+  --muted: #545d6e;
+  --subtle: #7b8494;
+  --line: rgb(10 13 20 / 0.09);
+  --line-strong: rgb(10 13 20 / 0.16);
+  --brand: #b87300;
+  --brand-soft: #f5b544;
+  --violet: #4f5bd5;
+  --teal: #0b8f79;
+  --danger: #d23b4c;
+  --glass: rgb(255 255 255 / 0.62);
+  --glass-strong: rgb(255 255 255 / 0.82);
+  --shadow: 0 1px 2px rgb(10 13 20 / 0.04), 0 12px 40px -12px rgb(10 13 20 / 0.14);
+  --glow: rgb(184 115 0 / 0.22);
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #05070d;
+  --bg-soft: #080b14;
+  --surface: #0c111c;
+  --surface-2: #101624;
+  --fg: #eef1f7;
+  --muted: #a1aabb;
+  --subtle: #7a8396;
+  --line: rgb(255 255 255 / 0.08);
+  --line-strong: rgb(255 255 255 / 0.15);
+  --brand: #f5b544;
+  --brand-soft: #ffd27a;
+  --violet: #8b97ff;
+  --teal: #3de0c5;
+  --danger: #ff6474;
+  --glass: rgb(14 19 31 / 0.55);
+  --glass-strong: rgb(14 19 31 / 0.78);
+  --shadow: 0 1px 1px rgb(0 0 0 / 0.3), 0 24px 60px -20px rgb(0 0 0 / 0.7);
+  --glow: rgb(245 181 68 / 0.28);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-subtle: var(--subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-brand: var(--brand);
+  --color-brand-soft: var(--brand-soft);
+  --color-violet: var(--violet);
+  --color-teal: var(--teal);
+  --color-danger: var(--danger);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), var(--font-sans), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-mono), ui-monospace, monospace;
+  --shadow-soft: var(--shadow);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+  ::selection {
+    background: var(--brand);
+    color: #05070d;
+  }
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  [id] {
+    scroll-margin-top: 88px;
+  }
+}
+
+/* ── Reusable surfaces ──────────────────────────────────── */
+@utility glass {
+  background: var(--glass);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid var(--line);
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, var(--brand) 0%, var(--brand-soft) 35%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility grid-bg {
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 75%);
+}
+
+@utility dot-bg {
+  background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Animated conic border — wrap content in .border-beam */
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@utility border-beam {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    border-radius: inherit;
+    background: conic-gradient(
+      from var(--beam-angle),
+      transparent 0deg,
+      var(--brand) 60deg,
+      var(--violet) 120deg,
+      transparent 180deg,
+      transparent 360deg
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: beam-spin 6s linear infinite;
+    z-index: -1;
+  }
+}
+
+@keyframes beam-spin {
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes flow-x {
+  from {
+    left: -6%;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  to {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes flow-y {
+  from {
+    top: -10%;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  to {
+    top: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes jitter {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0);
+  }
+  25% {
+    transform: translate(1.5px, -1px) rotate(-1deg);
+  }
+  75% {
+    transform: translate(-1.5px, 1px) rotate(1deg);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@keyframes mesh-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) scale(1.08);
+  }
+}
+
+.animate-dash {
+  stroke-dasharray: 4 6;
+  animation: dash-flow 1.6s linear infinite;
+}
+.animate-float {
+  animation: float-y 6s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+.animate-jitter {
+  animation: jitter 0.6s ease-in-out infinite;
+}
+.animate-pulse-ring {
+  animation: pulse-ring 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+.animate-mesh {
+  animation: mesh-drift 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

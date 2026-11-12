@@ -191,7 +191,7 @@ export default function TransformationJourney() {
   }, [activeDimension, prefersReducedMotion]);
 
   return (
-    <section className="py-0 px-6 relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
+    <section className="ui-section relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
       <div className="mx-auto max-w-7xl relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">

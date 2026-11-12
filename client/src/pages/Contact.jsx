@@ -3,7 +3,10 @@ import { useSearchParams, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../lib/api';
 import { toast } from 'react-toastify';
-import { Phone, Mail, MapPin, Send, Sparkles, ChevronDown, Layers } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, ChevronDown, Layers, Clock, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import PageHero from '../components/ui/PageHero';
+
+const inputCls = 'w-full rounded-2xl border border-[#E4E9F0] bg-white/80 px-4 py-3.5 text-sm text-gray-700 placeholder-gray-400 shadow-[0_1px_2px_rgba(15,23,41,0.04)] transition focus:border-[#0057D8] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#0057D8]/10';
 
 const serviceMap = {
   'web-development': 'Web Development',
@@ -113,50 +116,40 @@ export default function Contact() {
   };
 
   return (
-    <div className="relative min-h-screen bg-white text-gray-700 overflow-x-hidden pt-[65px]">
-      {/* Glow Backdrops */}
-      <div className="pointer-events-none fixed left-0 top-0 h-[500px] w-[500px] rounded-full bg-blue-50/40 blur-[160px]" />
-
-      {/* Page Banner */}
-      <section className="relative h-[240px] flex items-center justify-center border-b border-[#E4E9F0] overflow-hidden bg-[#F8FAFC]">
-        <div className="relative z-10 mx-auto max-w-7xl px-6 w-full text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="section-badge mb-3 inline-block">
-              <Sparkles size={13} className="inline mr-1 animate-pulse" /> Enterprise Support
-            </span>
-            <h1 className="text-3xl sm:text-5xl font-display font-extrabold tracking-tight text-gray-900 mb-3 uppercase">
-              Get In Touch
-            </h1>
-            <p className="text-gray-500 max-w-lg mx-auto text-sm sm:text-base leading-relaxed font-medium">
-              We are ready to architect your next digital capability.
-            </p>
-          </motion.div>
+    <div className="relative min-h-screen bg-[var(--color-bg)] text-gray-700 overflow-x-clip">
+      <PageHero
+        eyebrow="Enterprise Support"
+        title={form.subject === 'Get Proposal' ? 'Get a tailored' : form.subject === 'Book Consultation' ? 'Book your free' : 'Get in'}
+        highlight={form.subject === 'Get Proposal' ? 'proposal.' : form.subject === 'Book Consultation' ? 'consultation.' : 'touch.'}
+        sub="We are ready to architect your next digital capability."
+      >
+        <div className="flex flex-wrap justify-center gap-2.5">
+          <span className="ui-tag"><Clock size={14} /> Reply within 24 hours</span>
+          <span className="ui-tag"><ShieldCheck size={14} /> NDA on request</span>
+          <span className="ui-tag"><CheckCircle2 size={14} /> Senior architects only</span>
         </div>
-      </section>
+      </PageHero>
 
       {/* Main Contact Grid */}
-      <section className="mx-auto max-w-7xl px-6 py-16 sm:px-10 lg:px-14 relative z-10">
-        <div className="grid gap-12 lg:grid-cols-2 items-start">
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-10 sm:py-20 lg:px-14 relative z-10">
+        <div className="grid gap-8 lg:gap-12 lg:grid-cols-[1.15fr_1fr] items-start">
           
           {/* Left Column: Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.55 }}
-            className="rounded-lg border border-[#E4E9F0] bg-white p-8 sm:p-10 shadow-sm relative overflow-hidden"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="ui-panel"
           >
-            <h2 className="text-2xl sm:text-3xl font-display font-extrabold text-gray-900 mb-2">
+            <div className="ui-panel__shine" aria-hidden="true" />
+            <h2 className="relative text-2xl sm:text-3xl font-display font-extrabold tracking-[-0.03em] text-gray-900 mb-2">
               Send Us A Message
             </h2>
-            <p className="text-sm leading-relaxed text-gray-500 mb-8 font-medium">
+            <p className="relative text-sm leading-relaxed text-gray-500 mb-8 font-medium">
               Need to discuss your project requirements? <span className="text-[#003087] font-bold">We respond within 24 hours.</span>
             </p>
 
-            <form className="space-y-5" onSubmit={handleValidationAndSubmit}>
+            <form className="relative space-y-5" onSubmit={handleValidationAndSubmit} noValidate>
               <div className="grid gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="form-name" className="flex items-center text-xs font-bold uppercase tracking-wider text-[#003087] mb-1.5 ml-1">Full Name *</label>
@@ -166,7 +159,7 @@ export default function Contact() {
                     placeholder="John Doe"
                     value={form.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
-                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
+                    className={inputCls}
                   />
                   {errors.name && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.name}</p>}
                 </div>
@@ -179,7 +172,7 @@ export default function Contact() {
                     placeholder="john@company.com"
                     value={form.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
+                    className={inputCls}
                   />
                   {errors.email && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.email}</p>}
                 </div>
@@ -194,7 +187,7 @@ export default function Contact() {
                     placeholder="Your Company"
                     value={form.company}
                     onChange={(e) => handleInputChange('company', e.target.value)}
-                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
+                    className={inputCls}
                   />
                 </div>
 
@@ -206,7 +199,7 @@ export default function Contact() {
                     placeholder="+91 00000 00000"
                     value={form.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
+                    className={inputCls}
                   />
                   {errors.phone && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.phone}</p>}
                 </div>
@@ -221,7 +214,7 @@ export default function Contact() {
                     id="form-service"
                     value={form.service}
                     onChange={(e) => handleInputChange('service', e.target.value)}
-                    className="w-full appearance-none rounded-lg border border-[#E4E9F0] bg-white px-4 py-3.5 text-sm text-gray-700 focus:border-[#003087] focus:outline-none transition-colors pr-10 cursor-pointer font-medium"
+                    className={`${inputCls} appearance-none pr-10 cursor-pointer font-medium`}
                   >
                     <option value="General Inquiry" className="text-gray-700 bg-white">Select a service</option>
                     <option value="Web Development" className="text-gray-700 bg-white">Web Development</option>
@@ -247,7 +240,7 @@ export default function Contact() {
                   placeholder="What are you trying to achieve? Current pain points, timeline, and any technical or compliance constraints..."
                   value={form.message}
                   onChange={(e) => handleInputChange('message', e.target.value)}
-                  className="w-full resize-none rounded-lg border border-[#E4E9F0] bg-white px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-[#003087] focus:outline-none transition-colors"
+                  className={`${inputCls} resize-none`}
                 />
                 {errors.message && <p className="text-red-600 text-xs mt-1.5 ml-1">{errors.message}</p>}
               </div>
@@ -255,19 +248,25 @@ export default function Contact() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 rounded-lg bg-[#003087] px-8 py-4 text-xs font-bold text-white shadow hover:bg-[#002068] transition-all uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
+                className="ui-btn ui-btn--primary w-full sm:w-auto"
               >
-                <Send size={14} />
-                Submit Inquiry
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  {loading ? (
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden="true" />
+                  ) : (
+                    <Send size={15} />
+                  )}
+                  Submit Inquiry
+                </span>
               </button>
 
               {successMsg && (
-                <p className="text-green-700 text-xs font-semibold mt-4 border border-green-200 bg-green-50 rounded-lg p-4 leading-6">
+                <p role="status" className="text-green-700 text-xs font-semibold mt-4 border border-green-200 bg-green-50 rounded-2xl p-4 leading-6">
                   {successMsg}
                 </p>
               )}
               {errorMsg && (
-                <p className="text-red-600 text-xs font-semibold mt-4 border border-red-200 bg-red-50 rounded-lg p-4 leading-6">
+                <p role="alert" className="text-red-600 text-xs font-semibold mt-4 border border-red-200 bg-red-50 rounded-2xl p-4 leading-6">
                   {errorMsg}
                 </p>
               )}
@@ -276,15 +275,15 @@ export default function Contact() {
 
           {/* Right Column: Address Details & Map */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="space-y-6"
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="space-y-6 lg:sticky lg:top-24"
           >
-            <div className="rounded-lg border border-[#E4E9F0] bg-white p-8 shadow-sm">
+            <div className="ui-card ui-card--static ui-spot p-6 sm:p-8">
               <div className="grid gap-8 sm:grid-cols-2">
                 <div className="space-y-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100">
+                  <div className="ui-icon-tile">
                     <MapPin size={20} />
                   </div>
                   <div>
@@ -299,7 +298,7 @@ export default function Contact() {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-[#003087] border border-blue-100">
+                  <div className="ui-icon-tile">
                     <Phone size={20} />
                   </div>
                   <div>
@@ -320,11 +319,11 @@ export default function Contact() {
             </div>
 
             {/* Google Map Box */}
-            <div className="rounded-lg border border-[#E4E9F0] overflow-hidden h-[320px] shadow-sm relative bg-gray-50">
+            <div className="ui-card ui-card--static overflow-hidden h-[300px] sm:h-[340px] relative bg-gray-50 p-1.5">
               <iframe
                 title="Esland IT Solutions Office Map Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2481.691646495486!2d0.07895821577108171!3d51.53721527964005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a66d4184d01d%3A0x4fc9c915675b5d4b!2sRadial+House%2C+3-5+Ripple+Rd%2C+Barking+IG11+7NP%2C+UK!5e0!3m2!1sen!2sin!4v1483707062936"
-                className="w-full h-full border-0 brightness-95"
+                className="w-full h-full rounded-[18px] border-0 brightness-95"
                 allowFullScreen
                 loading="lazy"
               />

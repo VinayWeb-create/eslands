@@ -174,7 +174,7 @@ export default function EnterpriseStandard() {
   }, [activeCap, prefersReducedMotion]);
 
   return (
-    <section className="py-0 px-6 relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
+    <section className="ui-section relative bg-[var(--color-bg-surface)] overflow-hidden border-t border-[var(--color-border)]">
       {/* Dynamic Volumetric Background Lighting Shift */}
       <motion.div
         animate={{ background: activeCap.ambientGlow }}

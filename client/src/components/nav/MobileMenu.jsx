@@ -33,24 +33,25 @@ export default function MobileMenu({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={() => setMobileOpen(false)}
-        className="fixed inset-0 z-30 bg-black/40 dark:bg-black/70 backdrop-blur-md lg:hidden"
+        className="fixed inset-0 z-[100] bg-black/40 dark:bg-black/70 backdrop-blur-md lg:hidden"
       />
       <motion.div
         initial={{ opacity: 0, x: prefersReducedMotion ? 0 : '100%' }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: prefersReducedMotion ? 0 : '100%' }}
         transition={{ type: prefersReducedMotion ? false : 'spring', stiffness: 350, damping: 35 }}
-        className="fixed inset-y-0 right-0 z-40 flex flex-col bg-white/95 dark:bg-slate-950/95 w-full lg:hidden overflow-y-auto shadow-2xl border-l border-gray-200 dark:border-white/[0.06]"
+        className="fixed inset-y-0 right-0 z-[101] isolate flex flex-col bg-white/90 dark:bg-slate-950/95 w-full lg:hidden overflow-y-auto overflow-x-hidden shadow-2xl border-l border-gray-200 dark:border-white/[0.06]"
         style={{ backdropFilter: 'blur(30px) saturate(1.2)', WebkitBackdropFilter: 'blur(30px) saturate(1.2)' }}
       >
+        <div className="ui-mesh ui-mesh--left opacity-70" aria-hidden="true" />
         {/* Header area */}
         <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-white/[0.06]">
           <Link to="/" onClick={() => setMobileOpen(false)}>
-            <Logo variant="horizontal" iconSize={32} />
+            <Logo variant="horizontal" iconSize={32} theme="light" />
           </Link>
           <button
             onClick={() => setMobileOpen(false)}
-            className="flex h-12 w-12 items-center justify-center rounded-[1rem] bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:bg-white/[0.06] dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/[0.1] active:scale-95 transition-all"
+            className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-gray-900 dark:bg-white/[0.06] dark:text-slate-400 dark:hover:text-white dark:hover:bg-white/[0.1] active:scale-95 transition-all"
             aria-label="Close menu"
           >
             <X size={24} />
@@ -58,7 +59,7 @@ export default function MobileMenu({
         </div>
 
         {/* Nav items */}
-        <nav className="flex-1 px-4 py-8">
+        <nav className="flex-1 px-4 py-6" aria-label="Mobile">
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -70,7 +71,7 @@ export default function MobileMenu({
                 <motion.div variants={itemVariants} key={item.label} className="w-full">
                   <button
                     onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                    className={`flex w-full items-center justify-between rounded-2xl px-5 py-4 text-xl sm:text-2xl font-black transition-colors ${
+                    className={`flex w-full items-center justify-between rounded-2xl px-5 py-4 text-xl sm:text-2xl font-extrabold tracking-tight font-display transition-colors ${
                       mobileServicesOpen ? 'text-[#003087] bg-blue-50 border-blue-100 dark:text-white dark:bg-white/[0.03] border dark:border-white/[0.05]' : 'text-gray-700 hover:text-gray-900 dark:text-slate-400 dark:hover:text-slate-200 border border-transparent'
                     }`}
                   >
@@ -125,14 +126,14 @@ export default function MobileMenu({
                     to={item.path}
                     onClick={() => setMobileOpen(false)}
                     className={({ isActive }) =>
-                      `relative flex items-center gap-4 rounded-2xl px-5 py-4 text-xl sm:text-2xl font-black transition-all active:scale-[0.98] ${
+                      `relative flex items-center gap-4 rounded-2xl px-5 py-3.5 text-xl sm:text-2xl font-extrabold tracking-tight font-display transition-all active:scale-[0.98] ${
                         isActive ? 'text-[#003087] bg-blue-50 border border-blue-100 shadow-sm dark:text-white dark:bg-white/[0.05] dark:border-white/[0.1] dark:shadow-xl' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-white/[0.02] border border-transparent'
                       }`
                     }
                   >
                     {({ isActive }) => (
                        <>
-                         {isActive && <div className="absolute left-0 w-[4px] h-6 bg-[#003087] dark:bg-emerald-400 rounded-r-full shadow-[0_0_12px_rgba(0,48,135,0.3)] dark:shadow-[0_0_12px_rgba(52,211,153,0.8)]" />}
+                         {isActive && <div className="absolute left-0 w-[4px] h-6 bg-gradient-to-b from-[#0057D8] to-[#8B5CF6] dark:bg-emerald-400 rounded-r-full shadow-[0_0_12px_rgba(0,48,135,0.3)] dark:shadow-[0_0_12px_rgba(52,211,153,0.8)]" />}
                          {item.label}
                        </>
                     )}
@@ -144,20 +145,29 @@ export default function MobileMenu({
         </nav>
 
         {/* Bottom CTA (Safe area padding for modern phones) */}
-        <div className="px-6 pb-12 pt-6 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50 dark:bg-slate-950">
+        <div className="px-6 pb-10 pt-6 border-t border-gray-100 dark:border-white/[0.06] bg-gray-50/80 backdrop-blur dark:bg-slate-950">
           <div className="flex items-center justify-between mb-6">
             <a href="mailto:info@eslanditsolutions.com" className="flex items-center gap-2 text-sm font-bold text-gray-600 hover:text-[#003087] dark:text-slate-400 dark:hover:text-white transition-colors">
               <Mail size={16} className="text-[#003087] dark:text-sky-400" />
               info@eslanditsolutions.com
             </a>
           </div>
-          <Link
-            to="/contact"
-            onClick={() => setMobileOpen(false)}
-            className="flex items-center justify-center gap-2 w-full rounded-[1.25rem] bg-white border border-gray-200 px-6 py-4 text-sm font-black text-gray-900 hover:bg-gray-50 dark:bg-white/[0.05] dark:border-white/10 dark:text-white dark:hover:bg-white/[0.1] transition-all active:scale-[0.98] uppercase tracking-wider shadow-sm dark:shadow-none"
-          >
-            Contact Support
-          </Link>
+          <div className="grid gap-3">
+            <Link
+              to="/contact?mode=consultation"
+              onClick={() => setMobileOpen(false)}
+              className="ui-btn ui-btn--primary ui-btn--block"
+            >
+              <span className="relative z-10 inline-flex items-center gap-2">Book Consultation <ArrowRight size={16} /></span>
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setMobileOpen(false)}
+              className="ui-btn ui-btn--ghost ui-btn--block"
+            >
+              <span className="relative z-10">Contact Support</span>
+            </Link>
+          </div>
         </div>
       </motion.div>
     </>

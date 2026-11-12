@@ -1,0 +1,204 @@
+/* ══════════════════════════════════════════════════════════
+   Startup360 — page-scoped design layer
+   Uses the site's CSS variables, so light and dark themes both work.
+   ══════════════════════════════════════════════════════════ */
+
+.s360 {
+  --s360-blue: #0057D8;
+  --s360-navy: #003087;
+  --s360-violet: #8B5CF6;
+  --s360-ink: #050B18;
+}
+
+/* ── Type & labels ───────────────────────────────────────── */
+
+
+/* ── Buttons ─────────────────────────────────────────────── */
+
+.s360-play { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 99px; color: #fff; background: linear-gradient(135deg, #0057D8, #8B5CF6); box-shadow: 0 0 0 6px rgba(0,87,216,.12); animation: s360-ring-pulse 2.4s ease-out infinite; }
+@keyframes s360-ring-pulse { 0% { box-shadow: 0 0 0 0 rgba(0,87,216,.35); } 100% { box-shadow: 0 0 0 14px rgba(0,87,216,0); } }
+
+/* ── Hero ────────────────────────────────────────────────── */
+.s360-hero { background: var(--color-bg); }
+
+@keyframes s360-mesh { to { transform: translate3d(-3%, 2%, 0) scale(1.06); } }
+
+.s360-pill {
+  display: inline-flex; align-items: center; gap: .6rem; padding: .4rem .5rem .4rem .9rem; border-radius: 999px;
+  font-size: 13px; font-weight: 600; color: var(--color-text-muted);
+  background: color-mix(in srgb, var(--color-bg) 70%, transparent); border: 1px solid var(--color-border); backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(15,23,41,.05);
+}
+.s360-pill__phase { display: inline-flex; min-width: 5.6rem; justify-content: center; overflow: hidden; padding: .2rem .7rem; border-radius: 999px; font-weight: 700; color: #fff; background: linear-gradient(135deg, #003087, #0057D8); }
+
+.s360-ring {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; border-radius: 999px;
+  border: 1px dashed color-mix(in srgb, var(--s360-blue) 28%, transparent);
+  animation: s360-spin linear infinite;
+}
+.s360-ring::before { content: ''; position: absolute; top: -4px; left: 50%; width: 8px; height: 8px; border-radius: 99px; background: var(--s360-blue); box-shadow: 0 0 14px var(--s360-blue); }
+.s360-spin { animation: s360-spin 60s linear infinite; }
+.s360-spin--reverse { animation-direction: reverse; }
+@keyframes s360-spin { to { rotate: 360deg; } }
+
+.s360-core {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: clamp(120px, 28vw, 168px); aspect-ratio: 1; border-radius: 999px;
+  background: radial-gradient(circle at 30% 25%, #2F6BFF, #003087 60%, #001A4D);
+  box-shadow: 0 30px 80px -20px rgba(0,87,216,.7), inset 0 2px 0 rgba(255,255,255,.25), 0 0 0 10px color-mix(in srgb, var(--color-bg) 70%, transparent);
+}
+.s360-core__pulse { position: absolute; inset: 0; border-radius: inherit; border: 2px solid rgba(64,128,255,.5); animation: s360-pulse 3s ease-out infinite; }
+.s360-core__pulse--late { animation-delay: 1.5s; }
+@keyframes s360-pulse { from { transform: scale(1); opacity: .8; } to { transform: scale(1.9); opacity: 0; } }
+
+.s360-chip {
+  display: inline-flex; align-items: center; gap: .45rem; white-space: nowrap;
+  padding: .5rem .8rem; border-radius: 12px; font-size: 13px; font-weight: 700; color: var(--color-text);
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent); border: 1px solid var(--color-border);
+  backdrop-filter: blur(14px); box-shadow: 0 10px 30px -10px rgba(15,23,41,.25);
+  transition: transform .25s, border-color .25s, box-shadow .25s;
+}
+.s360-chip svg { color: var(--s360-blue); }
+.s360-chip:hover { transform: scale(1.08); border-color: var(--s360-blue); box-shadow: 0 14px 34px -10px rgba(0,87,216,.5); }
+@media (max-width: 480px) { .s360-chip { font-size: 11px; padding: .35rem .55rem; } }
+
+/* ── Shared surfaces ─────────────────────────────────────── */
+
+/* Journey */
+.s360-stage-card {
+  position: relative; overflow: hidden; padding: 2rem; border-radius: 28px;
+  background: var(--color-bg); border: 1px solid var(--color-border);
+  box-shadow: 0 40px 80px -40px rgba(0,48,135,.35), 0 1px 0 rgba(255,255,255,.6) inset;
+  transform-origin: 50% 100%;
+}
+@media (min-width: 640px) { .s360-stage-card { padding: 2.5rem; } }
+.s360-stage-card::before { content: ''; position: absolute; inset: 0 0 auto 0; height: 3px; background: linear-gradient(90deg, #003087, #0057D8, #8B5CF6); }
+.s360-stage-card__num {
+  position: absolute; right: -.5rem; bottom: -2.5rem; font-family: Manrope, sans-serif; font-weight: 800;
+  font-size: 11rem; line-height: 1; letter-spacing: -.06em; color: transparent;
+  -webkit-text-stroke: 1.5px color-mix(in srgb, var(--s360-blue) 18%, transparent);
+  pointer-events: none;
+}
+
+/* ── Dark stages ─────────────────────────────────────────── */
+
+/* OS */
+.s360-flow { animation: s360-dash 1.6s linear infinite; }
+@keyframes s360-dash { to { stroke-dashoffset: -15; } }
+.s360-os-core {
+  position: absolute; left: 50%; top: 50%; translate: -50% -50%; z-index: 2;
+  display: flex; align-items: center; justify-content: center;
+  width: 26%; aspect-ratio: 1; border-radius: 999px;
+  background: radial-gradient(circle at 30% 25%, #3B82F6, #1E3A8A 60%, #0B1530);
+  box-shadow: 0 0 60px rgba(59,130,246,.45), inset 0 2px 0 rgba(255,255,255,.2);
+  transition: box-shadow .4s, transform .4s;
+}
+.s360-os-core--lit, .s360-os-core:hover { transform: scale(1.06); box-shadow: 0 0 120px rgba(96,165,250,.8), 0 0 0 12px rgba(96,165,250,.1), inset 0 2px 0 rgba(255,255,255,.25); }
+.s360-os-core:focus-visible, .s360-os-node:focus-visible { outline: 2px solid #93C5FD; outline-offset: 4px; }
+.s360-os-node {
+  position: absolute; z-index: 3; translate: -50% -50%;
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  border-radius: 16px;
+}
+.s360-os-node__icon {
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(38px, 8vw, 54px); aspect-ratio: 1; border-radius: 16px;
+  color: var(--c); background: rgba(15,23,42,.85); border: 1px solid rgba(148,163,184,.2);
+  transition: transform .3s, box-shadow .3s, background .3s, color .3s, border-color .3s;
+}
+.s360-os-node__label { font-size: clamp(10px, 1.6vw, 13px); font-weight: 700; color: #CBD5E1; white-space: nowrap; transition: color .3s; }
+.s360-os-node[data-lit] .s360-os-node__icon { transform: scale(1.12); color: #fff; background: var(--c); border-color: var(--c); box-shadow: 0 0 36px var(--c), 0 0 0 6px color-mix(in srgb, var(--c) 18%, transparent); }
+.s360-os-node[data-lit] .s360-os-node__label { color: #fff; }
+
+/* Comparison */
+.s360-compare-card { padding: 1.75rem; border-radius: 28px; background: var(--color-bg); border: 1px solid var(--color-border); box-shadow: var(--card-shadow); }
+.s360-compare-card--good { border-color: rgba(16,185,129,.3); box-shadow: 0 30px 80px -40px rgba(16,185,129,.45); }
+.s360-compare-stage { position: relative; margin-top: 1.5rem; height: 320px; border-radius: 20px; overflow: hidden; }
+.s360-compare-stage--bad { background: repeating-linear-gradient(135deg, rgba(239,68,68,.04) 0 12px, transparent 12px 24px), var(--color-bg-surface); }
+.s360-compare-stage--good { background: radial-gradient(circle at 50% 50%, rgba(16,185,129,.12), transparent 60%), var(--color-bg-surface); }
+.s360-vendor {
+  position: absolute; translate: -50% -50%; z-index: 2; white-space: nowrap;
+  padding: .45rem .75rem; border-radius: 10px; font-size: 12px; font-weight: 700;
+  color: var(--color-text); background: var(--color-bg); border: 1px solid rgba(239,68,68,.3);
+  box-shadow: 0 6px 18px -8px rgba(239,68,68,.4);
+}
+.s360-vendor--good { border-color: rgba(16,185,129,.35); box-shadow: 0 6px 18px -8px rgba(16,185,129,.5); }
+.s360-break { position: absolute; translate: -50% -50%; z-index: 1; display: flex; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 99px; color: #fff; background: #EF4444; box-shadow: 0 0 0 4px rgba(239,68,68,.15); }
+.s360-pain { position: absolute; z-index: 3; display: inline-flex; align-items: center; gap: .3rem; white-space: nowrap; padding: .25rem .55rem; border-radius: 8px; font-size: 11px; font-weight: 700; color: #B91C1C; background: #FEE2E2; border: 1px solid #FCA5A5; }
+.dark .s360-pain { color: #FCA5A5; background: rgba(127,29,29,.5); border-color: rgba(248,113,113,.3); }
+.s360-hub { position: absolute; translate: -50% -50%; z-index: 3; padding: .85rem 1.2rem; border-radius: 16px; font-weight: 800; font-size: 13px; color: #fff; white-space: nowrap; background: linear-gradient(135deg, #047857, #10B981); box-shadow: 0 0 0 8px rgba(16,185,129,.15), 0 16px 40px -10px rgba(16,185,129,.7); animation: s360-hub 3s ease-in-out infinite; }
+@keyframes s360-hub { 50% { box-shadow: 0 0 0 16px rgba(16,185,129,.06), 0 16px 40px -10px rgba(16,185,129,.7); } }
+.s360-mini-stat { padding: 1.1rem 1.25rem; border-radius: 18px; background: var(--color-bg-surface); border: 1px solid var(--color-border); }
+@media (max-width: 480px) { .s360-vendor { font-size: 10px; padding: .35rem .5rem; } .s360-pain { font-size: 9.5px; } .s360-compare-stage { height: 280px; } }
+
+/* Services 3D panel */
+
+
+/* Growth engine */
+.s360-pipe { position: absolute; left: 4%; right: 4%; top: 46px; height: 4px; border-radius: 99px; background: linear-gradient(90deg, rgba(59,130,246,.2), rgba(139,92,246,.2), rgba(16,185,129,.3)); display: none; }
+@media (min-width: 1024px) { .s360-pipe { display: block; } }
+.s360-pipe__packet { position: absolute; top: 50%; left: 0; width: 34px; height: 4px; translate: 0 -50%; border-radius: 99px; background: linear-gradient(90deg, transparent, #7DD3FC, #fff); box-shadow: 0 0 16px #60A5FA; animation: s360-packet 4.9s linear infinite; }
+@keyframes s360-packet { from { left: 0; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } to { left: calc(100% - 34px); opacity: 0; } }
+.s360-station { position: relative; padding: 1.25rem; border-radius: 22px; background: linear-gradient(160deg, rgba(30,41,59,.7), rgba(15,23,42,.9)); border: 1px solid rgba(148,163,184,.14); transition: transform .3s, border-color .3s, box-shadow .3s; }
+.s360-station:hover { transform: translateY(-6px); border-color: rgba(96,165,250,.4); box-shadow: 0 20px 50px -20px rgba(59,130,246,.6); }
+.s360-station__icon { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 15px; color: #fff; background: linear-gradient(135deg, #1D4ED8, #7C3AED); box-shadow: 0 0 0 0 rgba(96,165,250,.6); animation: s360-station 3.2s ease-out infinite; }
+@keyframes s360-station { 0% { box-shadow: 0 0 0 0 rgba(96,165,250,.55); } 60%, 100% { box-shadow: 0 0 0 14px rgba(96,165,250,0); } }
+.s360-station--revenue { background: linear-gradient(160deg, rgba(6,78,59,.75), rgba(15,23,42,.9)); border-color: rgba(52,211,153,.35); }
+.s360-station--revenue .s360-station__icon { background: linear-gradient(135deg, #059669, #10B981); }
+.s360-station--revenue .font-mono { color: #6EE7B7; }
+
+/* Industries */
+.s360-ind-pill { display: inline-flex; flex-shrink: 0; align-items: center; gap: .45rem; padding: .6rem 1rem; border-radius: 999px; font-size: 14px; font-weight: 700; color: var(--color-text-muted); background: var(--color-bg); border: 1px solid var(--color-border); transition: all .25s; }
+.s360-ind-pill svg { color: var(--c); }
+.s360-ind-pill:hover { color: var(--color-text); border-color: var(--c); transform: translateY(-2px); }
+.s360-ind-pill--on { color: #fff; background: var(--c); border-color: var(--c); box-shadow: 0 10px 26px -8px var(--c); }
+.s360-ind-pill--on svg { color: #fff; }
+.s360-ind-stage { display: grid; overflow: hidden; border-radius: 32px; border: 1px solid var(--color-border); background: radial-gradient(600px circle at 0% 0%, color-mix(in srgb, var(--c) 12%, transparent), transparent 60%), var(--color-bg); box-shadow: 0 40px 90px -50px color-mix(in srgb, var(--c) 70%, transparent); }
+@media (min-width: 1024px) { .s360-ind-stage { grid-template-columns: 1fr 1fr; } }
+.s360-dash { overflow: hidden; border-radius: 22px; background: var(--color-bg); border: 1px solid var(--color-border); box-shadow: 0 24px 60px -30px rgba(15,23,41,.35); }
+
+/* Industry illustrations */
+.s360-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: s360-draw 2.4s ease-in-out infinite; }
+@keyframes s360-draw { 0% { stroke-dashoffset: 1; } 60%, 100% { stroke-dashoffset: 0; } }
+.s360-blink { animation: s360-blink 1.8s ease-in-out infinite; }
+@keyframes s360-blink { 50% { opacity: .25; } }
+.s360-bob { animation: s360-bob 2s ease-in-out infinite; }
+@keyframes s360-bob { 50% { transform: translateY(6px); } }
+.s360-float-slow { animation: s360-bob 4s ease-in-out infinite; }
+.s360-grow { animation: s360-grow 2.6s ease-in-out infinite alternate; }
+@keyframes s360-grow { from { transform: scaleY(.45); } to { transform: scaleY(1); } }
+.s360-gear { animation: s360-spin 6s linear infinite; }
+.s360-gear--rev { animation-direction: reverse; animation-duration: 4s; }
+.s360-swing { animation: s360-swing 3s ease-in-out infinite; }
+@keyframes s360-swing { 0%, 100% { rotate: -6deg; } 50% { rotate: 6deg; } }
+.s360-stack { opacity: 0; animation: s360-stack 3s ease-out infinite; }
+@keyframes s360-stack { 0% { opacity: 0; transform: translateY(-14px); } 20%, 85% { opacity: 1; transform: none; } 100% { opacity: 0; } }
+.s360-pop { animation: s360-pop 2.8s ease-in-out infinite; transform-box: fill-box; transform-origin: center bottom; }
+@keyframes s360-pop { 0%, 100% { transform: scaleY(.85); } 50% { transform: scaleY(1); } }
+.s360-heartbeat { animation: s360-heartbeat 1.4s ease-in-out infinite; }
+@keyframes s360-heartbeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.18); } 30% { transform: scale(1); } 45% { transform: scale(1.12); } }
+.s360-dash-move { stroke-dasharray: 6 6; animation: s360-dash 1s linear infinite; }
+
+/* Bento */
+
+
+/* FAQ */
+.s360-search { display: flex; align-items: center; gap: .75rem; padding: .95rem 1.2rem; border-radius: 16px; background: var(--color-bg); border: 1px solid var(--color-border); box-shadow: var(--card-shadow); transition: border-color .2s, box-shadow .2s; }
+.s360-search:focus-within { border-color: var(--s360-blue); box-shadow: 0 0 0 4px rgba(0,87,216,.12); }
+.s360-faq { border-radius: 18px; background: var(--color-bg); border: 1px solid var(--color-border); transition: border-color .25s, box-shadow .25s; }
+.s360-faq:hover { border-color: var(--color-border-strong); }
+.s360-faq--open { border-color: color-mix(in srgb, var(--s360-blue) 35%, transparent); box-shadow: 0 20px 50px -30px rgba(0,87,216,.5); }
+
+/* Final CTA */
+
+@keyframes s360-aurora { to { transform: scale(1.15) rotate(4deg); } }
+
+/* ── Motion safety ───────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .s360 *, .s360 *::before, .s360 *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+  .s360-draw { stroke-dashoffset: 0; }
+  .s360-stack { opacity: 1; }
+}
+
+/* Keep the "broken ecosystem" stage legible on phones */
+@media (max-width: 480px) { .s360-pain--minor { display: none; } }

@@ -12,10 +12,11 @@ export default function MegaMenu({ allServices, serviceIcons, setServicesOpen, s
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, y: prefersReducedMotion ? 0 : 14, scale: prefersReducedMotion ? 1 : 0.96 }}
       transition={{ duration: prefersReducedMotion ? 0 : 0.2, ease: [0.22, 1, 0.36, 1] }}
-      className="absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[520px] rounded-2xl border border-white/[0.08] bg-slate-900/95 p-6 shadow-2xl shadow-black/40 z-50"
+      className="ui-border-anim absolute left-1/2 -translate-x-1/2 top-full mt-3 w-[560px] rounded-3xl border border-white/[0.08] bg-[#060C1A]/95 p-6 shadow-[0_40px_80px_-20px_rgba(0,20,60,0.6)] z-50 overflow-hidden"
       style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
     >
-      <div className="flex items-center gap-2 mb-5">
+      <div className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgba(59,130,246,0.35),transparent_70%)] blur-2xl" aria-hidden="true" />
+      <div className="relative flex items-center gap-2 mb-5">
         <div className="h-1.5 w-1.5 rounded-full bg-sky-400" />
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-sky-400">Our Services</p>
       </div>
@@ -23,7 +24,7 @@ export default function MegaMenu({ allServices, serviceIcons, setServicesOpen, s
         initial="hidden"
         animate="show"
         variants={{ show: { transition: { staggerChildren: prefersReducedMotion ? 0 : 0.025, delayChildren: prefersReducedMotion ? 0 : 0.03 } } }}
-        className="grid grid-cols-2 gap-1.5"
+        className="relative grid grid-cols-2 gap-1.5"
       >
         {allServices.map((s, idx) => {
           const ServiceIcon = serviceIcons[s.icon];
@@ -44,7 +45,7 @@ export default function MegaMenu({ allServices, serviceIcons, setServicesOpen, s
               <Link
                 to={s.href}
                 onClick={() => { setServicesOpen(false); setHoveredIndex(null); }}
-                className={`flex items-start gap-3 rounded-xl border border-transparent px-4 py-3 text-sm text-slate-300 transition-all duration-300 group ${c.boxHover}`}
+                className={`ui-spot ui-spot--dark flex items-start gap-3 rounded-2xl border border-transparent px-4 py-3 text-sm text-slate-300 transition-all duration-300 group ${c.boxHover}`}
               >
                 <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] border border-white/[0.05] ${c.text} transition-colors duration-300 ${c.iconHover}`}>
                   {ServiceIcon ? <ServiceIcon size={18} /> : <span className="text-xs font-bold">{s.label[0]}</span>}
@@ -58,13 +59,20 @@ export default function MegaMenu({ allServices, serviceIcons, setServicesOpen, s
           );
         })}
       </motion.div>
-      <div className="mt-4 border-t border-white/[0.06] pt-4">
+      <div className="relative mt-4 flex items-center justify-between gap-4 border-t border-white/[0.06] pt-4">
         <Link
           to="/services"
           onClick={() => { setServicesOpen(false); setHoveredIndex(null); }}
           className="flex items-center gap-2 text-[13px] font-bold text-sky-400 hover:text-sky-300 transition-colors"
         >
           View all services <ArrowRight size={13} />
+        </Link>
+        <Link
+          to="/contact?mode=consultation"
+          onClick={() => { setServicesOpen(false); setHoveredIndex(null); }}
+          className="rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 text-[12px] font-bold text-white hover:bg-white/10 transition-colors"
+        >
+          Talk to an architect
         </Link>
       </div>
     </motion.div>
